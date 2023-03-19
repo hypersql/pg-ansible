@@ -1,7 +1,12 @@
 name: publish-tmax-opensql-galaxy
 
-on:                                 
+on:
   workflow_call:
+    inputs:
+      updated_version:
+        description: 'new version'
+        required: true
+        type: string
     secrets:
       galaxy_api_key:
         description: 'API KEY of tmax-opensql galaxy'
@@ -13,36 +18,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      
+
       - name: Install Package
         uses: ConorMacBride/install-package@v1.1.0
         with:
           apt: ansible python3
-      
+
       - name: Install Custom module galaxy_timeout
         # solution of galaxy collection install time out
         # https://github.com/ansible/galaxy/issues/2302#issuecomment-1143132088
         run: python3 -m pip install https://github.com/WATonomous/ansible/archive/galaxy_timeout.tar.gz
-        
+
       - name: Install tmax_opensql.postgres collection
         run: ansible-galaxy collection install --api-key ${{ secrets.galaxy_api_key }} tmax_opensql.postgres
-      
+
       - name: Set old_version
         id: old_version
         run: |
           echo "OLD_VERSION=$(ansible-galaxy collection list tmax_opensql.postgres | grep tmax_opensql.postgres | awk '{print $2}')" >> $GITHUB_OUTPUT
 
-      - name: Set new_version
-        id: new_version
-        uses: pCYSl5EDgo/cat@master
-        with:
-          path: VERSION
-          trim: true
-
       - name: Compare Version
         uses: jackbilestech/semver-compare@1.0.4
         with:
-          head: ${{ steps.new_version.outputs.text }}
+          head: ${{ inputs.updated_version }}
           base: ${{ steps.old_version.outputs.OLD_VERSION }}
           operator: '>'
 
