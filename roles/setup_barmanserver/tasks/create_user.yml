@@ -15,6 +15,16 @@
     home: "{{ barman_home }}"
   become: true
 
+- name: Check barman user home directory
+  ansible.builtin.stat:
+    path: "{{ barman_home }}"
+  register: barman_home_stat
+
+- name: Verify barman home directory permissions
+  ansible.builtin.fail:
+    msg: Barman Syste user do not have permission to access the home directory. Check user barman_home parameter.
+  when: barman_home_stat.stat.pw_name != barman_user
+
 - name: Check if getenforce is installed
   ansible.builtin.shell: command -v getenforce > /dev/null 2>&1
   register: getenforce_installed

@@ -5,6 +5,7 @@ python2_barman_package: "python2-barman-3.2.0-1"
 barman_cli_package: "barman-cli-3.2.0-1"
 
 barman_default_home: "/var/lib/barman"
+barman_home: "/var/lib/barman"
 
 supported_os:
   - CentOS7
