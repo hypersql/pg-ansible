@@ -1,11 +1,13 @@
 ---
 pg_instance_name: main
-use_hostname: false
 
 pg_owner: postgres
 pg_port: 5432
 
+barman_user: "barman"
+barman_group: "barman"
 barman_pg_user: "barman"
+barman_configuration_files_directory: "/etc/barman.d"
 barman: true
 barman_server_private_ip: ""
 
@@ -14,4 +16,5 @@ pg_group: postgres
 pg_port: 5432
 
 etc_hosts_lists: []
+use_hostname: false
 update_etc_file: true
