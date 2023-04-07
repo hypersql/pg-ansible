@@ -26,7 +26,6 @@
       user: "{{ barman_pg_user }}"
       db: postgres
 
-
 - name: Ensure privileges for the barman user
   include_role:
     name: manage_dbserver
