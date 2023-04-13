@@ -35,7 +35,6 @@ pgbouncer_auth_file: "/etc/pgbouncer/userlist.txt"
 # pgbouncer_auth_query: "SELECT usename, passwd FROM pg_shadow WHERE usename = $1"
 
 # Systemd unit file
-pgbouncer_systemd_unit_file: "/etc/systemd/system/pgbouncer.service.d/pgbouncer.conf"
 pgbouncer_syslog: 0
 pgbouncer_syslog_ident: "pgbouncer"
 

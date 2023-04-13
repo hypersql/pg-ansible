@@ -18,3 +18,5 @@ rpm_list:
     "name": "{{ rpm_install_path }}-contrib-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
     "state": present,
   }
+
+pg_default_data: "/var/lib/pgsql/{{ pg_major_version }}/data"
