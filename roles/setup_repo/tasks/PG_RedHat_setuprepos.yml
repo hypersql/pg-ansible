@@ -27,6 +27,9 @@
     name: "{{ epel_repo }}"
     state: present
   become: true
+  register: repo_try
+  retries: "{{ external_package_retries }}"
+  until: "repo_try is not failed"
 
 - name: Install PG repo for EL7, EL8
   ansible.builtin.package:
@@ -35,6 +38,9 @@
   become: true
   when:
     - pg_type == 'PG'
+  register: repo_try
+  retries: "{{ external_package_retries }}"
+  until: "repo_try is not failed"
 
 - name: Install dnf-plugins-core for EL8
   ansible.builtin.package:
@@ -72,6 +78,9 @@
   become: true
   loop: "{{ yum_additional_repos }}"
   when: yum_additional_repos | length > 0
+  register: repo_try
+  retries: "{{ external_package_retries }}"
+  until: "repo_try is not failed"
 
 # This is needed for some fresh versions of CentOS8 where this issue is met:
 # https://bugzilla.redhat.com/show_bug.cgi?id=1768206
