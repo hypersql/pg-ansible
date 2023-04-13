@@ -1,6 +1,6 @@
 ---
 pgbouncer_version: 1.7
-# RPM package name
+# Deb package name
 pgbouncer_package_name: "pgbouncer"
 
 # PgBouncer service name

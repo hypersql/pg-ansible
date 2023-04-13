@@ -22,7 +22,7 @@
 
 - name: Verify barman home directory permissions
   ansible.builtin.fail:
-    msg: Barman Syste user do not have permission to access the home directory. Check user barman_home parameter.
+    msg: Barman System user do not have permission to access the home directory. Check user barman_home parameter.
   when: barman_home_stat.stat.pw_name != barman_user
 
 - name: Check if getenforce is installed

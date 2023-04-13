@@ -18,13 +18,13 @@
     name: manage_dbserver
     tasks_from: manage_roles
   vars:
-  pg_grant_roles:
-    - role: pg_read_all_settings
-      user: "{{ barman_pg_user }}"
-      db: postgres
-    - role: pg_read_all_stats
-      user: "{{ barman_pg_user }}"
-      db: postgres
+    pg_grant_roles:
+      - role: pg_read_all_settings
+        user: "{{ barman_pg_user }}"
+        db: postgres
+      - role: pg_read_all_stats
+        user: "{{ barman_pg_user }}"
+        db: postgres
 
 - name: Ensure privileges for the barman user
   include_role:

@@ -1,9 +1,6 @@
 ---
 pg_instance_name: main
 
-pg_owner: postgres
-pg_port: 5432
-
 barman_user: "barman"
 barman_group: "barman"
 barman_pg_user: "barman"

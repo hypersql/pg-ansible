@@ -1,4 +1,5 @@
 ---
+pgbouncer_systemd_unit_file: "/etc/systemd/system/pgbouncer.service.d/pgbouncer.conf"
 # Enable SSL
 pgbouncer_ssl: true
 pgbouncer_ssl_csr_dn:
