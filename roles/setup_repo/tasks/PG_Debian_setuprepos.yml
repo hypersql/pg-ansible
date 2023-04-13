@@ -38,6 +38,9 @@
     filename: "pgdg"
   when: pg_type == 'PG'
   become: true
+  register: repo_try
+  retries: "{{ external_package_retries }}"
+  until: "repo_try is not failed"
 
 - name: Add additional Debian keys
   ansible.builtin.apt_key:
@@ -55,3 +58,6 @@
   become: true
   loop: "{{ apt_additional_repos }}"
   when: apt_additional_repos | length > 0
+  register: repo_try
+  retries: "{{ external_package_retries }}"
+  until: "repo_try is not failed"
