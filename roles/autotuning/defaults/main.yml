@@ -1,5 +1,4 @@
 ---
-pg_major_version: "{{ pg_version | int }}"
 pg_instance_name: main
 tuned_profile: "postgres"
 ssd_disk: false

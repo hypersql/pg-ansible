@@ -1,12 +1,12 @@
 ---
 pg_default_data: "/var/lib/postgresql/{{ pg_major_version }}/{{ pg_instance_name }}"
 
+# postgres service
+pg_service: "postgresql@{{ pg_major_version }}-{{ pg_instance_name }}.service"
+
 # required & optional directories
 pg_user_home: "/var/lib/postgresql"
 pg_bin_path: "/usr/lib/postgresql/{{ pg_major_version }}/bin"
-
-# postgres service
-pg_service: "postgresql@{{ pg_major_version }}-{{ pg_instance_name }}.service"
 
 pg_initdb_options: "-k -A scram-sha-256 --encoding=UTF-8 --locale={{ pg_locale }} --auth-local=peer --user={{ pg_owner }}"
 pg_initdb: "{{ pg_bin_path }}/initdb"

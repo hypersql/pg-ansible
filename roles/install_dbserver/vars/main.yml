@@ -1,4 +1,5 @@
 ---
+pg_major_version: "{{ pg_version | int }}"
 core_dump_directory: "/var/coredumps"
 sysctl_params:
   - {

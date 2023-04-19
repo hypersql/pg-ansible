@@ -10,3 +10,5 @@ shell_profile_content: |
   export PGHOST={{ pg_unix_socket_directories[0] }}
 pg_bin_path: "/usr/pgsql-{{ pg_major_version }}/bin"
 pg_default_data: "/var/lib/pgsql/{{ pg_major_version }}/data"
+
+pg_service: "{{ lookup('tmax_opensql.postgres.pg_service') }}.service"
