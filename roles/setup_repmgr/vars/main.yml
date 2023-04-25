@@ -1,5 +1,7 @@
 ---
 pg_major_version: "{{ pg_version | int }}"
+pg_instance_name: main
+pg_port: 5432
 
 # SSH port
 ssh_port: 22

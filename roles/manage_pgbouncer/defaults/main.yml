@@ -4,8 +4,6 @@ pgbouncer_databases_list: []
 # User names & passwords list
 pgbouncer_auth_user_list: []
 
-pg_port: 5432
-
 # PgBouncer system user & group
 pgbouncer_user: "pgbouncer"
 pgbouncer_group: "pgbouncer"

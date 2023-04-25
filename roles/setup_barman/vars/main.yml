@@ -9,6 +9,7 @@ ssh_port: 22
 
 pass_dir: "~/.pgpassfile"
 
+pg_port: 5432
 pg_database: "postgres"
 
 pg_unix_socket_directories:

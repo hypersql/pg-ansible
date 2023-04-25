@@ -11,3 +11,5 @@ shell_profile_content: |
   export PGHOST={{ pg_unix_socket_directories[0] }}
 pg_bin_path: "/usr/lib/postgresql/{{ pg_major_version }}/bin"
 pg_default_data: "/var/lib/postgresql/{{ pg_major_version }}/{{ pg_instance_name }}"
+
+pg_service: "postgresql@{{ pg_major_version }}-{{ pg_instance_name }}.service"

@@ -1,4 +1,6 @@
 ---
+pg_major_version: "{{ pg_version | int }}"
+
 pgpool2_version: 4.3
 # We don't have the choice of the version with community PostgreSQL
 pgpool2_package_name: "pgpool-II"
@@ -56,6 +58,10 @@ pgpool2_ssl_csr_dn:
   C: ""
   EMAIL: "example@mail.com"
 
+pg_port: 5432
+pg_database: "postgres"
+pg_instance_name: "main"
+
 supported_os:
   - CentOS7
   - CentOS8
@@ -75,3 +81,5 @@ supported_pg_version:
 
 supported_pgpool2_version:
   - 4.3
+
+pg_user_home: "/var/lib/pgsql"
