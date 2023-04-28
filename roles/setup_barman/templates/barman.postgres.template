@@ -5,7 +5,7 @@ conninfo = host={{ pg_host }} user={{ barman_pg_user }} dbname=postgres port={{ 
 streaming_conninfo = host={{ pg_host  }}  user={{ barman_pg_user }} port={{ pg_port }}
 backup_method = postgres
 streaming_archiver = on
-slot_name = barman
+slot_name = barman_{{ inventory_hostname }}_{{ pg_instance_name }}
 backup_options = concurrent_backup
 immediate_checkpoint = true
 recovery_options = get-wal
