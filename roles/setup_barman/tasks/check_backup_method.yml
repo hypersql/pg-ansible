@@ -1,0 +1,64 @@
+---
+- name: Get Barman server informations
+  set_fact:
+    _barman_server_info: "{{ lookup('tmax_opensql.postgres.barman_server', wantlist=True) }}"
+
+- name: Fail if barman server informations are not found
+  fail:
+    msg: "Unable to find barman server informations"
+  when:
+    - _barman_server_info|length == 0
+
+- name: Set _barman_server_inventory_hostname
+  set_fact:
+    _barman_server_inventory_hostname: "{{ _barman_server_info[0].inventory_hostname }}"
+
+- name: Create backup_method file
+  file:
+    path: "{{ barman_home }}/.backup_method"
+    owner: "{{ barman_user }}"
+    group: "{{ barman_group }}"
+    mode: '0644'
+    state: "touch"
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+
+- name: Wait for create backup_method file
+  wait_for:
+    path: "{{ barman_home }}/.backup_method"
+    state: present
+    msg: "Timeout to find file {{ barman_home }}/.backup_method"
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+
+- name: Read backup_method from file
+  ansible.builtin.shell: >-
+    set -o pipefail && grep '^{{ inventory_hostname }}-{{ pg_instance_name }}=' {{ barman_home }}/.backup_method | cut -d'=' -f2
+  args:
+    executable: /bin/bash
+  register: _backup_method
+  become_user: "{{ barman_user }}"
+  failed_when: false
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+
+- name: Set opposite backup method
+  set_fact:
+    _opposite_backup_method: "{{ 'postgres' if barman_backup_method == 'rsync' else 'rsync' if barman_backup_method == 'postgres' }}"
+
+- name: Check barman_backup_method exists
+  fail:
+    msg: "Backup_method cannot be switched."
+  when:
+    - _backup_method.stdout == _opposite_backup_method
+
+- name: Add backup_method line
+  ansible.builtin.lineinfile:
+    path: "{{ barman_home }}/.backup_method"
+    line: '{{ inventory_hostname }}-{{ pg_instance_name }}={{ barman_backup_method }}'
+    regexp: '^{{ inventory_hostname }}-{{ pg_instance_name }}='
+    state: present
+  become_user: "{{ barman_user }}"
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+
+- name: Reset _backup_method
+  set_fact:
+    _opposite_backup_method: ""
+    _backup_method: ""

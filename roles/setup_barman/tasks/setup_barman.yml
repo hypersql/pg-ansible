@@ -41,6 +41,9 @@
     - use_hostname|bool
     - update_etc_file|bool
 
+- name: Ensure backup_method
+  include_tasks: check_backup_method.yml
+
 - name: Include the package installation tasks
   include_role:
     name: setup_barmanserver
@@ -66,6 +69,9 @@
 
 - name: Include the SSH keys exchange tasks
   include_tasks: exchange_ssh_keys.yml
+
+- name: Include the archive barman backup files
+  include_tasks: archive_barman.yml
 
 - name: Include the barman configuration tasks
   include_tasks: configure_barman.yml

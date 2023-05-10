@@ -45,10 +45,17 @@
     tasks_from: manage_slots
   vars:
     pg_slots:
-      - name: barman
+      - name: barman_{{ inventory_hostname }}_{{ pg_instance_name }}
         slot_type: physical
   no_log: "{{ disable_logging }}"
   when: barman_backup_method == 'postgres'
+
+- name: Set archive command variable
+  set_fact:
+    barman_archive_command: >-
+          rsync -a -e
+          "ssh -p {{ ssh_port }}"
+          %p {{ barman_user }}@{{ _barman_host }}:{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/incoming/%f
 
 - name: Ensure WAL archiving is configured
   include_role:
@@ -61,10 +68,7 @@
       # Note: barman-wal-archive does not allow using a different SSH port than
       # the default one.
       - name: archive_command
-        value: >-
-          rsync -a -e
-          "ssh -p {{ ssh_port }}"
-          %p {{ barman_user }}@{{ _barman_host }}:{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/incoming/%f
+        value: "{{ barman_archive_command }}"
   no_log: "{{ disable_logging }}"
   when: barman_backup_method == 'rsync'
 
