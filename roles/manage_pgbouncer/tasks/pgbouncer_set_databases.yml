@@ -1,4 +1,15 @@
 ---
+- name: Check pgbouncer_databases_list validation
+  fail:
+    msg: "pgbouncer_databases_list.dbname is not defined."
+  with_items: "{{ pgbouncer_databases_list }}"
+  loop_control:
+    loop_var: user_item
+  when:
+    - pgbouncer_databases_list|length > 0
+    - user_item.state is not defined or user_item.state == 'present'
+    - user_item.dbname is not defined or user_item.dbname|length < 1
+
 - name: Manage PgBouncer databases entries in {{ pgbouncer_databases_file }}
   lineinfile:
     path: "{{ pgbouncer_databases_file }}"

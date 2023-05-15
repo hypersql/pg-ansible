@@ -1,4 +1,15 @@
 ---
+- name: Check pgpool2_users validation
+  fail:
+    msg: "pgpool2_users.password is not defined or pgpool2_users.auth is not supported."
+  with_items: "{{ pgpool2_users }}"
+  loop_control:
+    loop_var: user_item
+  when:
+    - pgpool2_users|length > 0
+    - user_item.state is not defined or user_item.state == 'present'
+    - (user_item.pass is not defined or user_item.pass|length < 1) or (user_item.auth not in ('scram', 'md5'))
+
 - name: Remove users from pool_passwd
   lineinfile:
     path: "{{ pgpool2_pool_passwd_file }}"
