@@ -24,7 +24,3 @@ supported_pg_version:
 
 supported_pgpool2_version:
   - 4.3
-
-pg_port: 5432
-pg_user_home: "/var/lib/pgsql"
-pg_instance_name: "main"
