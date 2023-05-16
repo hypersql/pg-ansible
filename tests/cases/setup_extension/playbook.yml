@@ -1,0 +1,19 @@
+---
+- hosts: all
+  name: Postgres deployment playbook
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      ansible.builtin.set_fact:
+        disable_logging: false
+
+  roles:
+    - role: setup_repo
+      when: "'setup_repo' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: setup_extension
+      when: "'setup_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
