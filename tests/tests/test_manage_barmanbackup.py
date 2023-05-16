@@ -7,7 +7,7 @@ from conftest import (
 )
 
 
-def test_setup_barman_home_dir():
+def test_manage_barmanbackup_home_dir():
     ansible_vars = load_ansible_vars()
     barman_user = ansible_vars["barman_user"]
     barman_home = ansible_vars["barman_home"]
@@ -22,7 +22,7 @@ def test_setup_barman_home_dir():
     )
 
 
-def test_setup_barman_status():
+def test_manage_barmanbackup_status():
     ansible_vars = load_ansible_vars()
     barman_user = ansible_vars["barman_user"]
     host = get_barmanserver()
@@ -34,7 +34,7 @@ def test_setup_barman_status():
     assert "True" in result, "primary1-main's server status is not active"
 
 
-def test_setup_barman_user():
+def test_manage_barmanbackup_user():
     ansible_vars = load_ansible_vars()
     barman_user = ansible_vars["barman_user"]
     port = "5432"
@@ -53,8 +53,8 @@ def test_setup_barman_user():
     assert len(result) > 0, "Barman user does not exist in primary database"
 
 
-def test_setup_barman_logical_wal_level():
-    # Make sure setup_barman does not override wal_level if it has been
+def test_manage_barmanbackup_logical_wal_level():
+    # Make sure manage_barmanbackup does not override wal_level if it has been
     # previously configured to 'logical'.
     port = "5432"
     pg_user = "postgres"
@@ -72,7 +72,7 @@ def test_setup_barman_logical_wal_level():
     assert result == "logical", "wal_level should be set to 'logical'"
 
 
-def test_setup_barman_backup():
+def test_manage_barmanbackup_backup():
     ansible_vars = load_ansible_vars()
     barman_user = ansible_vars["barman_user"]
     host = get_barmanserver()

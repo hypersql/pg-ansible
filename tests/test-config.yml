@@ -24,7 +24,7 @@ available_roles:
   - setup_extension
   - manage_pgbouncer
   - manage_pgpool2
-  - setup_barman
+  - manage_barmanbackup
   - setup_barmanserver
   - setup_pgbackrest
   - setup_pgbackrestserver

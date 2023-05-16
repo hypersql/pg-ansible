@@ -14,11 +14,11 @@ The following table describes the roles included in **tmax_opensql.postgres** co
 | [autotuning](roles/autotuning/README.md)                         | The autotuning role configures the system and Postgres instances for optimal performances. Most of the configuration values are calculated automatically from available resources found on the system. |
 | [init_dbserver](roles/init_dbserver/README.md)                   | Initialize the PostgreSQL cluster (data) directory.                                                                                                                                                    |
 | [install_dbserver](roles/install_dbserver/README.md)             | Install PostgreSQL database server packages.                                                                                                                                                           |
-| [manage_extension](roles/manage_extension/README.md)               | Manage PostgreSQL Extension Packages.                                                                                                                                                    |
+| [setup_extension](roles/setup_extension/README.md)               | Install PostgreSQL Extension packages.                                                                                                                                                    |
 | [manage_dbserver](roles/manage_dbserver/README.md)               | Manage PostgreSQL clusters and covers common tasks.                                                                                                                                                    |
 | [manage_pgbouncer](roles/manage_pgbouncer/README.md)             | Manage PgBouncer pools list and users.                                                                                                                                                                 |
 | [manage_pgpool2](roles/manage_pgpool2/README.md)                 | Manage Pgpool-II settings and users.                                                                                                                                                                   |
-| [setup_barman](roles/setup_barman/README.md)                     | Set up PostgreSQL backups with Barman.                                                                                                                                                                 |
+| [manage_barmanbackup](roles/manage_barmanbackup/README.md)       | Set up PostgreSQL backups with Barman.                                                                                                                                                                 |
 | [setup_barmanserver](roles/setup_barmanserver/README.md)         | Set up Barman (Postgres backup) server.                                                                                                                                                                |
 | [setup_pgbackrest](roles/setup_pgbackrest/README.md)             | Set up PostgreSQL backups with pgBackRest.                                                                                                                                                             |
 | [setup_pgbackrestserver](roles/setup_pgbackrestserver/README.md) | Set up pgBackRest server for Postgres backups and recovery.                                                                                                                                            |
@@ -141,8 +141,8 @@ playbook:
       when: "'install_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: init_dbserver
       when: "'init_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
-    - role: manage_extension
-      when: "'manage_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: setup_extension
+      when: "'setup_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_replication
       when: "'setup_replication' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_pgpool2
@@ -161,8 +161,8 @@ playbook:
       when: "'manage_pgbouncer' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_barmanserver
       when: "'setup_barmanserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
-    - role: setup_barman
-      when: "'setup_barman' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: manage_barmanbackup
+      when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: autotuning
       when: "'autotuning' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
 ```

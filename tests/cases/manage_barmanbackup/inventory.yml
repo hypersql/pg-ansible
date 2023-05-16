@@ -1,0 +1,17 @@
+---
+all:
+  children:
+    primary:
+      hosts:
+        primary1:
+          ansible_host: 172.27.0.2
+          private_ip: 172.27.0.2
+          barman: true
+          barman_server_private_ip: 172.27.0.3
+          barman_backup_method: rsync
+    barmanserver:
+      hosts:
+        barman1:
+          ansible_host: 172.27.0.3
+          private_ip: 172.27.0.3
+          primary_private_ip: 172.27.0.2

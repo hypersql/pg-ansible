@@ -142,7 +142,7 @@ class LookupModule(LookupBase):
             if group in ["pemserver", "primary", "standby"] and hostvars.get(
                 "barman", False
             ):
-                supported_roles = list(set(supported_roles) | set(["setup_barman"]))
+                supported_roles = list(set(supported_roles) | set(["manage_barmanbackup"]))
             # Special case for the primary nodes when the host variable
             # dbt2 is set to true.
             if group in ["primary"] and hostvars.get("dbt2", False):
