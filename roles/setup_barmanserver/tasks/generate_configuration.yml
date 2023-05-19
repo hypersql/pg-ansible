@@ -1,4 +1,17 @@
 ---
+- name: Check if we have symlink for default config file location
+  stat:
+    path: "{{ barman_home }}/.barman.conf"
+  register: barman_conf
+
+- name: Ensure barman config file is deleted if barman_configuration_file is not default
+  file:
+    path: "{{ barman_home }}/.barman.conf"
+    state: absent
+  when:
+    - barman_conf.stat.exists
+  become: true
+
 - name: Build configuration file {{ barman_configuration_file }}
   template:
     src: "./templates/barman.conf.template"
@@ -6,4 +19,16 @@
     owner: "{{ barman_user }}"
     group: "{{ barman_group }}"
     mode: 0600
+  become: true
+
+- name: Create symlink for default barman.conf
+  file:
+    src: "{{ barman_configuration_file }}"
+    dest: "{{ barman_home }}/.barman.conf"
+    owner: "{{ barman_user }}"
+    group: "{{ barman_group }}"
+    state: link
+  when:
+    - barman_configuration_file != '/etc/barman.conf'
+    - barman_configuration_file != "{{ barman_home }}/.barman.conf"
   become: true

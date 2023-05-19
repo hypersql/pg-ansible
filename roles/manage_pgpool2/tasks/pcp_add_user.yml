@@ -7,7 +7,7 @@
   become_user: "{{ pg_owner }}"
   when:
     - pcp_user|length > 0
-    - pcp_user.state is not defined or user_item.state == 'present'
+    - pcp_user.state is not defined or pcp_user.state == 'present'
   register: pcp_password_out
 
 - name: Update pcp.conf
@@ -18,4 +18,4 @@
   become_user: "{{ pg_owner }}"
   when:
     - pcp_user|length > 0
-    - pcp_user.state is not defined or user_item.state == 'present'
+    - pcp_user.state is not defined or pcp_user.state == 'present'

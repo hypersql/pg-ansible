@@ -1,0 +1,74 @@
+---
+- name: Get Barman server informations
+  set_fact:
+    _barman_server_info: "{{ lookup('tmax_opensql.postgres.barman_server', wantlist=True) }}"
+
+- name: Fail if barman server informations are not found
+  fail:
+    msg: "Unable to find barman server informations"
+  when:
+    - _barman_server_info|length == 0
+
+- name: Set _barman_server_inventory_hostname
+  set_fact:
+    _barman_server_inventory_hostname: "{{ _barman_server_info[0].inventory_hostname }}"
+
+- name: Ensure timeline ID
+  community.postgresql.postgresql_query:
+    query: >-
+      SELECT SUBSTRING(redo_wal_file, 1, 16) AS timeline_id FROM pg_control_checkpoint();
+    port: "{{ pg_port }}"
+    db: "{{ pg_database }}"
+    login_user: "{{ pg_owner }}"
+    login_unix_socket: "{{ pg_unix_socket_directories[0] }}"
+  no_log: "{{ disable_logging }}"
+  become: true
+  become_user: "{{ pg_owner }}"
+  register: _timeline_id
+
+- name: Set timeline ID
+  set_fact:
+    _timeline_id : "{{ _timeline_id.query_result[0].timeline_id }}"
+
+- name: Create wals directory
+  file:
+    path: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/wals/{{ _timeline_id }}"
+    state: directory
+    owner: "barman"
+    group: "barman"
+    mode: 0700
+  become: true
+
+- name: Copy streaming directory
+  copy:
+    src: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/streaming/"
+    dest: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/wals/{{ _timeline_id }}/"
+    remote_src: true
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+  failed_when: false
+
+- name: Copy incoming directory
+  copy:
+    src: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/incoming/"
+    dest: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/wals/{{ _timeline_id }}/"
+    remote_src: true
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+  failed_when: false
+
+- name: Delete streaming directory when method is rsync
+  file:
+    path: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/streaming"
+    state: absent
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+  when: barman_backup_method == 'rsync'
+
+- name: Delete incoming directory when method is postgres
+  file:
+    path: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/incoming"
+    state: absent
+  delegate_to: "{{ _barman_server_inventory_hostname }}"
+  when: barman_backup_method == 'postgres'
+
+- name: Reset local variables
+  set_fact:
+    _timeline_id: null

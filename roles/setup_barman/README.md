@@ -68,6 +68,9 @@ barman_server_private_ip: 10.0.0.123
 
 ### `barman_backup_method`
 
+After setup_barman role is executed, changing backup method may result in loss of the backup copy.
+So barman_backup_method manages the current backup method in the ~/.backup_method file of each server and prevents method conversion.
+
 Backup method. Can be:
 
 - `postgres` for backups based on `pg_basebackup` using Streaming

@@ -22,7 +22,8 @@
   "pcp_users": [
     {
       "name": "test",
-      "pass": "password"
+      "pass": "password",
+      "state": "present"
     }
   ]
 }

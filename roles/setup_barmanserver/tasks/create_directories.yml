@@ -17,6 +17,22 @@
     mode: 0750
   become: true
 
+- name: Check barman.conf file directory
+  stat:
+    path: "{{ barman_configuration_file | dirname }}"
+  register: _barman_conf_directory
+
+- name: Enusre barman.conf file directory {{ barman_configuration_file | dirname }} exists
+  file:
+    path: "{{ barman_configuration_file | dirname }}"
+    state: directory
+    owner: "{{ barman_user }}"
+    group: "{{ barman_group }}"
+    mode: 0750
+  become: true
+  when:
+    - not _barman_conf_directory.stat.exists
+
 - name: Ensure configuration files directory {{ barman_configuration_files_directory }} exists
   file:
     path: "{{ barman_configuration_files_directory }}"
