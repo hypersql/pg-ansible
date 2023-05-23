@@ -32,7 +32,7 @@ GROUP_ROLES = {
     'primary': [
         'setup_repo',
         'install_dbserver',
-        'manage_extension',
+        'setup_extension',
         'init_dbserver',
         'manage_dbserver',
         'autotuning',
@@ -42,7 +42,7 @@ GROUP_ROLES = {
     'standby': [
         'setup_repo',
         'install_dbserver',
-        'manage_extension',
+        'setup_extension',
         'setup_replication',
         'manage_dbserver',
         'autotuning',
@@ -65,7 +65,7 @@ GROUP_ROLES = {
     "standby": [
         "setup_repo",
         "install_dbserver",
-        "manage_extension",
+        "setup_extension",
         "setup_replication",
         "manage_dbserver",
         "autotuning",
@@ -142,7 +142,7 @@ class LookupModule(LookupBase):
             if group in ["pemserver", "primary", "standby"] and hostvars.get(
                 "barman", False
             ):
-                supported_roles = list(set(supported_roles) | set(["setup_barman"]))
+                supported_roles = list(set(supported_roles) | set(["manage_barmanbackup"]))
             # Special case for the primary nodes when the host variable
             # dbt2 is set to true.
             if group in ["primary"] and hostvars.get("dbt2", False):

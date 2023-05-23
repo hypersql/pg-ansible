@@ -9,6 +9,6 @@
       - pg_version
 
 # Entry point of the extension_manage role
-- name: Include the manage_extension.yml
-  include_tasks: manage_extension.yml
-  when: "'manage_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+- name: Include the setup_extension.yml
+  include_tasks: setup_extension.yml
+  when: "'setup_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"

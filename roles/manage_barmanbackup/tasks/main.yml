@@ -1,0 +1,14 @@
+---
+- name: Check required variables for this role
+  include_role:
+    name: common
+    tasks_from: check_required_variables
+  vars:
+    required_variables:
+      - pg_type
+      - pg_version
+
+# Entry point of the manage_barmanbackup role
+- name: Include the manage_barmanbackup.yml
+  include_tasks: manage_barmanbackup.yml
+  when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
