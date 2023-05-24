@@ -12,6 +12,8 @@ pgpool2_ssl: true
 
 # Default configuration values
 pgpool2_port: 9999
+pgpool2_pg_port: 5432
+pgpool_pg_check_password: ""
 
 # Disable logging
 disable_logging: false

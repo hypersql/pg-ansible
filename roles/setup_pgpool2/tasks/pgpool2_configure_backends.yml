@@ -12,7 +12,7 @@
         },
         {
           'key': 'backend_port'+ ansible_loop.index0 | string,
-          'value': pg_port,
+          'value': pgpool2_pg_port,
           'state': 'present',
           'quoted': false
         },

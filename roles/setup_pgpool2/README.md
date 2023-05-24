@@ -97,6 +97,16 @@ Example:
 pgpool2_port: 5433
 ```
 
+### `pgpool2_pg_port`
+
+PostgreSQL(backend) TCP port to connect to from pgpool. Default: `5432`.
+
+Example:
+
+```yaml
+pgpool2_port: 5434
+```
+
 ## Dependencies
 
 This role does not have any dependencies, but packages repositories should have
