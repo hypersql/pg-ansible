@@ -5,7 +5,6 @@ barman_user: "barman"
 barman_group: "barman"
 barman_pg_user: "barman"
 barman_configuration_files_directory: "/etc/barman.d"
-barman: true
 barman_server_private_ip: ""
 
 pg_owner: postgres
