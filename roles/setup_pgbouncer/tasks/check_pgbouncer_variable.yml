@@ -1,0 +1,25 @@
+---
+- name: Check PgBouncer version
+  fail:
+    msg: "PgBouncer version {{ pgbouncer_version }} not supported.
+        Supported versions are {{ supported_pgbouncer_version }}."
+  when: pgbouncer_version not in supported_pgbouncer_version
+
+- name: Check PgBouncer pool_mode configuration value
+  fail:
+    msg: "PgBouncer pooling mode = {{ pgbouncer_pool_mode }} not valid.
+      Available pooling modes are {{ available_pool_mode }}"
+  when: pgbouncer_pool_mode not in available_pool_mode
+
+- name: Check PgBouncer auth_type configuration value
+  fail:
+    msg: "PgBouncer authentication type = {{ pgbouncer_auth_type }} not valid.
+      Available authentication types are {{ available_auth_type }}"
+  when: pgbouncer_auth_type not in available_auth_type
+
+- name: Check Pgbouncer pgbouncer_listen_addr
+  fail:
+    msg: "pgbouncer_listen_addr is not IP format"
+  when:
+    - pgbouncer_listen_addr != '*'
+    - pgbouncer_listen_addr is not ansible.utils.ip_address
