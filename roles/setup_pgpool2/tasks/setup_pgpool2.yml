@@ -140,6 +140,12 @@
   vars:
     pgpool2_backends: "{{ _pgpool2_backends }}"
 
+- name: Set password PostgreSQL Check user
+  set_fact:
+    pgpool2_health_check_password: "{{ pgpool_pg_check_password }}"
+    pgpool2_sr_check_password: "{{ pgpool_pg_check_password }}"
+  when: pgpool_pg_check_password|length > 0
+
 - name: Include the pgpool2_setup_sr_mode
   include_tasks: pgpool2_setup_sr_mode.yml
   when:
