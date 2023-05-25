@@ -35,5 +35,5 @@
       when: "'manage_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_barmanserver
       when: "'setup_barmanserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
-    - role: setup_barman
-      when: "'setup_barman' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: manage_barmanbackup
+      when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"

@@ -1,4 +1,4 @@
-# manage_extension
+# setup_extension
 
 This Ansible Role install and manage PostgreSQL Extension
 
@@ -16,7 +16,7 @@ When executing the role via Ansible these are required variables:
     Postgres Version supported are: `14.0`, `14.1`, `14.2`, `14.3`, `14.3`, `14.5`, `14.6`
 
 - **pg_type**
-    
+
     Database Engine supported are: `PG`
 
 - **pg_extension_list**
@@ -33,9 +33,9 @@ pg_extension_list:
 
 The rest of the variables can be configured and are available in the:
 
-- [roles/manage_extension/defaults/main.yml](./defaults/main.yml)
-- [roles/manage_extension/vars/PG_RedHat.yml](./vars/PG_RedHat.yml)
-- [roles/manage_extension/vars/PG_Debian.yml](./vars/PG_Debian.yml)
+- [roles/setup_extension/defaults/main.yml](./defaults/main.yml)
+- [roles/setup_extension/vars/PG_RedHat.yml](./vars/PG_RedHat.yml)
+- [roles/setup_extension/vars/PG_Debian.yml](./vars/PG_Debian.yml)
 
 
 ## Dependencies
@@ -71,9 +71,9 @@ all:
 ```
 
 
-### How to include the `manage_extension` role in your Playbook
+### How to include the `setup_extension` role in your Playbook
 
-Below is an example of how to include the `manage_extension` role for
+Below is an example of how to include the `setup_extension` role for
 installing extension :
 
 ```yaml
@@ -97,7 +97,7 @@ installing extension :
             - pgaudit
 
   roles:
-    - manage_extension
+    - setup_extension
 ```
 
 ## Database engines supported

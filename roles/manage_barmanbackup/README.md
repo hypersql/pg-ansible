@@ -1,4 +1,4 @@
-# setup_barman
+# manage_barmanbackup
 
 This role is for configuring Barman backups on Postgres nodes.
 
@@ -23,11 +23,11 @@ Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, 
 Database Engine supported are: `PG`
 
 These and other variables can be assigned in the `pre_tasks` definition of the
-section: _How to include the `setup_barman` role in your Playbook_
+section: _How to include the `manage_barmanbackup` role in your Playbook_
 
 The rest of the variables can be configured and are available in the:
 
-- [roles/setup_barman/defaults/main.yml](./defaults/main.yml)
+- [roles/manage_barmanbackup/defaults/main.yml](./defaults/main.yml)
 
 Below is the documentation of the rest of the main variables:
 
@@ -68,7 +68,7 @@ barman_server_private_ip: 10.0.0.123
 
 ### `barman_backup_method`
 
-After setup_barman role is executed, changing backup method may result in loss of the backup copy.
+After manage_barmanbackup role is executed, changing backup method may result in loss of the backup copy.
 So barman_backup_method manages the current backup method in the ~/.backup_method file of each server and prevents method conversion.
 
 Backup method. Can be:
@@ -184,9 +184,9 @@ all:
           barman_no_configuration: true
 ```
 
-### How to include the `setup_barman` role in your Playbook
+### How to include the `manage_barmanbackup` role in your Playbook
 
-Below is an example of how to include the `setup_barman` role:
+Below is an example of how to include the `manage_barmanbackup` role:
 
 ```yaml
 ---
@@ -205,15 +205,15 @@ Below is an example of how to include the `setup_barman` role:
         pg_type: "PG"
 
   roles:
-    - setup_barman
-      when: "'setup_barman' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - manage_barmanbackup
+      when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
 ```
 
 Defining and adding variables is done in the `set_fact` of the `pre_tasks`.
 
 All the variables are available at:
 
-- [roles/setup_barman/defaults/main.yml](./defaults/main.yml)
+- [roles/manage_barmanbackup/defaults/main.yml](./defaults/main.yml)
 
 ## Important notes for recovery
 

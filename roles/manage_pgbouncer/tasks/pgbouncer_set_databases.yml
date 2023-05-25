@@ -20,6 +20,7 @@
       {% if db_item.pool_mode is defined %}pool_mode={{ db_item.pool_mode }}{% endif %}
       {% if db_item.max_db_connections is defined %}max_db_connections={{ db_item.max_db_connections }}{% endif %}
       {% if db_item.reserve_pool is defined %}reserve_pool={{ db_item.reserve_pool }}{% endif %}
+    regexp: "^{{ db_item.dbname | regex_escape() }}\\ = "
     state: "{{ db_item.state | default('present') }}"
   when: pgbouncer_databases_list|length > 0
   with_items: "{{ pgbouncer_databases_list }}"

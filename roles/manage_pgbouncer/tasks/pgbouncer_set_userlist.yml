@@ -14,13 +14,27 @@
   lineinfile:
     path: "{{ pgbouncer_auth_file }}"
     line: '"{{ user_item.username }}" "{{ user_item.password }}"'
-    regexp: "^\\\"{{ user_item.username | regex_escape() }}\\\".*"
-    state: "{{ user_item.state | default('present') }}"
+    state: "present"
     create: true
     mode: 0600
     owner: "{{ pgbouncer_user }}"
     group: "{{ pgbouncer_group }}"
-  when: pgbouncer_auth_user_list|length > 0
+  when:
+    - pgbouncer_auth_user_list|length > 0
+    - user_item.state == 'present'
+  with_items: "{{ pgbouncer_auth_user_list }}"
+  loop_control:
+    loop_var: user_item
+  become: true
+
+- name: Remove PgBouncer auth in {{ pgbouncer_auth_file }}
+  lineinfile:
+    path: "{{ pgbouncer_auth_file }}"
+    regexp: "^\\\"{{ user_item.username | regex_escape() }}\\\".*"
+    state: "absent"
+  when:
+    - pgbouncer_auth_user_list|length > 0
+    - user_item.state == 'absent'
   with_items: "{{ pgbouncer_auth_user_list }}"
   loop_control:
     loop_var: user_item
