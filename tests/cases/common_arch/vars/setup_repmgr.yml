@@ -1,0 +1,35 @@
+---
+# This is a variable file for using repmgr as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# Set user for Database user and password.
+pg_repmgr_dbname: "repmgr"
+#pg_repmgr_user_password: ""
+# Set user for System user.
+pg_repmgr_user: "repmgr"
+#
+# Set replication user used by primary and standby.
+pg_replication_user: "repuser"
+#
+# Repmgr log level
+repmgr_log_level: INFO
+# Repmgr log facility
+repmgr_log_facility: STDERR
+# Repmgr log file path when using STDERR
+repmgr_log_file: /var/log/repmgr/repmgr.log
+# Repmgr failover mode, could be 'automatic' for automatic failover, or
+# 'manual'
+repmgr_failover: automatic
+# Number of connection attemps in case of failure before triggering an
+# automatic failover.
+repmgr_reconnect_attempts: 3
+# Interval of time, in seconds, between each reconnect attemps
+repmgr_reconnect_interval: 5
+#
+# Add hostname in /etc/hosts. Use the <private_ip> of each node written
+# in the inventory file, and use the <hostname> written under the group as the hostname.
+# e.g. 192.168.0.8 standby1
+use_hostname: false
+#etc_hosts_lists: "127.0.0.1 localhost"

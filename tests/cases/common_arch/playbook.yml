@@ -1,0 +1,94 @@
+---
+- hosts: all
+  name: Remove nologin
+  tasks:
+    - name: Remove /run/nologin
+      ansible.builtin.file:
+        path: /run/nologin
+        state: absent
+      become: true
+
+- hosts: all
+  name: Settings PostgreSQL, pgbouncer, repmgr
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      set_fact:
+        pg_version: 14.6
+        pg_type: "PG"
+        disable_logging: false
+    - name: Set variable
+      ansible.builtin.include_vars:
+        dir: vars
+        ignore_unknown_extensions: true
+        extensions:
+          - 'yml'
+
+  roles:
+    - role: setup_repo
+    - role: install_dbserver
+    - role: setup_extension
+    - role: init_dbserver
+    - role: setup_replication
+    - role: manage_dbserver
+    - role: setup_pgbouncer
+    - role: manage_pgbouncer
+    - role: setup_repmgr
+
+- hosts: all
+  name: Settings barmanserver and Primary barman postgres method backup to primary
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      set_fact:
+        pg_version: 14.6
+        pg_type: "PG"
+        disable_logging: false
+    - name: Set variable
+      ansible.builtin.include_vars:
+        dir: vars
+        ignore_unknown_extensions: True
+        extensions:
+          - 'yml'
+
+  roles:
+    - role: setup_barmanserver
+    - role: manage_barmanbackup
+
+- hosts: all
+  name: Settings pgpool-II and Connect pgpool-II / pgbouncer
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      set_fact:
+        pg_version: 14.6
+        pg_type: "PG"
+        pgpool2_pg_port: 6432
+        pg_pgpool_user_password: "password"       #"pgpool" user
+        pgpool_pg_check_password: "password"     #"pgpool2" user(check sr, health)
+        disable_logging: false
+    - name: Set variable
+      ansible.builtin.include_vars:
+        dir: vars
+        ignore_unknown_extensions: True
+        extensions:
+          - 'yml'
+
+  roles:
+    - role: setup_pgpool2
+    - role: manage_pgpool2

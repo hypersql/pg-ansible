@@ -18,6 +18,7 @@ available_os_types:
   - ubuntu20
   - oraclelinux7
 available_roles:
+  - autotuning
   - init_dbserver
   - install_dbserver
   - manage_dbserver
@@ -33,3 +34,4 @@ available_roles:
   - setup_replication
   - setup_repmgr
   - setup_repo
+  - common_arch

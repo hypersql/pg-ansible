@@ -1,0 +1,11 @@
+---
+# This is a variable file for using manage_extension as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# manage_extension role installs all extensions included in the role by default.
+# If you want to limit the extension, use this variable.
+pg_extension_list:
+    - postgis
+    - pgaudit

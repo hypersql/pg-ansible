@@ -1,0 +1,41 @@
+---
+# This is a variable file for using manage_pgbouncer as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# Set System user and group.
+pgbouncer_user: "pgbouncer"
+pgbouncer_group: "pgbouncer"
+#
+pgbouncer_pid_file: "/run/pgbouncer/pgbouncer.pid"
+#
+# Set the path of the databases.ini file
+# and defines databases to be added and deleted.
+# Reload pgbouncer on setup.
+pgbouncer_databases_file: "/etc/pgbouncer/databases.ini"
+
+pgbouncer_databases_list:
+  - dbname: "postgres"
+    host: "localhost"
+    port: 5432
+    pool_size: 50
+    pool_mode: "session"
+    max_db_connections: 100
+    reserve_pool: 10
+    state: present
+#
+# Set the path of the userlist.txt file
+# and defines auth_user to be added and deleted.
+# Reload pgbouncer on setup.
+pgbouncer_auth_file: "/etc/pgbouncer/userlist.txt"
+pgbouncer_auth_user_list:
+  - username: "postgres"
+    password: "password"
+    state: present
+  - username: "pgpool"
+    password: "password"
+    state: present
+  - username: "pgpool2"
+    password: "password"
+    state: present

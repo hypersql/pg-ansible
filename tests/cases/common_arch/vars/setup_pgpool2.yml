@@ -1,0 +1,22 @@
+---
+# This is a variable file for using setup_pgpool2 as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# Watchdog can be used when there are 3 or more pgpool-II servers.
+# vip (Virtual IP) is available only when watchdog is enabled.
+pgpool2_watchdog: false
+#pgpool2_vip: "10.0.0.123"
+#pgpool2_vip_dev: "eth0"
+#
+pgpool_load_balancing: true
+#
+pgpool2_ssl: true
+pgpool2_port: 9999
+#
+# Add hostname in /etc/hosts. Use the <private_ip> of each node written
+# in the inventory file, and use the <hostname> written under the group as the hostname.
+# e.g. 192.168.0.8 standby1
+use_hostname: false
+#etc_hosts_lists: "127.0.0.1 localhost"

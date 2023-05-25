@@ -1,0 +1,21 @@
+---
+- hosts: all
+  name: Postgres deployment playbook
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      ansible.builtin.set_fact:
+        pg_version: 14.6
+        pg_type: "PG"
+        disable_logging: false
+
+  roles:
+    - role: setup_repo
+    - role: install_dbserver
+    - role: init_dbserver
+    - role: autotuning
