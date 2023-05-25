@@ -23,21 +23,8 @@
       Supported versions are {{ supported_pg_version }}"
   when: pg_version|float not in supported_pg_version
 
-- name: Check supported versions for pgpoolII
-  fail:
-    msg: "pgpoolII Version = {{ pgpool2_version }} not supported.
-      Supported versions are {{ supported_pgpool2_version }}"
-  when:
-    - pgpool2_version not in supported_pgpool2_version
-
-- name: Check watchdog settings
-  fail:
-    msg: "Watchdog settings not valid: pgpool2_vip = '{{ pgpool2_vip }}',
-      pgpool2_vip_dev = '{{ pgpool2_vip_dev }}'"
-  when:
-    - pgpool2_watchdog
-    - (pgpool2_vip is not defined or pgpool2_vip|length == 0) or
-      (pgpool2_vip_dev is not defined or pgpool2_vip_dev|length == 0)
+- name: Check Pgpool2 variable validation
+  include_tasks: check_pgpool2_variable.yml
 
 - name: Set the service name
   set_fact:

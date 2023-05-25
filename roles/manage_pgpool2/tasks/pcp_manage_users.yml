@@ -1,4 +1,15 @@
 ---
+- name: Check pcp_users validation
+  fail:
+    msg: "pcp_users.password is not defined."
+  with_items: "{{ pcp_users }}"
+  loop_control:
+    loop_var: user_item
+  when:
+    - pcp_users|length > 0
+    - user_item.state is not defined or user_item.state == 'present'
+    - user_item.pass is not defined or user_item.pass|length < 1
+
 - name: Check if we have pcp.conf file
   stat:
     path: "{{ pcp_configuration_file }}"

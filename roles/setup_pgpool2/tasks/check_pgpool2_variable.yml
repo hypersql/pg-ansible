@@ -1,0 +1,24 @@
+---
+- name: Check supported versions for pgpoolII
+  fail:
+    msg: "pgpoolII Version = {{ pgpool2_version }} not supported.
+      Supported versions are {{ supported_pgpool2_version }}"
+  when:
+    - pgpool2_version not in supported_pgpool2_version
+
+- name: Check watchdog settings
+  fail:
+    msg: "Watchdog settings not valid: pgpool2_vip = '{{ pgpool2_vip }}',
+      pgpool2_vip_dev = '{{ pgpool2_vip_dev }}'"
+  when:
+    - pgpool2_watchdog
+    - (pgpool2_vip is not defined or pgpool2_vip|length == 0) or
+      (pgpool2_vip_dev is not defined or pgpool2_vip_dev|length == 0)
+
+- name: Check watchdog pgpool2_vip
+  fail:
+    msg: "pgpool2_vip is not IP format"
+  when:
+    - pgpool2_vip is defined
+    - pgpool2_vip|length > 0
+    - pgpool2_vip is not ansible.utils.ip_address
