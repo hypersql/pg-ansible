@@ -8,7 +8,7 @@
   when:
     - pgbouncer_auth_user_list|length > 0
     - user_item.state is not defined or user_item.state == 'present'
-    - (user_item.username is not defined or user_item.username|length < 1) or (user_item.password is not defined or user_item.password|length < 1)
+    - (user_item.username is not defined or user_item.username|length < 1) or (user_item.password is not defined or user_item.password|string|length < 1)
 
 - name: Manage PgBouncer auth. file entries in {{ pgbouncer_auth_file }}
   lineinfile:
