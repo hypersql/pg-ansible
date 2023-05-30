@@ -2,7 +2,7 @@
 DIR := $(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 DIST := $(DIR)/dist
 DIST_FOR_TEST := $(DIR)/tests/docker
-VERSION ?= $(shell cat $(DIR)/VERSION | head -n 1)
+VERSION ?= 0.0.0-test
 
 build:
 	sed -E 's/version:.*/version: "$(VERSION)"/g' $(DIR)/galaxy.template.yml > $(DIR)/galaxy.yml

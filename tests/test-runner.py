@@ -195,7 +195,7 @@ def get_testing_roles_from_keywords(keywords):
     testing_roles = []
     for keyword in keywords:
         for role in TestConfiguration()["available_roles"]:
-            if re.search(re.escape(keyword), role):
+            if re.fullmatch(re.escape(keyword), role):
                 testing_roles.append(role)
 
     return testing_roles

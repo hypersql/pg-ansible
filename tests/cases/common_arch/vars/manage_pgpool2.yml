@@ -1,0 +1,47 @@
+---
+# This is a variable file for using manage_pgpool2 as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# Set parameters in pgpool-II.conf.
+# Parameter value is not automatically quoted("").
+# If you want to set it, set the value of quoted to true.
+pgpool2_configuration:
+  - key: logging_collector
+    value: on
+  - key: log_directory
+    quoted: true
+    value: "/var/log/pgpool-II"
+  - key: log_filename
+    quoted: true
+    value: "pgpool-%Y-%m-%d_%H%M%S.log"
+  - key: "disable_load_balance_on_write"
+    value: "transaction"
+    quoted: true
+  - key: delay_threshold
+    value: "8192"
+  - key: log_standby_delay
+    value: "if_over_threshold"
+    quoted: true
+
+#
+# Add or Remove pgpool-II users.
+pgpool2_users:
+ - name: "postgres"
+   pass: "password"
+   auth: scram
+#  - name: "my_user2"
+#    pass: "password"
+#    auth: md5
+#  - name: "my_user_to_be_removed"
+#    state: absent
+#
+# Add or Remove pcp users.
+#pcp_users:
+#  - name: "my_user1"
+#    pass: "password"
+#  - name: "my_user2"
+#    pass: "password"
+#  - name: "my_user_to_be_removed"
+#    state: absent

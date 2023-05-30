@@ -1,0 +1,29 @@
+---
+# This is a variable file for using setup_barmanserver as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# Set System user and group.
+barman_user: "barman"
+barman_group: "barman"
+#
+# Set directories and configuration file path.
+barman_configuration_file: "/etc/barman.conf"
+barman_configuration_files_directory: "/etc/barman.d"
+barman_home: "/var/lib/barman"
+barman_lock_directory: "/var/run/barman"
+#
+# Set log configuration.
+barman_log_file: "/var/log/barman/barman.log"
+barman_log_level: "INFO"
+#
+# Set the compression format to use when archiving backups and WAL files with barman.
+# It can be set to gzip, lz4, zstd, none.
+barman_compression: "gzip"
+#
+# Add hostname in /etc/hosts. Use the <private_ip> of each node written
+# in the inventory file, and use the <hostname> written under the group as the hostname.
+# e.g. 192.168.0.8 standby1
+use_hostname: false
+#etc_hosts_lists: "127.0.0.1 localhost"

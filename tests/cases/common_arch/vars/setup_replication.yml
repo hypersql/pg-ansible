@@ -1,0 +1,26 @@
+---
+# This is a variable file for using setup_replication as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# If force_replication is true, delete directory pg_data, pg_default_data,
+# pg_wal, pg_log, pg_local_wal_archive_dir in standby server.
+# If force_initdb is set to true, the same results shows,
+# even if force_replication is false.
+force_replication: false
+#
+# Set directory
+#pg_data: "/opensql/pg/14/data"
+#pg_wal: "/opensql/pg/14/pg_wal"
+#pg_log: "/opensql/pg/14/log/pg_log"
+#pg_local_wal_archive_dir: "/opensql/pg/14/archive"
+#
+# Set PostgreSQL database locale. The locale must exist on the target server.
+pg_locale: "en_US.utf8"
+#
+# Add hostname in /etc/hosts. Use the <private_ip> of each node written
+# in the inventory file, and use the <hostname> written under the group as the hostname.
+# e.g. 192.168.0.8 standby1
+use_hostname: false
+# etc_hosts_lists: "127.0.0.1 localhost"

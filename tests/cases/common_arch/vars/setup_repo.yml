@@ -1,0 +1,20 @@
+---
+# This is a variable file for using setup_repo as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# If force_repo is true, delete repo related postgresql repo(epel, pgdg) .
+force_repo: false
+#
+# This variable run only RedHat.
+#yum_additional_repos:
+#  - name: "epel"
+#    description: "EPEL YUM repo"
+#    baseurl: "https://download.fedoraproject.org/pub/epel/$releasever/$basearch/"
+#    gpgcheck: "no"
+#
+# This variable run only Debian, Ubuntu.
+#apt_additional_repos:
+#  - repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+#    filename: google-chrome

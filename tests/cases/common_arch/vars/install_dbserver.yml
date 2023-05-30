@@ -1,0 +1,20 @@
+---
+# This is a variable file for using install_dbserver as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# If force_install is true, delete package related postgresql
+force_install: false
+#
+# For installing the minor version.
+# The version indicated in pg_version will be installed.
+# Downloaded from the postgresql official download site.
+rpm_install: true
+#
+# Decide whether to use ssl in postgresql or not.
+# Here we are specifying to receive packages related to ssl.
+# It used default value true.
+pg_ssl: true
+#
+enable_core_dump: false

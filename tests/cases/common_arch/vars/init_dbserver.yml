@@ -1,0 +1,32 @@
+---
+# This is a variable file for using init_dbserver as a role.
+#
+# For details on user defined variables of each role,
+# refer to README.md and roles/<role_name>/default/main.yml.
+#
+# If force_initdb is true, remove directory pg_data,
+# pg_default_data, pg_wal, pg_log, pg_local_wal_acrhive_dir in primary server.
+force_initdb: false
+#
+# Set directory
+#pg_data: "/opensql/pg/14/data"
+#pg_wal: "/opensql/pg/14/pg_wal"
+#pg_log: "/hyperslq/pg/14/log/pg_log"
+#pg_local_wal_archive_dir: "/opensql/pg/14/archive"
+#
+# Set PostgreSQL database locale. The locale must exist on the target server.
+pg_locale: "en_US.utf8"
+#
+# Decide whether to use ssl in postgresql or not.
+# Set to yes to generate an ssl certificate that PostgreSQL can use
+# and add the certificate to the PostgreSQL server settings.
+# It used default value true.
+pg_ssl: true
+#
+# Add hostname in /etc/hosts. Use the <private_ip> of each node written
+# in the inventory file, and use the <hostname> written under the group as the hostname.
+# e.g.
+# <private_ip> <hostname>
+# 192.168.0.8 standby1
+use_hostname: false
+#etc_hosts_lists: "127.0.0.1 localhost"
