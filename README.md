@@ -215,6 +215,9 @@ ansible-playbook playbook.yml \
 ### Supported PostgreSQL Version
 - 14.0 - 14.6
 
+## Tmax OpenSQL Version
+Tmax OpenSQL v2.0
+
 ## License
 
 BSD
