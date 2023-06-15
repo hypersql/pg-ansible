@@ -24,3 +24,6 @@ update_etc_file: true
 # Database variables
 pg_data: "{{ pg_user_home + '/' + pg_major_version + '/data' if ansible_os_family == 'RedHat' else \
       pg_user_home + '/' + pg_major_version  + '/' + pg_instance_name if ansible_os_family == 'Debian' }}"
+
+# TODO
+# It can changed backend_flag

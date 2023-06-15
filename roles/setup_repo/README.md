@@ -28,7 +28,7 @@ When executing the role via Ansible these are the required variables:
 
 - **pg_version**
 
-  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
 - **pg_type**
 
@@ -147,7 +147,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## Playbook execution examples
 
@@ -172,4 +173,4 @@ Original Author:
   * Doug Ortiz
   * Vibhor Kumar (Co-Author)
   * Julien Tachoires (Co-Author)
-  
+
