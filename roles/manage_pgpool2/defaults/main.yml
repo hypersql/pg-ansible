@@ -2,12 +2,9 @@
 pgpool2_configuration: []
 pgpool2_users: []
 pcp_users: []
-<<<<<<< HEAD
 pgpool2_port: 9999
 
 # Database variables
 pg_owner: "postgres"
 
 use_system_user: true
-=======
->>>>>>> ff5cc95 (Added .pcppass settings, backend flags)
