@@ -23,6 +23,15 @@
     - initdb_cmd.changed
   become: true
 
+- name: Ensure User home directory's file privilege
+  ansible.builtin.file:
+    path: "{{ pg_user_home }}"
+    owner: "{{ pg_owner }}"
+    group: "{{ pg_group }}"
+    state: directory
+    recurse: true
+  become: true
+
 - name: Ensure postgres default data directory exists
   ansible.builtin.file:
     path: "{{ pg_default_data }}"

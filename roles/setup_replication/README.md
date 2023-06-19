@@ -32,6 +32,17 @@ Operating Systems supported are: CentOS7 and RHEL7
 
   Database Engine supported are: `PG`
 
+### `standby_quorum_type`
+
+Using this parameters user can set backend flag registered in pgpool-II.
+Users can set only "any" or "first".
+
+Example:
+
+```yaml
+standby_quorum_type: "any"
+```
+
 The rest of the variables can be configured and are available in the:
 
   * [roles/setup_replication/defaults/main.yml](./defaults/main.yml)

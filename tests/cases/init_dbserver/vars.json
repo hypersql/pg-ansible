@@ -1,4 +1,5 @@
 {
+  "ansible_module_running_in_container": false,
   "pg_owner": "opensql",
   "pg_group": "opensql",
   "pg_port": 5433,
