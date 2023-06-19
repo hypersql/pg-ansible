@@ -14,7 +14,8 @@ psqlrc_group: "{{ pg_group }}"
 psqlrc_mode: "0600"
 psqlrc_content: |
   -- psql configuration
-
+  \set PROMPT1 '%n@%/:%>-%# '
+  \set PROMPT2 '%# '
 multi_param_list:
   - local_preload_libraries
   - session_preload_libraries
