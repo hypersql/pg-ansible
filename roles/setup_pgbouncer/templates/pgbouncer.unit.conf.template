@@ -2,6 +2,12 @@
 User={{ pgbouncer_user }}
 Group={{ pgbouncer_group }}
 
+{% if pgbouncer_binds_service|length > 0 %}
+# Binds pgbouncer service
+After={{ pgbouncer_binds_service }}
+BindsTo={{ pgbouncer_binds_service }}
+{% end if %}
+
 # Path to the init file
 Environment=BOUNCERCONF={{ pgbouncer_config_file }}
 

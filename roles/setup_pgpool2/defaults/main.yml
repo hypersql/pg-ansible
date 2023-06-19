@@ -15,6 +15,9 @@ pgpool2_port: 9999
 pgpool2_pg_port: 5432
 pgpool_pg_check_password: ""
 
+# pgpool-II backend values
+pgpool2_backend_flag: "ALLOW_TO_FAILOVER"
+
 # Disable logging
 disable_logging: false
 

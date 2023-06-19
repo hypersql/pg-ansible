@@ -13,7 +13,11 @@ pgpool2_group: "postgres"
 # Systemd unit file
 pgpool2_systemd_unit_file: "/usr/lib/systemd/system/pgpool-II.service"
 pgpool2_systemd_conf_file: "/etc/sysconfig/pgpool-II"
+
+# pcp file
 pcp_configuration_file: "/etc/pgpool-II/pcp.conf"
+pcppass_file: "{{ pg_user_home }}/.pcppass"
+
 pgpool2_pid_file_name: "/var/run/pgpool-II/pgpool.pid"
 pgpool2_logdir: "/var/log/pgpool-II"
 # Directory containing SSL keys and certs
@@ -67,6 +71,7 @@ pgpool2_ssl_csr_dn:
 pg_port: 5432
 pg_database: "postgres"
 pg_instance_name: "main"
+pg_user_home: "/var/lib/pgsql"
 
 supported_os:
   - CentOS7
@@ -92,5 +97,3 @@ supported_pg_version:
 
 supported_pgpool2_version:
   - 4.3
-
-pg_user_home: "/var/lib/pgsql"

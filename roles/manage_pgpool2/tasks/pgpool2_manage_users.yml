@@ -32,7 +32,7 @@
       script -q -c '{{ pgpool2_bin_path }}/pg_enc -k ~/.pgpoolkey -f {{ pgpool2_configuration_file }} -u {{ user_item.name }} -p -m'
     stdin: "{{ user_item.pass }}"
   become: true
-  become_user: "{{ pg_owner }}"
+  become_user: "{{ pgpool2_user }}"
   loop: "{{ pgpool2_users }}"
   loop_control:
     loop_var: user_item
@@ -47,7 +47,7 @@
       script -q -c '{{ pgpool2_bin_path }}/pg_md5 -f {{ pgpool2_configuration_file }} -u {{ user_item.name }} -p -m'
     stdin: "{{ user_item.pass }}"
   become: true
-  become_user: "{{ pg_owner }}"
+  become_user: "{{ pgpool2_user }}"
   loop: "{{ pgpool2_users }}"
   loop_control:
     loop_var: user_item

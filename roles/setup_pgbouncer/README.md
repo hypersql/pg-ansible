@@ -259,7 +259,16 @@ Example:
 ```yaml
 use_system_user: false
 ```
+### `pgbouncer_binds_service`
 
+Set the service to be registered as BindsTo in the system unit
+
+
+Example:
+
+```yaml
+pgbouncer_binds_service: "postgresql-14.service"
+```
 
 ## Dependencies
 
