@@ -39,3 +39,19 @@
         objects: >-
           pg_start_backup(text:boolean:boolean),pg_stop_backup(),pg_stop_backup(boolean:boolean),pg_switch_wal(),pg_create_restore_point(text)
         type: function
+  when: pg_major_version|int <= 14
+
+- name: Ensure privileges for the barman user
+  include_role:
+    name: manage_dbserver
+    tasks_from: manage_privileges
+  vars:
+    pg_grant_privileges:
+      - roles: "{{ barman_pg_user }}"
+        database: postgres
+        privileges: execute
+        schema: pg_catalog
+        objects: >-
+          pg_backup_start(text:boolean),pg_backup_stop(boolean),pg_switch_wal(),pg_create_restore_point(text)
+        type: function
+  when: pg_major_version|int >= 15

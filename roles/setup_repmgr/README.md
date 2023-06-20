@@ -30,7 +30,7 @@ When executing the role via ansible there are three required variables:
 
 - **_pg_version_**
 
-  Postgres Versions supported are: `14.0`,`14.1`,`14.2`,`14.3`,`14.3`,`14.5`,`14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 - **_pg_type_**
 
 Database Engine supported is `PG`
@@ -138,7 +138,8 @@ Below is an example of how to include the `setup_repmgr` role:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## Playbook execution examples
 

@@ -20,3 +20,4 @@ rpm_list:
   }
 
 pg_default_data: "/var/lib/pgsql/{{ pg_major_version }}/data"
+pg_bin_path: "/usr/pgsql-{{ pg_major_version }}/bin"
