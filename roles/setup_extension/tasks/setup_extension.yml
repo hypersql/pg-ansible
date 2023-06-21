@@ -13,11 +13,47 @@
 - name: Reference Postgres variables
   include_vars: "{{ pg_type }}_{{ ansible_os_family }}.yml"
 
-- name: Include extension_package_manage tasks
-  include_tasks: extension_package_manage.yml
+- name: Include RedHat variable in install_dbserver
+  include_vars: ../../install_dbserver/vars/{{ pg_type }}_{{ ansible_os_family }}.yml
+
+- name: Include install_extension_package tasks
+  include_tasks: install_extension_package.yml
   loop: "{{ pg_extension_list }}"
   loop_control:
     loop_var: pg_extension
   when:
     - pg_extension_list is defined
     - pg_extension_list|length > 0
+
+- name: Set extension_spl_param to add extension libraries
+  include_tasks: set_spl_param.yml
+  loop: "{{ pg_extension_list }}"
+  loop_control:
+    loop_var: pg_extension
+  when:
+    - pg_extension_list is defined
+    - pg_extension_list|length > 0
+    - pg_extension_creates
+
+- name: Include supporeted multi_param_list
+  include_vars: ../../manage_dbserver/vars/main.yml
+  when: pg_extension_creates
+
+- name: Add extension to SPL if needed
+  include_tasks: ../../manage_dbserver/tasks/manage_multi_params.yml
+  vars:
+    pg_multi_params: "{{ extension_spl_param }}"
+  when:
+    - extension_spl_param is defined
+    - extension_spl_param|length > 0
+    - pg_extension_creates
+
+- name: Create extension in postgresql
+  include_tasks: create_extension_in_pg.yml
+  loop: "{{ pg_extension_list }}"
+  loop_control:
+    loop_var: pg_extension
+  when:
+    - pg_extension_list is defined
+    - pg_extension_list|length > 0
+    - pg_extension_creates
