@@ -1,4 +1,6 @@
 {
+  "pg_owner": "opensql",
+  "pg_group": "opensql",
   "use_hostname": false,
   "pg_data": "/var/lib/pgsql/14/main/data",
   "pg_wal": "/opt/pgwal",

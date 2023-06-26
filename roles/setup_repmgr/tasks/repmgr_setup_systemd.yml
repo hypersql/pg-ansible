@@ -26,6 +26,16 @@
   become: true
   when: ansible_os_family == 'Debian'
 
+- name: Create repmgr socket domain directories
+  file:
+    path: "/var/run/repmgr"
+    owner: "{{ pg_owner }}"
+    group: "{{ pg_group }}"
+    mode: 0755
+    state: directory
+    recurse: yes
+  become: true
+
 - name: Enable and start repmgrd
   ansible.builtin.systemd:
     name: "{{ repmgrd_service }}"
