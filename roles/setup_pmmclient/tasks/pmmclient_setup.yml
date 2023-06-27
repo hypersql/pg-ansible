@@ -1,0 +1,20 @@
+---
+# Configure pmm-client
+- name: Configure pmm-client
+  ansible.builtin.command: >
+    pmm-admin config --server-url=http://admin/admin@{{ pmm_server_host }}
+
+# Register pmm-client on pmm-server
+- name: Register pmm-client
+  ansible.builtin.command: >
+    pmm-admin register --server-url=http://admin/admin@{{ pmm_server_host }}
+
+# Add monitoring database service
+- name: Add monitoring {{ database_type }} service
+  ansible.builtin.command: >
+    pmm-admin add {{ database_type }}
+
+# Start Agent
+- name: Start Agent
+  ansible.builtin.command: >
+    nohup pmm-agent --config-file=/usr/local/percona/pmm2/config/pmm-agent.yml &

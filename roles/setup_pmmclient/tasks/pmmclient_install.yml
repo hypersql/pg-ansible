@@ -1,0 +1,40 @@
+---
+# Update package
+- name: Apt Update
+  ansible.builtin.command: >
+    apt update
+
+# Install dependency package
+- name: Install Dependency Packages
+  package:
+    name:
+      - wget
+      - curl
+      - lsb-release
+    status: present
+  become: true
+
+# Get package from repository
+# TODO: Target directory path
+# TODO: Use wget module
+- name: Get pmm-client from repository
+  ansible.builtin.command: >
+    wget https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+
+# Dpkg
+# TODO: Target directory path
+# TODO: Use dpkg module
+- name: dpkg
+  ansible.builtin.command: >
+    dpkg -i percona-release_latest.generic_all.deb
+
+# Update package
+- name: Apt Update
+  ansible.builtin.command: >
+    apt update
+
+# Install pmm-client package (Debian)
+- name: Install pmm-client package
+  package:
+    name:
+      - pmm2-client

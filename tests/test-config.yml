@@ -35,3 +35,4 @@ available_roles:
   - setup_repmgr
   - setup_repo
   - common_arch
+  - setup_pmmclient

@@ -105,6 +105,9 @@ GROUP_ROLES = {
         "setup_repo",
         "setup_pgbackrestserver",
     ],
+    "pmmserver": [
+        "setup_pmmserver"
+    ],
 }
 
 
@@ -193,4 +196,11 @@ class LookupModule(LookupBase):
             # variable pgbackrest is set to true.
             if group in ["primary", "standby"] and hostvars.get("pgbackrest", False):
                 supported_roles = list(set(supported_roles) | set(["setup_pgbackrest"]))
+            
+            # Pmm monitoring
+            if group in ["pmmserver"]:
+                supported_roles = list(set(supported_roles) | set(["setup_pmmserver"]))
+            
+            if group in ["primary", "standby"] and hostvars.get("pmm_client", False):
+                supported_roles = list(set(supported_roles) | set(["setup_pmmclient"]))
         return supported_roles
