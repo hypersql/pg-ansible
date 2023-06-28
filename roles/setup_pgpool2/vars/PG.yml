@@ -49,6 +49,11 @@ pgpool2_health_check_password: ""
 
 pgpool2_user_map: []
 
+# pgpool command
+pgpool_start_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }}"
+pgpool_stop_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} -m fast stop"
+pgpool_reload_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} reload"
+
 pgpool2_ssl_csr_dn:
   CN: "pgpool-server.fqdn"
   O: ""

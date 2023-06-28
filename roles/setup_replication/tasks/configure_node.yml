@@ -43,7 +43,16 @@
     daemon_reload: true
     state: started
     enabled: true
+  when: use_system_user
   become: true
+
+- name: Start pg process
+  ansible.builtin.command: >
+    {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} start
+  when:
+    - not use_system_user
+  become: true
+  become_user: "{{ pg_owner }}"
 
 - name: Update standby hba config
   include_role:

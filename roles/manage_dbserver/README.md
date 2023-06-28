@@ -190,6 +190,18 @@ pg_tablespaces:
     state: present
 ```
 
+### `use_system_user`
+
+Restart or Reload PostgreSQL systemd unit to apply the settings using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+
 ## Dependencies
 
 The `manage_dbserver` role does depend on the following roles:

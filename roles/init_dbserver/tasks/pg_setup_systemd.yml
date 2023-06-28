@@ -10,16 +10,23 @@
   when:
     - ansible_facts.services[pg_service] is defined
     - ansible_facts.services[pg_service].state == 'running'
-    - not ansible_module_running_in_container
+    - use_system_user
   become: true
 
-- name: Stop pg service if running container
+- name: Check if we have postgres pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pg_default_data }}/postmaster.pid"
+  become: true
+  register: postgres_pid_file
+
+- name: Stop pg process
   ansible.builtin.command: >
     {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} stop
-  when: ansible_module_running_in_container
+  when:
+    - not use_system_user
+    - postgres_pid_file.stat.exists
   become: true
   become_user: "{{ pg_owner }}"
-  failed_when: false
 
 - name: Copy global systemd unit file to /etc/systemd/system
   ansible.builtin.copy:
@@ -32,7 +39,7 @@
   become: true
   when:
     - ansible_os_family == 'RedHat'
-    - not ansible_module_running_in_container
+    - use_system_user
 
 - name: Update systemd unit file in Redhat
   ansible.builtin.lineinfile:
@@ -60,7 +67,7 @@
       insertafter: "^\\[Service\\]$"
   when:
     - ansible_os_family == 'RedHat'
-    - not ansible_module_running_in_container
+    - use_system_user
 
 - name: Update systemd unit file in Debian
   ansible.builtin.lineinfile:
@@ -93,7 +100,7 @@
       insertafter: "^\\[Service\\]$"
   when:
     - ansible_os_family == 'Debian'
-    - not ansible_module_running_in_container
+    - use_system_user
 
 - name: Unlimited core file size when core_dump enable in systemd file
   ansible.builtin.lineinfile:
@@ -109,4 +116,4 @@
   when:
     - enable_core_dump|bool
     - ansible_os_family == 'RedHat'
-    - not ansible_module_running_in_container
+    - use_system_user

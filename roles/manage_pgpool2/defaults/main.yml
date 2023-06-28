@@ -5,3 +5,5 @@ pcp_users: []
 
 # Database variables
 pg_owner: "postgres"
+
+use_system_user: true

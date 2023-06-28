@@ -9,15 +9,23 @@
   when:
     - ansible_facts.services[pg_service] is defined
     - ansible_facts.services[pg_service].state == 'running'
+    - use_system_user
   become: true
 
-- name: Stop pg service if running container
+- name: Check if we have postgres pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pg_default_data }}/postmaster.pid"
+  become: true
+  register: postgres_pid_file
+
+- name: Stop pg process
   ansible.builtin.command: >
     {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} stop
-  when: ansible_module_running_in_container
+  when:
+    - not use_system_user
+    - postgres_pid_file.stat.exists
   become: true
   become_user: "{{ pg_owner }}"
-  failed_when: false
 
 - name: Drop the default debian database
   shell: >

@@ -107,6 +107,18 @@ Example:
 pgpool2_port: 5434
 ```
 
+### `use_system_user`
+
+Start pgpool-II systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+
 ## Dependencies
 
 This role does not have any dependencies, but packages repositories should have

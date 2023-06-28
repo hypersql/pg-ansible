@@ -6,6 +6,14 @@
 - name: Reference pg_type variables
   include_vars: "{{ pg_type }}.yml"
 
+- name: Get facts on current container
+  community.docker.current_container_facts:
+
+- name: Set whether to use the system user or not
+  set_fact:
+    use_system_user: false
+  when: ansible_module_running_in_container
+
 - name: Reference pg_type variables
   include_vars: "../../init_dbserver/vars/{{ pg_type }}_RedHat.yml"
 
@@ -43,12 +51,32 @@
   when:
     - pgpool2_users|length > 0
 
-- name: Reload pgpool-II service
+- name: Restart pgpool-II service
   systemd:
     name: "{{ pgpool2_service_name }}"
-    state: reloaded
+    state: restarted
   when:
     - pgpool2_user|length > 0 or pgpool2_configuration|length > 0
+    - use_system_user
+
+- name: Check if we have pgpoolII pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pgpool2_pid_file_name }}"
+  become: true
+  register: pgpool2_pid_file_exists
+
+- name: Restart pgpool-II process
+  when:
+    - pgpool2_user|length > 0 or pgpool2_configuration|length > 0
+    - not use_system_user
+  become: true
+  become_user: "{{ pgpool2_user }}"
+  block:
+    - name: Stop pgpool-II process
+      command: "{{ pgpool_stop_command }}"
+      when: pgpool2_pid_file_exists.stat.exists
+    - name: Restart pgpool-II process
+      command: "{{ pgpool_start_command }} -D"
 
 - name: Include the pcp_manage_users
   include_tasks: pcp_manage_users.yml

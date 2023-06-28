@@ -4,7 +4,25 @@
   systemd:
     name: "{{ pgpool2_service_name }}"
     state: restarted
+  when: use_system_user
   become: true
+
+- name: Check if we have pgpoolII pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pgpool2_pid_file_name }}"
+  become: true
+  register: pgpool2_pid_file_exists
+
+- name: Restart pgpool-II process
+  when: not use_system_user
+  become: true
+  become_user: "{{ pgpool2_user }}"
+  block:
+    - name: Stop pgpool-II process
+      command: "{{ pgpool_stop_command }}"
+      when: pgpool2_pid_file_exists.stat.exists
+    - name: Restart pgpool-II process
+      command: "{{ pgpool_start_command }} -D"
 
 - name: Wait for port {{ pgpool2_port }}
   wait_for:

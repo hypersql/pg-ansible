@@ -31,28 +31,25 @@
     loop_var: line_item
   no_log: "{{ disable_logging }}"
 
-- name: Reload the pg service
-  systemd:
-    name: "{{ pg_service }}"
-    daemon_reload: true
-    state: reloaded
+- name: Check if we have postgres pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pg_default_data }}/postmaster.pid"
   become: true
-  when:
-    - pg_postgres_conf_params|length > 0
-    - params.changed
-    - params_restart_required is defined
-    - not params_restart_required
-    - not ansible_module_running_in_container
+  register: postgres_pid_file
 
-- name: Reload the pg service in container
+- name: Fetch PostgreSQL pid
+  shell: |
+    set -o pipefail && cat {{ pg_default_data }}/postmaster.pid  | head -1
+  register: postgres_pid
+
+- name: Reload the pg process
   ansible.builtin.command: >
-    {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} reload
+    kill -HUP {{ postgres_pid.stdout }}
   when:
     - pg_postgres_conf_params|length > 0
     - params.changed
     - params_restart_required is defined
     - not params_restart_required
-    - ansible_module_running_in_container
   become: true
   become_user: "{{ pg_owner }}"
 
@@ -67,9 +64,9 @@
     - params.changed
     - params_restart_required is defined
     - params_restart_required
-    - not ansible_module_running_in_container
+    - use_system_user
 
-- name: Restart the pg service in container
+- name: Restart the pg process
   ansible.builtin.command: >
     {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} restart
   when:
@@ -77,7 +74,7 @@
     - params.changed
     - params_restart_required is defined
     - params_restart_required
-    - ansible_module_running_in_container
+    - not use_system_user
   become: true
   become_user: "{{ pg_owner }}"
 

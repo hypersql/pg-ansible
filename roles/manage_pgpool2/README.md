@@ -96,6 +96,18 @@ pcp_users:
 The `state` attribute defines if the user must be present or not in the
 authentication file. Default value is `present`.
 
+### `use_system_user`
+
+Restart pgpool-II systemd unit to apply the settings using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+
 ## Dependencies
 
 This role does not have any dependencies, but a PgpoolII instance should have

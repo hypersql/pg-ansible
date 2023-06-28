@@ -83,7 +83,7 @@ Example:
 ```yaml
 pg_local_wal_archive_dir: "/var/lib/pgsql/14/archive"
 ```
-### pg_owner_id
+### `pg_owner_id`
 
 Using this parameters user can change the uid of postgresql's systemuser.
 
@@ -93,7 +93,7 @@ Example:
 pg_owner_id: 10001
 ```
 
-### pg_group_id
+### `pg_group_id`
 
 Using this parameters user can change the uid of postgresql's systemuser.
 
@@ -121,6 +121,18 @@ Example:
 
 ```yaml
 pg_port: "5433"
+```
+
+### `use_system_user`
+
+Using this parameters PostgreSQL run as systemd unit.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
 ```
 
 The rest of the variables can be configured and are available in the:

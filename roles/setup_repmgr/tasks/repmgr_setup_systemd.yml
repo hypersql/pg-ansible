@@ -4,7 +4,9 @@
     mode: "0744"
     state: directory
   become: true
-  when: ansible_os_family == 'RedHat'
+  when:
+    - ansible_os_family == 'RedHat'
+    - use_system_user
 
 - name: "Write /etc/systemd/system/{{ repmgrd_service }}.service.d/override.conf"
   ansible.builtin.template:
@@ -14,7 +16,9 @@
     owner: root
     group: root
   become: true
-  when: ansible_os_family == 'RedHat'
+  when:
+    - ansible_os_family == 'RedHat'
+    - use_system_user
 
 - name: "Write /etc/default/repmgrd"
   ansible.builtin.template:
@@ -32,3 +36,11 @@
     state: restarted
     daemon_reload: true
   become: true
+  when: use_system_user
+
+- name: Start repmgrd start
+  ansible.builtin.command: >
+    {{ pg_bin_path }}/repmgrd -f {{ repmgr_configuration_file }} -p {{ repmgr_pid_file }} -d --verbose
+  when: not use_system_user
+  become: true
+  become_user: "{{ pg_owner }}"

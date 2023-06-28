@@ -47,3 +47,5 @@ pgbouncer_pid_file: "{{ '/run/pgbouncer/pgbouncer.pid' if ansible_os_family == '
 pgbouncer_log_file: "/var/log/pgbouncer/pgbouncer.log"
 # Databases configuration file
 pgbouncer_databases_file: "/etc/pgbouncer/databases.ini"
+
+use_system_user: true

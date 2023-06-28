@@ -32,6 +32,18 @@ Operating Systems supported are: CentOS7 and RHEL7
 
   Database Engine supported are: `PG`
 
+### `use_system_user`
+
+Start PostgreSQL systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+
 The rest of the variables can be configured and are available in the:
 
   * [roles/setup_replication/defaults/main.yml](./defaults/main.yml)

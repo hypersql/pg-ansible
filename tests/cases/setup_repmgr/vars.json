@@ -1,4 +1,6 @@
 {
+  "use_system_user": false,
+  "ansible_module_running_in_container": false,
   "use_hostname": false,
   "pg_data": "/var/lib/pgsql/14/main/data",
   "pg_wal": "/opt/pgwal",

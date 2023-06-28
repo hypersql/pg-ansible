@@ -102,14 +102,31 @@
     dest: "{{ pgbouncer_systemd_unit_file }}"
     src: ./templates/pgbouncer.unit.conf.template
     mode: 0644
-  when: pg_type == 'PG'
+  when:
+    - pg_type == 'PG'
+    - use_system_user
   become: true
 
 - name: Stop PgBouncer service
   systemd:
     name: "{{ pgbouncer_service_name }}"
     state: stopped
+  when: use_system_user
   become: true
+
+- name: Check if we have pgbouncer pid file exists or not
+  ansible.builtin.stat:
+    path: "{{ pgbouncer_pid_file }}"
+  become: true
+  register: pgbouncer_pid_file_exists
+
+- name: Stop PgBouncer process
+  command: kill -INT $(cat {{ pgbouncer_pid_file }})
+  when:
+    - not use_system_user
+    - pgbouncer_pid_file_exists.stat.exists
+  become: true
+  become_user: "{{ pgbouncer_user }}"
 
 - name: Enable and start PgBouncer service
   systemd:
@@ -117,4 +134,18 @@
     enabled: true
     daemon_reload: true
     state: started
+  when: use_system_user
   become: true
+
+- name: Start PgBouncer process
+  command: >
+    pgbouncer -d {{ pgbouncer_config_file }}
+  when: not use_system_user
+  become: true
+  become_user: "{{ pgbouncer_user }}"
+
+- name: Wait for port {{ pgbouncer_listen_port }}
+  wait_for:
+    host: 0.0.0.0
+    port: "{{ pgbouncer_listen_port }}"
+    state: started
