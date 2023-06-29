@@ -1,40 +1,24 @@
 ---
-# Update package
-- name: Apt Update
-  ansible.builtin.command: >
-    apt update
+- name: CentOS package update
+  yum:
+    name: '*'
+    state: latest
 
-# Install dependency package
 - name: Install Dependency Packages
-  package:
+  yum:
     name:
       - wget
       - curl
-      - lsb-release
-    status: present
+      - redhat-lsb-core
+    state: present
   become: true
 
-# Get package from repository
-# TODO: Target directory path
-# TODO: Use wget module
-- name: Get pmm-client from repository
-  ansible.builtin.command: >
-    wget https://repo.percona.com/apt/percona-release_latest.generic_all.deb
+- name: Download percona-release package
+  get_url:
+    url: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
+    dest: "/tmp/percona-release-latest.noarch.rpm"
 
-# Dpkg
-# TODO: Target directory path
-# TODO: Use dpkg module
-- name: dpkg
-  ansible.builtin.command: >
-    dpkg -i percona-release_latest.generic_all.deb
-
-# Update package
-- name: Apt Update
-  ansible.builtin.command: >
-    apt update
-
-# Install pmm-client package (Debian)
-- name: Install pmm-client package
-  package:
-    name:
-      - pmm2-client
+- name: Install percona-release package
+  yum:
+    name: "/tmp/percona-release-latest.noarch.rpm"
+    state: present

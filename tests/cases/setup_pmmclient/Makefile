@@ -12,4 +12,8 @@ build-ubuntu20:
 	docker compose up standby1-ubuntu20 -d
 	docker compose up standby2-ubuntu20 -d
 
-
+build-centos7:
+	docker compose up pmmserver-centos7 -d
+	docker compose up primary1-centos7 -d
+	docker compose up standby1-centos7 -d
+	docker compose up standby2-centos7 -d

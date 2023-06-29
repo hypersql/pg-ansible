@@ -17,7 +17,7 @@
 # Pull pmm-server docker image
 - name: Pull pmm-server docker image
   ansible.builtin.command: >
-    docker pull {{ pmm_server_image }}
+    docker pull percona/pmm-server:2
 
 # Create Volume
 - name: Create Volume
@@ -31,4 +31,4 @@
     -- publish 443:443 \
     -v pmm-data:/srv \
     --name pmm-server \
-    {{ pmm_server_image }}
+    percona/pmm-server:2

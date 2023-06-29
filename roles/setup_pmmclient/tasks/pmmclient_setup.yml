@@ -15,6 +15,6 @@
     pmm-admin add {{ database_type }}
 
 # Start Agent
-- name: Start Agent
+- name: Start pmm-client
   ansible.builtin.command: >
-    nohup pmm-agent --config-file=/usr/local/percona/pmm2/config/pmm-agent.yml &
+    nohup pmm-agent --config-file=/usr/local/percona/pmm2/config/pmm-agent.yaml > /dev/null 2>&1 &
