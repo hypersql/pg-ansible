@@ -1,0 +1,28 @@
+---
+all:
+  children:
+    pmmserver:
+      hosts:
+        pmmserver1:
+          ansible_host: 172.30.0.2
+          private_ip: 172.30.0.2
+    primary:
+      hosts:
+        primary1:
+          ansible_host: 172.30.0.3
+          private_ip: 172.30.0.3
+          pmm_client: true
+          pmm_server_host: 172.30.0.2
+    standby:
+      hosts:
+        standby1:
+          ansible_host: 172.30.0.4
+          private_ip: 172.30.0.4
+          upstream_node_private_ip: 172.30.0.3
+          replication_type: asynchronous
+        standby2:
+          ansible_host: 172.30.0.5
+          private_ip: 172.30.0.5
+          upstream_node_private_ip: 172.30.0.3
+          replication_type: asynchronous
+          

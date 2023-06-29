@@ -22,3 +22,15 @@
   yum:
     name: "/tmp/percona-release-latest.noarch.rpm"
     state: present
+  become: true
+
+- name: CentOS package update
+  yum:
+    name: '*'
+    state: latest
+
+- name: Install pmm2-client
+  yum:
+    name: pmm2-client
+    state: present
+  become: true

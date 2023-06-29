@@ -58,7 +58,7 @@ services:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
 
-  pmmserver-ubuntu20:
+  pmmserver1-ubuntu20:
     privileged: true
     build:
       context: ../../docker
@@ -122,7 +122,7 @@ services:
       - /run/sshd
       - /run/lock
 
-  pmmserver-centos7:
+  pmmserver1-centos7:
     privileged: true
     build:
       context: ../../docker
