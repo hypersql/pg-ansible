@@ -5,6 +5,7 @@ supported_os:
   - CentOS8
   - RedHat7
   - RedHat8
+  - Rocky8
   - Ubuntu20
 
 supported_pg_type:

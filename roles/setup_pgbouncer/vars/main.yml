@@ -33,6 +33,7 @@ supported_os:
   - CentOS8
   - RHEL7
   - RHEL8
+  - Rocky8
 
 supported_pgbouncer_version:
   - 1.6
