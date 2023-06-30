@@ -27,8 +27,10 @@
 # Run docker
 - name: Run docker
   ansible.builtin.command: >
-    docker run --detach --restart always \
-    -- publish 443:443 \
+    docker run \ 
+    --detach \
+    --restart always \
+    --publish 443:443 \
     -v pmm-data:/srv \
     --name pmm-server \
     percona/pmm-server:2

@@ -2,12 +2,7 @@
 # Configure pmm-client
 - name: Configure pmm-client
   ansible.builtin.command: >
-    pmm-admin config --server-url=http://admin/admin@{{ pmm_server_host }}
-
-# Register pmm-client on pmm-server
-- name: Register pmm-client
-  ansible.builtin.command: >
-    pmm-admin register --server-url=http://admin/admin@{{ pmm_server_host }}
+    pmm-admin config --server-insecure-tls --server-url=https://admin:admin@{{ pmm_server_host }}:443
 
 # Add monitoring database service
 - name: Add monitoring {{ database_type }} service
