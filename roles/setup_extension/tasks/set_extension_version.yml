@@ -3,10 +3,10 @@
   set_fact:
     postgis_version: 32
     pgaudit_version: 16
-  when: pg_major_version == 14
+  when: pg_major_version|int == 14
 
 - name: Set postgis, pgaudit version in PG 15
   set_fact:
     postgis_version: 33
     pgaudit_version: 17
-  when: pg_major_version == 15
+  when: pg_major_version|int == 15

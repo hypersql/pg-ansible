@@ -1,8 +1,9 @@
 ---
 pg_major_version: "{{ pg_version | int }}"
-barman_package: "barman-3.2.0-1"
-python2_barman_package: "python2-barman-3.2.0-1"
-barman_cli_package: "barman-cli-3.2.0-1"
+barman_version: "3.2.0-1"
+barman_package: "barman-{{ barman_version }}"
+python_barman_package: "python2-barman-{{ barman_version }}"
+barman_cli_package: "barman-cli-{{ barman_version }}"
 
 barman_default_home: "/var/lib/barman"
 barman_home: "/var/lib/barman"
