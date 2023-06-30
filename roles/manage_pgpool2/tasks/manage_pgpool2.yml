@@ -6,6 +6,14 @@
 - name: Reference pg_type variables
   include_vars: "{{ pg_type }}.yml"
 
+- name: Get facts on current container
+  community.docker.current_container_facts:
+
+- name: Set whether to use the system user or not
+  set_fact:
+    use_system_user: false
+  when: ansible_module_running_in_container
+
 - name: Reference pg_type variables
   include_vars: "../../init_dbserver/vars/{{ pg_type }}_RedHat.yml"
 
@@ -43,10 +51,8 @@
   when:
     - pgpool2_users|length > 0
 
-- name: Reload pgpool-II service
-  systemd:
-    name: "{{ pgpool2_service_name }}"
-    state: reloaded
+- name: Restart pgpool2
+  import_tasks: pgpool2_restart.yml
   when:
     - pgpool2_user|length > 0 or pgpool2_configuration|length > 0
 

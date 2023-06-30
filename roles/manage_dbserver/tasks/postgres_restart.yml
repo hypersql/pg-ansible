@@ -1,0 +1,19 @@
+---
+- name: Restart the pg service
+  systemd:
+    name: "{{ pg_service }}"
+    daemon_reload: true
+    state: restarted
+  become: true
+  when: use_system_user
+
+- name: Restart the pg process
+  ansible.builtin.command: >
+    {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} restart
+  when: not use_system_user
+  become: true
+  become_user: "{{ pg_owner }}"
+
+- name: Reset the restart_required
+  set_fact:
+    params_restart_required: false

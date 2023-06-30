@@ -27,4 +27,6 @@ pg_group: "postgres"
 pg_unix_socket_directories:
   - "/var/run/postgresql"
 
+use_system_user: true
+
 disable_logging: true

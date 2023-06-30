@@ -38,6 +38,18 @@ Database Engine supported is `PG`
 These and other variables can be assigned in the `pre_tasks` definition of the
 section: _How to include the `setup_repmgr` role in your Playbook_
 
+### `use_system_user`
+
+Start repmgrd systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+
 The rest of the variables can be configured and are available in the:
 
 - [roles/setup_repmgr/defaults/main.yml](./defaults/main.yml)

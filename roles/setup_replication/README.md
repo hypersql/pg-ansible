@@ -32,12 +32,21 @@ Operating Systems supported are: CentOS7 and RHEL7
 
   Database Engine supported are: `PG`
 
+### `use_system_user`
+
+Start PostgreSQL systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+```yaml
+use_system_user: false
+```
+
 ### `standby_quorum_type`
 
 Using this parameters user can set backend flag registered in pgpool-II.
 Users can set only "any" or "first".
-
-Example:
 
 ```yaml
 standby_quorum_type: "any"

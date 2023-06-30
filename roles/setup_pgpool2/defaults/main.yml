@@ -25,5 +25,12 @@ update_etc_file: true
 pg_data: "{{ pg_user_home + '/' + pg_major_version + '/data' if ansible_os_family == 'RedHat' else \
       pg_user_home + '/' + pg_major_version  + '/' + pg_instance_name if ansible_os_family == 'Debian' }}"
 
+# watchdog_command
+if_up_command: "/bin/sudo /sbin/ip addr add $_IP_$/24 dev {{ pgpool2_vip_dev }} label {{ pgpool2_vip_dev }}:0"
+if_down_command: "/bin/sudo /sbin/ip addr del $_IP_$/24 dev {{ pgpool2_vip_dev }}"
+arping_command: "/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I {{ pgpool2_vip_dev }}"
+
+use_system_user: true
+
 # TODO
 # It can changed backend_flag

@@ -37,3 +37,5 @@ pg_ssl: true
 pg_owner: "postgres"
 pg_group: "postgres"
 pg_service: "postgresql-{{ pg_major_version }}"
+
+use_system_user: true
