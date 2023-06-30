@@ -107,6 +107,17 @@ Example:
 pgpool2_port: 5434
 ```
 
+### `if_up_command`, `if_down_command`, `arping_command`
+
+Set commands when initially setting watchdog.
+
+Example:
+```yaml
+if_up_command: "/bin/sudo /sbin/ip addr add $_IP_$/24 dev eth0 label eth0:0"
+if_down_command: "/bin/sudo /sbin/ip addr del $_IP_$/24 dev eth0"
+arping_command: "/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I eth0"
+```
+
 ### `use_system_user`
 
 Start pgpool-II systemd unit using this parameter.

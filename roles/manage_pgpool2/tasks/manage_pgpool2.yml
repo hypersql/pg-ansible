@@ -51,32 +51,10 @@
   when:
     - pgpool2_users|length > 0
 
-- name: Restart pgpool-II service
-  systemd:
-    name: "{{ pgpool2_service_name }}"
-    state: restarted
+- name: Restart pgpool2
+  import_tasks: pgpool2_restart.yml
   when:
     - pgpool2_user|length > 0 or pgpool2_configuration|length > 0
-    - use_system_user
-
-- name: Check if we have pgpoolII pid exists or not
-  ansible.builtin.stat:
-    path: "{{ pgpool2_pid_file_name }}"
-  become: true
-  register: pgpool2_pid_file_exists
-
-- name: Restart pgpool-II process
-  when:
-    - pgpool2_user|length > 0 or pgpool2_configuration|length > 0
-    - not use_system_user
-  become: true
-  become_user: "{{ pgpool2_user }}"
-  block:
-    - name: Stop pgpool-II process
-      command: "{{ pgpool_stop_command }}"
-      when: pgpool2_pid_file_exists.stat.exists
-    - name: Restart pgpool-II process
-      command: "{{ pgpool_start_command }} -D"
 
 - name: Include the pcp_manage_users
   include_tasks: pcp_manage_users.yml

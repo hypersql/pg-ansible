@@ -203,8 +203,8 @@
   vars:
     pgpool2_nodes: "{{ _pgpool2_nodes }}"
 
-- name: Include the pgpool2_restart_service
-  include_tasks: pgpool2_restart_service.yml
+- name: Include the pgpool2_restart
+  include_tasks: pgpool2_restart.yml
 
 - name: Create and update pgpool2 database user
   include_tasks: pgpool2_create_db_user.yml

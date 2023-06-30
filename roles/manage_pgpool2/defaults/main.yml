@@ -2,6 +2,7 @@
 pgpool2_configuration: []
 pgpool2_users: []
 pcp_users: []
+pgpool2_port: 9999
 
 # Database variables
 pg_owner: "postgres"
