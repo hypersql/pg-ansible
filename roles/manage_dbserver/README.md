@@ -296,7 +296,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## License
 

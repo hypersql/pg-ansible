@@ -213,7 +213,11 @@ ansible-playbook playbook.yml \
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
+
+## Tmax OpenSQL Version
+Tmax OpenSQL v2.0
 
 ## License
 

@@ -1,5 +1,4 @@
 {
-    "pg_version": 14.5,
     "force_install": true,
     "rpm_install": true,
     "deb_install": true,

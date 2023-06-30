@@ -97,6 +97,8 @@
 - name: Build standby service check
   become: true
   block:
+    - name: Import create_os_user task
+      ansible.builtin.import_tasks: create_os_user.yml
     - name: Create directories if not exists
       ansible.builtin.import_tasks: create_directories.yml
     - name: Take PG base backup
