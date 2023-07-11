@@ -1,4 +1,12 @@
 ---
+- name: Check Operating System, PostgreSQL Type, PostgreSQL Version
+  include_role:
+    name: common
+    tasks_from: check_version.yml
+
+- name: Reference pg_type variables
+  include_vars: "{{ pg_type }}_{{ ansible_os_family }}.yml"
+
 - name: Include the pmmclient_install.yml
   include_tasks: pmmclient_install.yml
 

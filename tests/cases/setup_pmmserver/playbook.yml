@@ -1,0 +1,48 @@
+---
+# not supported setup_pmmserver
+- hosts: all
+  name: set docker in docker
+  tasks:
+    - name: Install epel repository
+      ansible.builtin.package:
+        name:
+          - epel-release
+      become: true
+
+    - name: Install packages
+      ansible.builtin.package:
+        name:
+          - supervisor
+          - iptables
+          - docker
+      become: true
+
+    - name: linein file
+      ansible.builtin.copy:
+        src: ./docker.ini
+        dest: /etc/supervisord.d/docker.ini
+      become: true
+
+    - name: start superviosrd
+      ansible.builtin.shell: |
+        set -o pipefail
+        /usr/bin/supervisord -n &
+      args:
+        executable: /bin/bash
+      become: true
+
+- hosts: all
+  name: Setup pmm-server test deployment playbook
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      ansible.builtin.set_fact:
+        disable_logging: false
+
+  roles:
+    # - role: setup_pmmserver

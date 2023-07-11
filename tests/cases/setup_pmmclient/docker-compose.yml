@@ -24,6 +24,7 @@ services:
     volumes:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock
 
   primary1-debian10:
     privileged: true
@@ -68,6 +69,7 @@ services:
     volumes:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     tmpfs:
       - /run
       - /tmp
@@ -132,6 +134,7 @@ services:
     volumes:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
+      - /var/run/docker.sock:/var/run/docker.sock
     command: /usr/sbin/init
 
   primary1-centos7:
@@ -145,6 +148,7 @@ services:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
     command: /usr/sbin/init
+
   standby1-centos7:
     privileged: true
     build:
@@ -156,6 +160,7 @@ services:
       - .:/workspace
       - /sys/fs/cgroup/:/sys/fs/cgroup:ro
     command: /usr/sbin/init
+
   standby2-centos7:
     privileged: true
     build:

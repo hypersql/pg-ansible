@@ -1,36 +1,30 @@
 ---
-- name: CentOS package update
-  yum:
-    name: '*'
-    state: latest
-
 - name: Install Dependency Packages
-  yum:
+  ansible.builtin.package:
     name:
       - wget
       - curl
       - redhat-lsb-core
     state: present
   become: true
+  when: ansible_os_family == 'RedHat'
 
-- name: Download percona-release package
-  get_url:
-    url: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"
-    dest: "/tmp/percona-release-latest.noarch.rpm"
-
-- name: Install percona-release package
-  yum:
-    name: "/tmp/percona-release-latest.noarch.rpm"
+# Install Repoistory
+- name: Install percona repository in RedHat
+  ansible.builtin.package:
+    name: "{{ percona_repo }}"
     state: present
   become: true
+  when: ansible_os_family == 'RedHat'
 
-- name: CentOS package update
-  yum:
-    name: '*'
-    state: latest
+- name: Install percona repository in Debian
+  ansible.builtin.apt:
+    deb: "{{ percona_repo }}"
+  become: true
+  when: ansible_os_family == 'Debian'
 
 - name: Install pmm2-client
-  yum:
+  ansible.builtin.package:
     name: pmm2-client
     state: present
   become: true

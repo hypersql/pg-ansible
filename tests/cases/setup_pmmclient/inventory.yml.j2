@@ -20,9 +20,12 @@ all:
           private_ip: {{ inventory_vars['standby1_ip'] }}
           upstream_node_private_ip: {{ inventory_vars['primary1_ip'] }}
           replication_type: asynchronous
+          pmm_client: true
+          pmm_server_host: {{ inventory_vars['pmmserver1_ip'] }}
         standby2:
           ansible_host: {{ inventory_vars['standby2_ip'] }}
           private_ip: {{ inventory_vars['standby2_ip'] }}
           upstream_node_private_ip: {{ inventory_vars['primary1_ip'] }}
           replication_type: asynchronous
-          
+          pmm_client: true
+          pmm_server_host: {{ inventory_vars['pmmserver1_ip'] }}

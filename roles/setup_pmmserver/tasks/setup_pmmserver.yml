@@ -1,0 +1,19 @@
+---
+- name: Check Operating System,  PostgreSQL type, PostgreSQL version
+  include_role:
+    name: common
+    tasks_from: check_version.yml
+
+- name: Get facts on current container
+  community.docker.current_container_facts:
+
+- name: Set whether to use the system user or not
+  set_fact:
+    use_system_user: false
+  when: ansible_module_running_in_container
+
+- name: Include pmmserver install
+  include_tasks: pmmserver_install.yml
+
+- name: Include pmmserver start
+  include_tasks: pmmserver_start.yml

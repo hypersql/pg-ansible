@@ -12,25 +12,15 @@
     name: docker
     state: started
     enabled: yes
+  when: use_system_user
   become: true
 
 # Pull pmm-server docker image
 - name: Pull pmm-server docker image
   ansible.builtin.command: >
-    docker pull percona/pmm-server:2
+    docker pull {{ pmm_server_image }}
 
 # Create Volume
 - name: Create Volume
   ansible.builtin.command: >
-    docker volume create pmm-data
-
-# Run docker
-- name: Run docker
-  ansible.builtin.command: >
-    docker run \ 
-    --detach \
-    --restart always \
-    --publish 443:443 \
-    -v pmm-data:/srv \
-    --name pmm-server \
-    percona/pmm-server:2
+    docker volume create {{ inventory_hostname }}-data
