@@ -30,7 +30,6 @@
     state: present
   when:
     - ansible_os_family == 'RedHat'
-    - pgpool2_version == 4.3
 
 - name: Install pgpoolII requried package on RedHat
   ansible.builtin.package:

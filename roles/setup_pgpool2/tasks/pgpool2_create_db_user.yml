@@ -78,9 +78,48 @@
     name: manage_pgpool2
     tasks_from: pgpool2_manage_users
   vars:
-    pgpool2_users:
+    pgpool2_manage_users:
       - name: "{{ pg_pgpool_user }}"
         pass: "{{ pg_pgpool_user_password }}"
         auth: scram
   no_log: "{{ disable_logging }}"
   when: pg_pgpool_user_password|length > 1
+
+# This task need that manage_dbserver done 'cause need password file of pg_owner as superuser
+- name: Check {{ pg_owner }} password file
+  ansible.builtin.stat:
+    path: "~/.pgpassfile/{{ pg_owner }}_pass"
+  become: false
+  delegate_to: localhost
+  register: pg_superuser_pass_file
+
+- name: Read {{ pg_owner }} pass
+  set_fact:
+    pg_superuser_password: "{{ lookup('file', '~/.pgpassfile/{{ pg_owner }}_pass').split('\n') }}"
+  become: false
+  delegate_to: localhost
+  when: pg_superuser_pass_file.stat.exists
+
+- name: Add pgpool2 database user in pgpool
+  include_role:
+    name: manage_pgpool2
+    tasks_from: pgpool2_manage_users
+  vars:
+    pgpool2_manage_users:
+      - name: "{{ pg_owner }}"
+        pass: "{{ pg_superuser_password[0] }}"
+        auth: scram
+  no_log: "{{ disable_logging }}"
+  when: pg_superuser_password[0]|length > 0
+
+- name: Add password in pgpass
+  include_role:
+    name: manage_dbserver
+    tasks_from: manage_pgpass
+  vars:
+    pg_pgpass_values:
+      - user: "{{ pg_owner }}"
+        password: "{{ pg_superuser_password[0] }}"
+        port: "5433"
+        create: true
+  no_log: "{{ disable_logging }}"

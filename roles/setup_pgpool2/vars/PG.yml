@@ -26,6 +26,10 @@ pgpool2_bin_path: "/usr/bin"
 
 pgpool2_node_id_file: "/etc/pgpool-II/pgpool_node_id"
 
+# failover script file in pgpool
+pgpool2_failover_file: "/etc/pgpool-II/failover.sh"
+pgpool2_follow_primary_file: "/etc/pgpool-II/follow_primary.sh"
+
 pgpool2_listen_addresses: '*'
 pgpool2_pcp_port: 9898
 pgpool2_wd_port: 9000
@@ -59,6 +63,10 @@ pgpool_start_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration
 pgpool_stop_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} -m fast stop"
 pgpool_reload_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} reload"
 
+# pgpool socket directories
+pgpool_socket_directories:
+  - "/tmp"
+
 pgpool2_ssl_csr_dn:
   CN: "pgpool-server.fqdn"
   O: ""
@@ -72,6 +80,13 @@ pg_port: 5432
 pg_database: "postgres"
 pg_instance_name: "main"
 pg_user_home: "/var/lib/pgsql"
+pg_default_data: "/var/lib/pgsql/{{ pg_major_version }}/data"
+pgpass_file: "{{ pg_user_home }}/.pgpass"
+
+# pg replication user
+pg_replication_user: "repuser"
+
+ssh_port: 22
 
 supported_os:
   - CentOS7

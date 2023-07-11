@@ -1,0 +1,23 @@
+---
+- name: Ensure the directory {{ pg_user_home }}/.ssh exists
+  file:
+    state: directory
+    path: "{{ pg_user_home }}/.ssh"
+    owner: "{{ pgpool2_user }}"
+    group: "{{ pgpool2_group }}"
+    mode: 0700
+  become: true
+
+- name: Check if the pgpool SSH private key exists
+  stat:
+    path: "{{ pg_user_home }}/.ssh/id_rsa"
+  register: pgpool_ssh_private_key
+  become: true
+
+- name: Ensure pgpool owner's SSH keys exist
+  community.crypto.openssh_keypair:
+    path: "{{ pg_user_home }}/.ssh/id_rsa"
+    owner: "{{ pgpool2_user }}"
+    group: "{{ pgpool2_group }}"
+  when: not pgpool_ssh_private_key.stat.exists
+  become: true
