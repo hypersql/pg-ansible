@@ -17,7 +17,7 @@ When executing the role via ansible these are the required variables:
 
 - **_pg_version_**
 
-  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
 - **_pg_type_**
 
@@ -105,6 +105,29 @@ Example:
 
 ```yaml
 pgpool2_port: 5434
+```
+
+### `if_up_command`, `if_down_command`, `arping_command`
+
+Set commands when initially setting watchdog.
+
+Example:
+```yaml
+if_up_command: "/bin/sudo /sbin/ip addr add $_IP_$/24 dev eth0 label eth0:0"
+if_down_command: "/bin/sudo /sbin/ip addr del $_IP_$/24 dev eth0"
+arping_command: "/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I eth0"
+```
+
+### `use_system_user`
+
+Start pgpool-II systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
 ```
 
 ## Dependencies
@@ -201,7 +224,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## pgpool-II supported
 

@@ -30,13 +30,25 @@ When executing the role via ansible there are three required variables:
 
 - **_pg_version_**
 
-  Postgres Versions supported are: `14.0`,`14.1`,`14.2`,`14.3`,`14.3`,`14.5`,`14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 - **_pg_type_**
 
 Database Engine supported is `PG`
 
 These and other variables can be assigned in the `pre_tasks` definition of the
 section: _How to include the `setup_repmgr` role in your Playbook_
+
+### `use_system_user`
+
+Start repmgrd systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
 
 The rest of the variables can be configured and are available in the:
 
@@ -138,7 +150,8 @@ Below is an example of how to include the `setup_repmgr` role:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## Playbook execution examples
 

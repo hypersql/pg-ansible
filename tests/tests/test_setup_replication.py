@@ -1,8 +1,9 @@
-from conftest import get_pg_type, get_pg_unix_socket_dir, get_primary, get_standbys
+from conftest import get_pg_type, get_pg_unix_socket_dir, get_primary, get_standbys, load_ansible_vars
 
 
 def test_setup_replication_user():
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     host = get_primary()
     socket_dir = get_pg_unix_socket_dir()
@@ -16,7 +17,8 @@ def test_setup_replication_user():
 
 
 def test_setup_replication_slots():
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     host = get_primary()
     socket_dir = get_pg_unix_socket_dir()
@@ -30,7 +32,8 @@ def test_setup_replication_slots():
 
 
 def test_setup_replication_stat_replication():
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     host = get_primary()
     rep_count = len(get_standbys())
@@ -45,7 +48,8 @@ def test_setup_replication_stat_replication():
 
 
 def test_setup_replication_stat_wal_receiver():
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     hosts = get_standbys()
     socket_dir = get_pg_unix_socket_dir()

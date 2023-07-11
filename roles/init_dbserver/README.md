@@ -32,7 +32,7 @@ When executing the role via ansible there are three required variables:
 
 - **_pg_version_**
 
-  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
 - **_pg_type_**
 
@@ -83,6 +83,25 @@ Example:
 ```yaml
 pg_local_wal_archive_dir: "/var/lib/pgsql/14/archive"
 ```
+
+### `pg_owner`
+
+Using this parameters user can set the OS user that controls PostgreSQL.
+
+Example:
+
+```yaml
+pg_owner: "postgres"
+```
+### `pg_group`
+
+Using this parameters user can set groups of OS users that control PostgreSQL.
+
+Example:
+
+```yaml
+pg_group: "postgres"
+```
 ### pg_owner_id
 
 Using this parameters user can change the uid of postgresql's systemuser.
@@ -93,7 +112,7 @@ Example:
 pg_owner_id: 10001
 ```
 
-### pg_group_id
+### `pg_group_id`
 
 Using this parameters user can change the uid of postgresql's systemuser.
 
@@ -121,6 +140,18 @@ Example:
 
 ```yaml
 pg_port: "5433"
+```
+
+### `use_system_user`
+
+Using this parameters PostgreSQL run as systemd unit.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
 ```
 
 The rest of the variables can be configured and are available in the:
@@ -201,7 +232,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## Playbook execution examples
 

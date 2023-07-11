@@ -16,7 +16,7 @@ When executing the role via ansible these are the required variables:
 
   * ***pg_version***
 
-  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
   Database Engine supported are: `PG`
 
@@ -95,6 +95,18 @@ pcp_users:
 
 The `state` attribute defines if the user must be present or not in the
 authentication file. Default value is `present`.
+
+### `use_system_user`
+
+Restart pgpool-II systemd unit to apply the settings using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
 
 ## Dependencies
 
@@ -184,7 +196,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## pgpool-II supported
 

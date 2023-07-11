@@ -6,6 +6,7 @@
     src: ./templates/pgpool.sudoers.d.conf.template
     dest: /etc/sudoers.d/pgpool
     mode: 0640
+  when: use_system_user
   become: true
 
 - name: Watchdog configuration
@@ -23,17 +24,17 @@
         },
         {
           'key': 'if_up_cmd',
-          'value': '/bin/sudo /sbin/ip addr add $_IP_$/24 dev {{ pgpool2_vip_dev }} label {{ pgpool2_vip_dev }}:0',
+          'value': '{{ if_up_command }}',
           'quoted': true
         },
         {
           'key': 'if_down_cmd',
-          'value': '/bin/sudo /sbin/ip addr del $_IP_$/24 dev {{ pgpool2_vip_dev }}',
+          'value': '{{ if_down_command }}',
           'quoted': true
         },
         {
           'key': 'arping_cmd',
-          'value': '/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I {{ pgpool2_vip_dev }}',
+          'value': '{{ arping_command }}',
           'quoted': true
         }
       ]

@@ -3,12 +3,26 @@ pg_user_home: "/var/lib/postgresql"
 pg_instance_name: "main"
 shell_profile_content: |
   # PostgreSQL shell environment
+  export PGHOME={{ pg_user_home }}
+  export PGLIB=/usr/pgsql-{{ pg_major_version }}/lib
   export PGDATA={{ pg_data }}
   export PGDATABASE=postgres
   export PGUSER={{ pg_owner }}
   export PGPORT={{ pg_port }}
   export PGLOCALEDIR=/usr/lib/postgresql/{{ pg_major_version }}/share/locale
   export PGHOST={{ pg_unix_socket_directories[0] }}
+  export PATH=$PATH:{{ pg_bin_path }}
+
+  #opensql-PostgreSQL ALIAS
+  alias pginst="cd $PGINST"
+  alias pglib="cd $PGLIB"
+  alias pghome="cd $PGHOME"
+  alias pgdata="cd $PGDATA"
+  alias pglog="cd {{ pg_log }}"
+  alias pgwal="cd {{ pg_wal }}"
+  alias pgconf="vi $PGDATA/postgresql.conf"
+  alias pghba="vi $PGDATA/pg_hba.conf"
+
 pg_bin_path: "/usr/lib/postgresql/{{ pg_major_version }}/bin"
 pg_default_data: "/var/lib/postgresql/{{ pg_major_version }}/{{ pg_instance_name }}"
 

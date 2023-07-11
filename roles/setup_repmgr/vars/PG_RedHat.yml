@@ -2,6 +2,7 @@
 repmgr_package_name: "repmgr_{{ pg_major_version }}"
 repmgrd_service: "repmgr-{{ pg_major_version }}"
 repmgr_configuration_file: "/etc/repmgr/{{ pg_major_version }}/repmgr-{{ pg_instance_name }}.conf"
+repmgr_pid_file: "/run/repmgr/repmgrd-{{ pg_major_version }}.pid"
 
 # Database variables
 pg_bin_path: "/usr/pgsql-{{ pg_major_version }}/bin"

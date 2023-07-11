@@ -38,31 +38,46 @@ def test_init_dbserver_files():
 
 
 def test_init_dbserver_service():
+    ansible_vars = load_ansible_vars()
     host = get_primary()
     pg_version = get_pg_version()
 
-    if os_family() == "RedHat":
-        if get_pg_type() == "PG":
-            service = "postgresql-%s" % pg_version
-    elif os_family() == "Debian":
-        if get_pg_type() == "PG":
-            service = "postgresql@%s-main" % pg_version
+    use_system_user = ansible_vars["use_system_user"]
 
-    assert host.service(service).is_running, "Postgres service not running"
+    if use_system_user:
+        if os_family() == "RedHat":
+            if get_pg_type() == "PG":
+                service = "postgresql-%s" % pg_version
+        elif os_family() == "Debian":
+            if get_pg_type() == "PG":
+                service = "postgresql@%s-main" % pg_version
 
-    assert host.service(service).is_enabled, "Postgres service not enabled"
+        assert host.service(service).is_running, "Postgres service not running"
+
+        assert host.service(service).is_enabled, "Postgres service not enabled"
+    elif not use_system_user:
+        if os_family() == "RedHat":
+            if get_pg_type() == "PG":
+                pid_file_path = "/var/lib/pgsql/%s/data/postmaster.pid" % pg_version
+        elif os_family() == "Debian":
+            if get_pg_type() == "PG":
+                pid_file_path = "/var/lib/postgresql/%s/main/postmaster.pid" % pg_version
+
+        postgres_pid = host.file("%s" % pid_file_path).content_string.split()
+
+        assert len(host.process.filter(pid=postgres_pid[0])) > 0, "Postgres process not running"
 
 
 def test_init_dbserver_socket():
     ansible_vars = load_ansible_vars()
     host = get_primary()
-    
+
     if get_pg_type() == "PG":
         if ansible_vars.get("pg_port", 0):
             pg_port = ansible_vars["pg_port"]
         else:
             pg_port = "5432"
-    
+
     sockets = []
 
     if get_pg_type() == "PG":
@@ -76,7 +91,7 @@ def test_init_dbserver_socket():
             sockets = [
                 "tcp://%s" % pg_port, "unix://%s/.s.PGSQL.%s" % (socket_dir, pg_port)
             ]
-        
+
     for socket in sockets:
         assert host.socket(socket).is_listening, (
             "Postgres is not listening on %s" % socket
