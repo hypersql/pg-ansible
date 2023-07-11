@@ -1,7 +1,8 @@
 # syntax=docker/dockerfile:1
 
-FROM rockylinux/rockylinux:8.4
+FROM rockylinux/rockylinux:9.2
 ENV container docker
+RUN [ ! -f /usr/sbin/init ] && dnf -y install systemd
 RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == \
 systemd-tmpfiles-setup.service ] || rm -f $i; done); \
 rm -f /lib/systemd/system/multi-user.target.wants/*;\
@@ -20,3 +21,4 @@ RUN dnf install ca-certificates -y
 RUN dnf install openssh-clients -y
 RUN dnf install openssh-server -y
 RUN dnf install which -y
+RUN dnf install iproute -y

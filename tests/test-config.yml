@@ -19,6 +19,7 @@ available_pg_versions:
 available_os_types:
   - centos7
   - rocky8
+  - rocky9
   - debian9
   - debian10
   - ubuntu20

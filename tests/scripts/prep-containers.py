@@ -17,7 +17,6 @@ def prep_container(id, os, ssh_dir):
     c.start_sshd()
     c.add_ssh_pub_key(ssh_dir / SSH_PUBLIC_KEY_FILE)
 
-
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(

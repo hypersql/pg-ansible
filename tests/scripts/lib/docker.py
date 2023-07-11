@@ -81,7 +81,6 @@ class DockerCentosContainer(DockerContainer):
     def start_sshd(self):
         self.exec('/bin/systemctl start sshd')
 
-
 class DockerCentos7Container(DockerCentosContainer):
     pass
 
@@ -89,6 +88,8 @@ class DockerCentos7Container(DockerCentosContainer):
 class DockerRocky8Container(DockerCentosContainer):
     pass
 
+class DockerRocky9Container(DockerCentosContainer):
+    pass
 
 class DockerOraclelinux7Container(DockerCentosContainer):
     pass
@@ -120,6 +121,8 @@ def DockerOSContainer(id, os):
         return DockerCentos7Container(id)
     elif os == 'rocky8':
         return DockerRocky8Container(id)
+    elif os == 'rocky9':
+        return DockerRocky9Container(id)
     elif os == 'debian9':
         return DockerDebian9Container(id)
     elif os == 'debian10':
