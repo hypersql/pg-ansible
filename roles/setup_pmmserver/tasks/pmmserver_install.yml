@@ -1,0 +1,26 @@
+---
+# Install docker
+- name: Install Docker
+  package:
+    name: docker
+    state: present
+  become: true
+
+# Start docker service
+- name: Start docker service
+  service:
+    name: docker
+    state: started
+    enabled: yes
+  when: use_system_user
+  become: true
+
+# Pull pmm-server docker image
+- name: Pull pmm-server docker image
+  ansible.builtin.command: >
+    docker pull {{ pmm_server_image }}
+
+# Create Volume
+- name: Create Volume
+  ansible.builtin.command: >
+    docker volume create {{ inventory_hostname }}-data

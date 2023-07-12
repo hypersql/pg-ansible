@@ -1,0 +1,11 @@
+---
+# Run docker
+- name: Run percona docker
+  ansible.builtin.command: >
+    docker run \
+    --detach \
+    --restart always \
+    --publish {{ pmm_server_port }}:443 \
+    -v {{ inventory_hostname }}-data:/srv \
+    --name {{ inventory_hostname }} \
+    {{ pmm_server_image }}

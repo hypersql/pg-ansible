@@ -1,0 +1,30 @@
+---
+- name: Install Dependency Packages
+  ansible.builtin.package:
+    name:
+      - wget
+      - curl
+      - redhat-lsb-core
+    state: present
+  become: true
+  when: ansible_os_family == 'RedHat'
+
+# Install Repoistory
+- name: Install percona repository in RedHat
+  ansible.builtin.package:
+    name: "{{ percona_repo }}"
+    state: present
+  become: true
+  when: ansible_os_family == 'RedHat'
+
+- name: Install percona repository in Debian
+  ansible.builtin.apt:
+    deb: "{{ percona_repo }}"
+  become: true
+  when: ansible_os_family == 'Debian'
+
+- name: Install pmm2-client
+  ansible.builtin.package:
+    name: pmm2-client
+    state: present
+  become: true
