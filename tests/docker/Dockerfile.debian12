@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM debian:buster
+FROM debian:bookworm
 
 RUN apt update
 RUN apt install sudo -y
@@ -15,7 +15,5 @@ RUN apt install acl -y
 RUN apt install apt-transport-https -y
 RUN apt-get update -y
 RUN apt-get install software-properties-common -y
-
-RUN wget -qO - https://adoptopenjdk.jfrog.io/adoptopenjdk/api/gpg/key/public | sudo apt-key add -
-RUN sudo add-apt-repository --yes https://adoptopenjdk.jfrog.io/adoptopenjdk/deb/
-RUN sudo apt-get update -y && sudo apt-get install -y adoptopenjdk-8-hotspot
+RUN apt-get update -y
+RUN apt-get install openjdk-8-jdk -y

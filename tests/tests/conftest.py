@@ -149,7 +149,6 @@ def get_dbt2_client():
 
 def get_pg_unix_socket_dir():
     pg_type = get_pg_type()
-    pg_version = get_pg_version()
     if pg_type == "PG":
         return "/var/run/postgresql"
 

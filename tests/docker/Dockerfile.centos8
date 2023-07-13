@@ -1,7 +1,10 @@
 # syntax=docker/dockerfile:1
 
-FROM centos:7
+FROM centos:8
 
+RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-Linux-*
+RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-Linux-*
+RUN yum makecache --refresh
 RUN yum install iproute -y
 RUN yum install sudo -y
 RUN yum install python3 -y

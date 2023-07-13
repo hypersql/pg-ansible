@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM ubuntu:focal
+FROM ubuntu:jammy
 
 RUN apt update
 RUN apt install iproute2 -y
