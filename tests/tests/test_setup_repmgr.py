@@ -6,6 +6,7 @@ from conftest import (
     get_primary,
     get_standbys,
     get_witness,
+    load_ansible_vars,
     os_family,
 )
 
@@ -13,11 +14,20 @@ from conftest import (
 def test_setup_repmgr_service_redhat():
     if get_os().startswith("debian") or get_os().startswith("ubuntu"):
         pytest.skip()
+    ansible_vars = load_ansible_vars()
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
     pg_version = get_pg_version()
     service = "repmgr-%s" % pg_version
-    for host in hosts:
-        assert host.service(service).is_running, "Repmgr service not running"
+    use_system_user = ansible_vars["use_system_user"]
+
+    if use_system_user:
+        for host in hosts:
+            assert host.service(service).is_running, "Repmgr service not running"
+    elif not use_system_user:
+        pid_file_path = "/run/repmgr/repmgrd-%s.pid" % pg_version
+        for host in hosts:
+            repmgrd_pid = host.file("%s" % pid_file_path).content_string.split()
+            assert len(host.process.filter(pid=repmgrd_pid[0])) > 0, "Repmgrd process not running"
 
 
 def test_setup_repmgr_service_debian():
@@ -56,7 +66,8 @@ def test_setup_repmgr_packages_debian():
 
 
 def test_setup_repmgr_user():
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
     socket_dir = get_pg_unix_socket_dir()
@@ -74,7 +85,8 @@ def test_setup_repmgr_node_status_redhat():
     if os_family() != "RedHat":
         pytest.skip()
 
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
     pg_version = get_pg_version()
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
 
@@ -93,7 +105,8 @@ def test_setup_repmgr_node_status_debian():
     if os_family() != "Debian":
         pytest.skip()
 
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
 
@@ -109,7 +122,8 @@ def test_setup_repmgr_node_check_redhat():
     if os_family() != "RedHat":
         pytest.skip()
 
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
     pg_version = get_pg_version()
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
 
@@ -133,7 +147,8 @@ def test_setup_repmgr_node_check_debian():
     if os_family() != "Debian":
         pytest.skip()
 
-    pg_user = "postgres"
+    ansible_vars = load_ansible_vars()
+    pg_user = ansible_vars["pg_owner"]
 
     hosts = [get_primary(), get_witness()[0], get_standbys()[0]]
 

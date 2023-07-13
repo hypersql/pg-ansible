@@ -22,7 +22,6 @@ use_replication_slots: true
 pg_database: "postgres"
 
 synchronous_standby_names: ""
-standby_quorum_type: "any"
 
 primary_private_ip: ""
 primary_public_ip: ""

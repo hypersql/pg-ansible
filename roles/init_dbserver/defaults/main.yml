@@ -35,4 +35,6 @@ use_hostname: false
 update_etc_file: true
 etc_hosts_lists: []
 
+use_system_user: true
+
 disable_logging: true

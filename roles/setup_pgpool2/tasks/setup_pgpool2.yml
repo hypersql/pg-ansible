@@ -9,6 +9,11 @@
 - name: Get facts on current container
   community.docker.current_container_facts:
 
+- name: Set whether to use the system user or not
+  set_fact:
+    use_system_user: false
+  when: ansible_module_running_in_container
+
 - name: Reference pg_type variables
   include_vars: "../../init_dbserver/vars/{{ pg_type }}_RedHat.yml"
 
@@ -198,8 +203,8 @@
   vars:
     pgpool2_nodes: "{{ _pgpool2_nodes }}"
 
-- name: Include the pgpool2_restart_service
-  include_tasks: pgpool2_restart_service.yml
+- name: Include the pgpool2_restart
+  include_tasks: pgpool2_restart.yml
 
 - name: Create and update pgpool2 database user
   include_tasks: pgpool2_create_db_user.yml

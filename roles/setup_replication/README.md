@@ -26,11 +26,31 @@ Operating Systems supported are: CentOS7 and RHEL7
 
 - **_pg_version_**
 
-  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`
+  Postgres Versions supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
 - **_pg_type_**
 
   Database Engine supported are: `PG`
+
+### `use_system_user`
+
+Start PostgreSQL systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+```yaml
+use_system_user: false
+```
+
+### `standby_quorum_type`
+
+Using this parameters user can set backend flag registered in pgpool-II.
+Users can set only "any" or "first".
+
+```yaml
+standby_quorum_type: "any"
+```
 
 The rest of the variables can be configured and are available in the:
 
@@ -109,7 +129,8 @@ All the variables are available at:
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## Playbook execution examples
 

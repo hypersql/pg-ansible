@@ -1,5 +1,5 @@
 ---
-- name: Set postgis version
+- name: Set postgis, pgaudit version in PG 14
   set_fact:
     postgis_version: 32
     pgaudit_version: 16
@@ -7,7 +7,7 @@
     pg_bigm_version: "1.2"
   when: pg_major_version == 14
 
-- name: Set pgaudit version
+- name: Set postgis, pgaudit version in PG 15
   set_fact:
     postgis_version: 33
     pgaudit_version: 17

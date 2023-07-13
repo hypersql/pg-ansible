@@ -1,0 +1,5 @@
+---
+database_type: "postgresql"
+
+# QAN (pgstatements, pgsatmonitor, none)
+query_source: "pgstatements"

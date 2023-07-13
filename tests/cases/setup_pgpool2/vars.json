@@ -13,5 +13,5 @@
   ],
   "pgpool2_watchdog": true,
   "pgpool2_vip_dev": "eth0",
-  "pgpool2_vip" : " 192.168.224.244"
+  "pgpool2_vip" : "192.168.224.244"
 }

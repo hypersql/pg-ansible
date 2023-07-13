@@ -14,3 +14,5 @@ pg_owner: postgres
 pg_group: postgres
 
 pg_port: 5432
+
+use_system_user: true

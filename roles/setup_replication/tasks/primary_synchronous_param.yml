@@ -5,6 +5,11 @@
   when:
     - synchronous_standby_names|length < 1
 
+- name: Check Quorum type
+  fail:
+    msg: standby_quorum_type is not defined as 'any' or 'first'
+  when: standby_quorum_type not in ['any', 'first']
+
 - name: Add standby quorum string
   set_fact:
     synchronous_standby_names: "{{ standby_quorum_type + _synchronous_standby_names }}"

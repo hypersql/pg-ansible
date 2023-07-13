@@ -13,7 +13,7 @@ When executing the role via Ansible these are required variables:
 
 - **pg_version**
 
-    Postgres Version supported are: `14.0`, `14.1`, `14.2`, `14.3`, `14.3`, `14.5`, `14.6`
+    Postgres Version supported are: `14.0`, `14.1`, `14.2`, `14.3`,`14.3`, `14.5`, `14.6`, `14.7`, `14.8`, `15.0`, `15.1`, `15.2`, `15.3`
 
 - **pg_type**
 
@@ -110,7 +110,8 @@ installing extension :
 - CentOS8
 
 ### Supported PostgreSQL Version
-- 14.0 - 14.6
+- 14.0 - 14.8
+- 15.0 - 15.3
 
 ## PostgreSQL extension supported
 
