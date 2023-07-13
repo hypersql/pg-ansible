@@ -1,14 +1,10 @@
 ---
-# TODO : Install extension and create extension in pg
-- name: Create Extension - {{ pg_extension }}
-  community.postgresql.postgresql_query:
-    query: >-
-      CREATE EXTENSION {{ pg_extension }}
-    port: "{{ pg_port }}"
-    db: "{{ pg_database }}"
-    login_user: "{{ pg_owner }}"
-    login_unix_socket: "{{ pg_unix_socket_directories[0] }}"
-    autocommit: true
+- name: Create {{ pg_extension }} extension
+  ansible.builtin.include_role:
+    name: manage_dbserver
+    tasks_from: manage_extensions
+  vars:
+    pg_extensions:
+      - name: "{{ pg_extension }}"
+        database: "{{ pg_database }}"
   no_log: "{{ disable_logging }}"
-  become: true
-  become_user: "{{ pg_owner }}"

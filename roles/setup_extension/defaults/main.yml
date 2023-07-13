@@ -9,8 +9,6 @@ pg_extension_list:
   - plpython3u
   - pg_bigm
 
-pg_extension_creates: false
-
 # postgresql configuration
 pg_owner: postgres
 pg_group: postgres

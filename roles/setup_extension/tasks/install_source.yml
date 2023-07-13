@@ -20,5 +20,6 @@
     target: install
   environment:
     PATH: "{{ path_env_var }}:/usr/pgsql-{{ pg_major_version }}/bin"
+    USE_PGXS: "true"
   become: true
 

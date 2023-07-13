@@ -36,16 +36,11 @@ supported_extension:
     },
     {
       "name": "pg_bigm",
-      "uri": "https://osdn.net/frs/redir.php?m=rwthaachen&f=pgbigm%2F72448%2Fpg_bigm-{{ pg_bigm_version }}.20200228-1.pg{{ pg_major_version }}.el{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
       "required_package": [""],
+      "source_src": "https://github.com/pgbigm/pg_bigm/releases/download/v{{ pg_bigm_version }}-20200228/pg_bigm-{{ pg_bigm_version }}-20200228.tar.gz",
+      "source_dest": "pg_bigm-{{ pg_bigm_version }}-20200228",
       "pg_repo": false,
+      "install_source": true,
       "need_spl": true
-    },
-    {
-      # TODO
-      "name": "oracle_fdw",
-      "extension_package": "",
-      "required_package": [""],
-      "pg_repo": false,
     }
   ]

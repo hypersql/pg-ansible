@@ -4,6 +4,7 @@
     postgis_version: 32
     pgaudit_version: 16
     pg_hint_plan_version: "1_4_1"
+    pg_bigm_version: "1.2"
   when: pg_major_version == 14
 
 - name: Set pgaudit version
@@ -11,4 +12,5 @@
     postgis_version: 33
     pgaudit_version: 17
     pg_hint_plan_version: "1_5_0"
+    pg_bigm_version: "1.2"
   when: pg_major_version == 15

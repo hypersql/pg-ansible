@@ -33,18 +33,6 @@ pg_extension_list:
     - postgis
     - pgaudit
 ```
-### `pg_extension_creates`
-
-Add extensions to postgresql's shared_preload_libraries, and add the extension to the working PostgreSQL server.
-This parameter can be used when PostgreSQL directories are structured and PostgreSQL is running.
-
-Default: false
-
-Example:
-
-```yaml
-extensioni_creates: true
-```
 
 The rest of the variables can be configured and are available in the:
 

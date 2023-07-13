@@ -10,10 +10,15 @@
     - ansible_os_family == 'RedHat'
     - pg_major_version|int >= 14
 
-- name: Reference Postgres variables
-  include_vars: "{{ pg_type }}_{{ ansible_os_family }}.yml"
+- name: Reference Postgres variables in RedHat
+  include_vars: "{{ pg_type }}_{{ ansible_os_family }}{{ ansible_distribution_major_version }}.yml"
+  when: ansible_os_family == 'RedHat'
 
-- name: Include RedHat variable in install_dbserver
+- name: Reference Postgres variables in RedHat
+  include_vars: "{{ pg_type }}_{{ ansible_os_family }}.yml"
+  when: ansible_os_family == 'Debian'
+
+- name: Include variable in install_dbserver
   include_vars: ../../install_dbserver/vars/{{ pg_type }}_{{ ansible_os_family }}.yml
 
 - name: Include install_extension_package tasks
