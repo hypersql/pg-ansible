@@ -1,0 +1,25 @@
+---
+- name: Download {{ extension_name }} source path
+  ansible.builtin.get_url:
+    url: "{{ extension_source_src }}"
+    dest: "/tmp/{{ extension_source_dest }}.tar.gz"
+
+- name: Unzip {{ extension_source_dest }}.tar.gz
+  unarchive:
+    src: "/tmp/{{ extension_source_dest }}.tar.gz"
+    dest: "/tmp"
+    remote_src: true
+
+- name: Get $PATH
+  shell: echo $PATH
+  register: path_env_var
+
+- name: command "make && make install"
+  make:
+    chdir: "/tmp/{{ extension_source_dest }}"
+    target: install
+  environment:
+    PATH: "{{ path_env_var }}:/usr/pgsql-{{ pg_major_version }}/bin"
+    USE_PGXS: "true"
+  become: true
+

@@ -52,10 +52,10 @@
 - name: Install Postgres
   package:
     name:
-      - postgresql{{ pg_major_version }}-libs
-      - postgresql{{ pg_major_version }}
-      - postgresql{{ pg_major_version }}-server
-      - postgresql{{ pg_major_version }}-contrib
+      - postgresql{{ pg_major_version }}-libs-{{ pg_version }}
+      - postgresql{{ pg_major_version }}-{{ pg_version }}
+      - postgresql{{ pg_major_version }}-server-{{ pg_version }}
+      - postgresql{{ pg_major_version }}-contrib-{{ pg_version }}
     state: present
   become: true
   when: not rpm_install

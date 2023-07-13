@@ -19,9 +19,11 @@ When executing the role via Ansible these are required variables:
 
     Database Engine supported are: `PG`
 
-- **pg_extension_list**
+### `pg_extension_list`
 
-    Extension supported are: `potgis`, `pgaudit`
+Extension supported are: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`
+
+Default: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`
 
 Example:
 
@@ -29,6 +31,7 @@ Example:
 # install only postgis
 pg_extension_list:
     - postgis
+    - pgaudit
 ```
 
 The rest of the variables can be configured and are available in the:
@@ -40,7 +43,7 @@ The rest of the variables can be configured and are available in the:
 
 ## Dependencies
 
-This role depends on the `common` role.
+This role depends on the `common`, `manage_dbserver`, `install_dbserver` role.
 
 ## Example Playbook
 
