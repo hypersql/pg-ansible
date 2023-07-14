@@ -2,6 +2,7 @@
 .cidfiles
 .ssh
 .inventory
+trace.log
 tests/__pycache__/
 tests/.pytest_cache
 scripts/__pycache__/

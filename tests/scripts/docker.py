@@ -2,7 +2,7 @@ import json
 import re
 import shlex
 import subprocess
-import yaml
+import common
 
 class DockerInventory():
     def __init__(self, cwd='.'):
@@ -26,8 +26,10 @@ class DockerInventory():
 class DockerContainer():
     def __init__(self, id):
         self.id = id
+        self.short_id = self.id[:12]
 
     def exec(self, command):
+        common.Logger().debug(f"Executing command in docker container {self.short_id}\n{command}")
         a_command = shlex.split(command)
         cp = subprocess.run(
             ['docker', 'exec', self.id] + a_command,
@@ -38,6 +40,7 @@ class DockerContainer():
         return cp.stdout
 
     def send_file(self, local, dest):
+        common.Logger().debug(f"Sending file to docker container {self.short_id}\nlocal:{local}, dest:{dest}")
         cp = subprocess.run(
             ['docker', 'cp', local, '%s:%s' % (self.id, dest)],
             stdout=subprocess.PIPE, stderr=subprocess.PIPE,
@@ -51,6 +54,7 @@ class DockerContainer():
 
         m = re.search(r'inet ([0-9\.]+)', output)
         if m:
+            common.Logger().debug(f"Getting ip from docker container {self.short_id}\nip:{m.group(1)}")
             return m.group(1)
 
     def mkdir(self, dir, mode='0700'):
@@ -71,11 +75,3 @@ class DockerContainer():
         self.exec('ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key')
         self.exec('ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key')
         self.exec('/usr/sbin/sshd')
-
-def DockerOSContainer(id, os):
-    with open('../../test-config.yml') as config_file:
-        config = yaml.load(config_file, Loader=yaml.FullLoader)
-        if os not in config['available_os_types']:
-            raise Exception("Unknown OS %s" % os)
-
-    return DockerContainer(id)
