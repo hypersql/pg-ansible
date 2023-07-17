@@ -1,8 +1,8 @@
 ---
 # Configure pgpoolII Health checking and streaming replication
 
-# Build random password for pgpool2_sr_user if needed
-- name: Build random password for pgpool2_sr_user
+# Build random password for pgpool2_health_check_user if needed
+- name: Build random password for pgpool2_health_check_user
   set_fact:
     pgpool2_health_check_password: >-
       {{ lookup('password', '/dev/null chars=ascii_letters,digits length=12') }}
@@ -51,6 +51,7 @@
   when:
     - pgpool2_primary_inventory_hostname is defined
     - pgpool2_primary_inventory_hostname|length > 0
+
 
 # grant monitoring privilege to pgpool2 user for replication status
 - name: Grant execute privileges on system functions to pgpoolII sr user

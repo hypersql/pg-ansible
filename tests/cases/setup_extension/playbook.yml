@@ -14,6 +14,6 @@
 
   roles:
     - role: setup_repo
-      when: "'setup_repo' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: install_dbserver
+    - role: init_dbserver
     - role: setup_extension
-      when: "'setup_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"

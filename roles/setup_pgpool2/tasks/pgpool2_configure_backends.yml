@@ -1,4 +1,9 @@
 ---
+- name: Check pgpoolII backend flags
+  fail:
+    msg: "pgpool2_backend_flag is not defined as 'ALLOW_TO_FAILOVER' or 'DISALLOW_TO_FAILOVER'"
+  when: pgpool2_backend_flag not in ['ALLOW_TO_FAILOVER', 'DISALLOW_TO_FAILOVER']
+
 # Configure pgpoolII backends
 - name: Build backends configuration
   set_fact:
@@ -36,7 +41,7 @@
         },
         {
           'key': 'backend_flag' + ansible_loop.index0 | string,
-          'value': 'ALLOW_TO_FAILOVER',
+          'value': pgpool2_backend_flag,
           'state': 'present',
           'quoted': true
         }

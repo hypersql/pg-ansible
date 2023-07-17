@@ -11,3 +11,7 @@ tuned_configuration_dir: "/etc/tuned"
 supported_tuned_configuration_dir:
   - "/etc/tuned"
   - "/usr/lib/tuned"
+
+# related tuned
+tuned_profile: "postgres"
+enable_tuned: false

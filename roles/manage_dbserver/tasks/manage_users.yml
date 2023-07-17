@@ -28,3 +28,17 @@
   when:
     - not host_is_standby
     - pg_users|length > 0
+
+- name: Add the passwords of users in pg_users to local pgpass file
+  include_role:
+    name: common
+    tasks_from: generate_password
+  vars:
+    input_user: "{{ pg_user.name }}"
+    input_password: "{{ pg_user.pass }}"
+  no_log: "{{ disable_logging }}"
+  loop: "{{ pg_users }}"
+  loop_control:
+    loop_var: pg_user
+  when:
+    - pg_users|length > 0

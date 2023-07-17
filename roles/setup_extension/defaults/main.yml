@@ -5,3 +5,14 @@ pg_major_version: "{{ pg_version | int }}"
 pg_extension_list:
   - postgis
   - pgaudit
+  - pg_hint_plan
+  - plpython3u
+  - pg_bigm
+
+# postgresql configuration
+pg_owner: postgres
+pg_group: postgres
+
+pg_port: 5432
+
+use_system_user: true

@@ -7,20 +7,30 @@
 - name: Get facts on current container
   community.docker.current_container_facts:
 
+- name: Set whether to use the system user or not
+  set_fact:
+    use_system_user: false
+  when: ansible_module_running_in_container
+
 - name: Check support for tuned_configuration_dir
   fail:
     msg: It is invalid tuned_configuration_dir '{{ tuned_configuration_dir }}'
   when:
     - tuned_configuration_dir not in supported_tuned_configuration_dir
     - not ansible_module_running_in_container
+    - enable_tuned
 
 - name: Include the tuned package installation tasks
   include_tasks: install_tuned.yml
-  when: not ansible_module_running_in_container
+  when:
+    - not ansible_module_running_in_container
+    - enable_tuned
 
 - name: Include tuned setting up tasks
   include_tasks: setup_tuned.yml
-  when: not ansible_module_running_in_container
+  when:
+    - not ansible_module_running_in_container
+    - enable_tuned
 
 - name: Include Postgres tuning tasks
   include_tasks: tune_postgres.yml

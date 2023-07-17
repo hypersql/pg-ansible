@@ -8,12 +8,23 @@ from conftest import (
 
 
 def test_setup_pgbouncer_service():
+    ansible_vars = load_ansible_vars()
     host = get_pgbouncer()[0]
     service = "pgbouncer"
+    use_system_user = ansible_vars["use_system_user"]
 
-    assert host.service(service).is_running, "pgbouncer service not running"
+    if use_system_user:
+        assert host.service(service).is_running, "pgbouncer service not running"
 
-    assert host.service(service).is_enabled, "pgbouncer service not enabled"
+        assert host.service(service).is_enabled, "pgbouncer service not enabled"
+    elif not use_system_user:
+        if os_family() == "RedHat":
+            pid_file_path = "/run/pgbouncer/pgbouncer.pid"
+        elif os_family() == "Debian":
+            pid_file_path = "/var/run/pgbouncer/pgbouncer.pid"
+        pgbouncer_pid = host.file("%s" % pid_file_path).content_string.split()
+
+        assert len(host.process.filter(pid=pgbouncer_pid[0])) > 0, "Pgbouncer process not running"
 
 
 def test_setup_pgbouncer_packages():

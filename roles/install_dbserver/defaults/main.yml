@@ -4,3 +4,5 @@ pg_ssl: true
 rpm_install: false
 force_install: false
 enable_core_dump: false
+
+use_system_user: true

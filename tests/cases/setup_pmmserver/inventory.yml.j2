@@ -1,0 +1,8 @@
+---
+all:
+  children:
+    pmmserver:
+      hosts:
+        pmmserver1:
+          ansible_host: {{ inventory_vars['pmmserver1_ip'] }}
+          private_ip: {{ inventory_vars['pmmserver1_ip'] }}

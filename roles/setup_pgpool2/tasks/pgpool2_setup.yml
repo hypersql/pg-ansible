@@ -126,6 +126,7 @@
     mode: 0700
   when:
     - pg_type == 'PG'
+    - use_system_user
   become: true
 
 - name: Generate pgpoolII systemd unit file
@@ -136,6 +137,7 @@
     mode: 0644
   when:
     - pg_type == 'PG'
+    - use_system_user
   become: true
 
 - name: Generate pgpoolII systemd conf file
@@ -146,13 +148,29 @@
     mode: 0644
   when:
     - pg_type == 'PG'
+    - use_system_user
   become: true
 
 - name: Stop pgpoolII service
   systemd:
     name: "{{ pgpool2_service_name }}"
     state: stopped
+  when: use_system_user
   become: true
+
+- name: Check if we have pgpoolII pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pgpool2_pid_file_name }}"
+  become: true
+  register: pgpool2_pid_file_exists
+
+- name: Stop pgpool-II process
+  command: "{{ pgpool_stop_command }}"
+  when:
+    - not use_system_user
+    - pgpool2_pid_file_exists.stat.exists
+  become: true
+  become_user: "{{ pgpool2_user }}"
 
 - name: Enable and start pgpoolII service
   systemd:
@@ -160,4 +178,11 @@
     enabled: true
     daemon_reload: true
     state: started
+  when: use_system_user
   become: true
+
+- name: Start pgpoolII process
+  command: "{{ pgpool_start_command }} -D"
+  when: not use_system_user
+  become: true
+  become_user: "{{ pgpool2_user }}"

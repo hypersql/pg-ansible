@@ -1,0 +1,4 @@
+---
+- name: Include the setup_pmmserver.yml
+  include_tasks: setup_pmmserver.yml
+  # when: "'setup_pmmserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"

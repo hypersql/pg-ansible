@@ -77,6 +77,14 @@
   become_user: "{{ pgpool2_user }}"
   when: not pgpool2_ssl_server_crt.stat.exists
 
+- name: Changed Permission ssl files
+  file:
+    path: "{{ pgpool2_ssl_dir }}/server.key"
+    owner: "{{ pgpool2_user }}"
+    state: "file"
+    mode: '0600'
+  become: true
+
 # Apply configuration changes
 - name: Include pgpool2_manage_configuration
   include_role:

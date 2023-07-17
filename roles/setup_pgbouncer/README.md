@@ -248,6 +248,28 @@ Example:
 pgbouncer_systemd_unit_file: "/etc/systemd/system/pgbouncer.service.d/pgbouncer.conf"
 ```
 
+### `use_system_user`
+
+Start pgbouncer systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
+```
+### `pgbouncer_binds_service`
+
+Set the service to be registered as BindsTo in the system unit
+
+
+Example:
+
+```yaml
+pgbouncer_binds_service: "postgresql-14.service"
+```
+
 ## Dependencies
 
 This role does not have any dependencies, but packages repositories should have

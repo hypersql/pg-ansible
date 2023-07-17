@@ -77,6 +77,33 @@ Example:
 pgpool_load_balancing: true
 ```
 
+### `pgpool2_failover`
+
+Enable failover command, follow primary command.
+Default: `false`
+
+Example:
+
+```yaml
+pgpool2_failover: true
+```
+
+
+### failover_script_local_path
+Set failover script local path.
+Default: `./templates/failover.sh.template`
+```yaml
+failover_script_local_path: "/opensql/failover.sh"
+```
+
+### follow_primary_script_local_path
+Set follow_primary script local path.
+Default: `./templates/follow_primary.sh.template`
+
+```yaml
+follow_primary_script_local_path: "/opensql/follow_prrimary.sh"
+```
+
 ### `pgpool2_ssl`
 
 Enable SSL support. Default: `true`.
@@ -105,6 +132,29 @@ Example:
 
 ```yaml
 pgpool2_port: 5434
+```
+
+### `if_up_command`, `if_down_command`, `arping_command`
+
+Set commands when initially setting watchdog.
+
+Example:
+```yaml
+if_up_command: "/bin/sudo /sbin/ip addr add $_IP_$/24 dev eth0 label eth0:0"
+if_down_command: "/bin/sudo /sbin/ip addr del $_IP_$/24 dev eth0"
+arping_command: "/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I eth0"
+```
+
+### `use_system_user`
+
+Start pgpool-II systemd unit using this parameter.
+If set to false, systemd unit is not used and it operates in the form of process through command.
+Default: true
+
+Example:
+
+```yaml
+use_system_user: false
 ```
 
 ## Dependencies

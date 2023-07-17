@@ -4,8 +4,8 @@ User={{ pgpool2_user }}
 EnvironmentFile=-/etc/sysconfig/pgpool-II
 
 ExecStart=
-ExecStart={{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} $OPTS
+ExecStart={{ pgpool_start_command }} $OPTS
 ExecStop=
-ExecStop={{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} -m fast stop
+ExecStop={{ pgpool_stop_command }}
 ExecReload=
-ExecReload={{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }} reload
+ExecReload={{ pgpool_reload_command }}

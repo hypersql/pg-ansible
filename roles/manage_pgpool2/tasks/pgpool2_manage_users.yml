@@ -1,12 +1,12 @@
 ---
-- name: Check pgpool2_users validation
+- name: Check pgpool2_manage_users validation
   fail:
-    msg: "pgpool2_users.password is not defined or pgpool2_users.auth is not supported."
-  with_items: "{{ pgpool2_users }}"
+    msg: "pgpool2_manage_users.password is not defined or pgpool2_manage_users.auth is not supported."
+  with_items: "{{ pgpool2_manage_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_users|length > 0
+    - pgpool2_manage_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - (user_item.pass is not defined or user_item.pass|length < 1) or (user_item.auth not in ('scram', 'md5'))
 
@@ -17,11 +17,11 @@
       {{ user_item.name }}:
     regexp: "^{{ user_item.name | regex_escape() }}\\:"
     state: "absent"
-  loop: "{{ pgpool2_users }}"
+  loop: "{{ pgpool2_manage_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_users|length > 0
+    - pgpool2_manage_users|length > 0
     - user_item.state is defined
     - user_item.state == 'absent'
   become: true
@@ -32,12 +32,12 @@
       script -q -c '{{ pgpool2_bin_path }}/pg_enc -k ~/.pgpoolkey -f {{ pgpool2_configuration_file }} -u {{ user_item.name }} -p -m'
     stdin: "{{ user_item.pass }}"
   become: true
-  become_user: "{{ pg_owner }}"
-  loop: "{{ pgpool2_users }}"
+  become_user: "{{ pgpool2_user }}"
+  loop: "{{ pgpool2_manage_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_users|length > 0
+    - pgpool2_manage_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - user_item.auth == 'scram'
 
@@ -47,11 +47,11 @@
       script -q -c '{{ pgpool2_bin_path }}/pg_md5 -f {{ pgpool2_configuration_file }} -u {{ user_item.name }} -p -m'
     stdin: "{{ user_item.pass }}"
   become: true
-  become_user: "{{ pg_owner }}"
-  loop: "{{ pgpool2_users }}"
+  become_user: "{{ pgpool2_user }}"
+  loop: "{{ pgpool2_manage_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_users|length > 0
+    - pgpool2_manage_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - user_item.auth == 'md5'
