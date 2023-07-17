@@ -113,5 +113,5 @@ def test_setup_pgpool_watchdog():
             % (pgpool2_password, pgpool2_user, address, pgpool2_port, query)
         )
         result = cmd.stdout.strip()
-    
+
     assert result == "on", "Watchdog is not enabled."

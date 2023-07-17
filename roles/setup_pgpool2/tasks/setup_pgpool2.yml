@@ -120,6 +120,13 @@
   when:
     - use_hostname|bool
 
+- name: Set PostgreSQL slot array
+  set_fact:
+    _slot_name_array: "{{ _slot_name_array|default('') + '\"' + server.inventory_hostname|regex_replace('[^a-zA-Z0-9_]', '_')  + '\" ' }}"
+  loop: "{{ _pgpool2_backends }}"
+  loop_control:
+    loop_var: server
+
 - name: Include the pgpool2_install
   include_tasks: pgpool2_install.yml
 
@@ -176,6 +183,19 @@
   include_tasks: pgpool2_configure_loadbalancing.yml
   when:
     - pgpool2_load_balancing
+
+- name: Include the pgpool2_copy_scripts
+  include_tasks: pgpool2_copy_scripts.yml
+
+- name: Include the pgpool2_configure_failover
+  include_tasks: pgpool2_configure_failover.yml
+  when: pgpool2_failover
+
+- name: Include the SSH keys generation tasks
+  include_tasks: generate_ssh_keys.yml
+
+- name: Include the SSH keys exchange tasks
+  include_tasks: exchange_ssh_keys.yml
 
 # This task gives ansible-lint warning but it's just a bug in ansible-lint
 # https://github.com/ansible/ansible-lint/issues/507

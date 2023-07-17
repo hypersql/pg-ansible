@@ -25,24 +25,14 @@ The rest of the variables can be configured and are available in the:
 - [roles/autotuning/defaults/main.yml](./defaults/main.yml)
 - [roles/autotuning/vars/main.yml](./vars/main.yml)
 
-### `tuned_profile`
-
-This is the `tuned` profile name used for configuring the system. Default: `postgres`
-
-Example:
-
-```yaml
-tuned_profile: "postgres"
-```
-
-### `tuned_configuration_dir`
-
-`tuned` configuration directory path. Default: `/etc/tuned`
+### `system_memory_mb`
+It can set the amount of memory used when PostgreSQL is tuned, in MB.
+The value cannot exceed the actual system memory value.
 
 Example:
 
 ```yaml
-tuned_configuration_dir: "/etc/tuned"
+system_memory_mb: 300
 ```
 
 ### `ssd_disk`

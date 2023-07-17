@@ -77,6 +77,33 @@ Example:
 pgpool_load_balancing: true
 ```
 
+### `pgpool2_failover`
+
+Enable failover command, follow primary command.
+Default: `false`
+
+Example:
+
+```yaml
+pgpool2_failover: true
+```
+
+
+### failover_script_local_path
+Set failover script local path.
+Default: `./templates/failover.sh.template`
+```yaml
+failover_script_local_path: "/opensql/failover.sh"
+```
+
+### follow_primary_script_local_path
+Set follow_primary script local path.
+Default: `./templates/follow_primary.sh.template`
+
+```yaml
+follow_primary_script_local_path: "/opensql/follow_prrimary.sh"
+```
+
 ### `pgpool2_ssl`
 
 Enable SSL support. Default: `true`.

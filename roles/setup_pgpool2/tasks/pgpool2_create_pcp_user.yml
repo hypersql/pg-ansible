@@ -26,3 +26,13 @@
         pass: "{{ pcp_admin_user_password }}"
   no_log: "{{ disable_logging }}"
   when: pcp_admin_user_password|length > 1
+
+- name: Add .pcppass file
+  lineinfile:
+    path: "{{ pcppass_file }}"
+    line: "localhost:{{ pgpool2_pcp_port }}:{{ pcp_admin_user }}:{{ pcp_admin_user_password }}"
+    regexp: "^localhost:{{ pgpool2_pcp_port }}:{{ pcp_admin_user }}:*"
+    create: true
+    mode: 0600
+  become: true
+  become_user: "{{ pgpool2_user }}"

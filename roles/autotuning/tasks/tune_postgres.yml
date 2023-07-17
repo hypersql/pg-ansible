@@ -5,6 +5,13 @@
     # Convert from megibyte to megabyte
     sys_memtotal_mb: "{{ (ansible_memtotal_mb * 1.048576) | int }}"
 
+- name: Check system_memory_mb value
+  fail:
+    msg: "system_memory_mb({{ system_memory_mb }}) cannot be set beyond the system memory({{ system_memtotal_mb }})."
+  when:
+    - system_memory_mb|length > 0
+    - system_memory_mb|int > sys_memtotal_mb|int
+
 - name: Set system memory for user
   set_fact:
     sys_memtotal_mb: "{{ system_memory_mb }} | int"
