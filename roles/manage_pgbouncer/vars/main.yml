@@ -4,5 +4,6 @@ supported_os:
   - CentOS8
   - RHEL7
   - RHEL8
+  - Rocky8
 
 pg_port: 5432

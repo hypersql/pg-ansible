@@ -32,12 +32,13 @@
     - ansible_os_family == 'RedHat'
 
 - name: Install pgpoolII requried package on RedHat
-  ansible.builtin.package:
+  ansible.builtin.yum:
     name:
       - "libevent"
       - "libmemcached"
       - "{{ pgpool2_package_name }}"
     state: present
+    disable_gpg_check: true
   when:
     - ansible_os_family == 'RedHat'
   become: true
