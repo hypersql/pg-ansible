@@ -48,4 +48,3 @@ available_roles:
   - common_arch
   - setup_pmmserver
   - setup_pmmclient
-  - 2node_2pgpool

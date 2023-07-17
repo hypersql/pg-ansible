@@ -332,14 +332,26 @@ def get_inventory_hostnames_for_test_case(case_name):
         hostnames.append("standby1")
         hostnames.append("witness1")
 
+    if case_name == "setup_pmmserver":
+        # setup_pmmserver doesn't need primary server
+        hostnames.clear()
+        hostnames.append("pmmserver1")
+
+    if case_name == "setup_pmmclient":
+        hostnames.append("standby1")
+        hostnames.append("standby2")
+        hostnames.append("pmmserver")
+
     common.Logger().debug(slice_to_log_str("hostnames", hostnames))
     return hostnames
 
 def create_managed_docker_containers(case_name, os_type, pg_version, hostnames):
     for hostname in hostnames:
+        command = get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname)
+        run_command_line(command)
+
         ctnr_name = get_container_name(case_name, os_type, pg_version, hostname)
-        common.Logger().info(f"Creating docker container {ctnr_name}")
-        run_command_line(get_managed_docker_ctnr_run_command(ctnr_name, os_type))
+        common.Logger().info(f"Created docker container {ctnr_name}")
         setup_ssh_configuration(ctnr_name)
 
 def get_container_name(case_name, os_type, pg_version, hostname):
@@ -348,13 +360,18 @@ def get_container_name(case_name, os_type, pg_version, hostname):
 def get_container_name_prefix(case_name, os_type, pg_version):
     return f"{case_name}_{os_type}_PG{pg_version}"
 
-def get_managed_docker_ctnr_run_command(ctnr_name, os_type):
+def get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname):
+    ctnr_name = get_container_name(case_name, os_type, pg_version, hostname)
     docker_command = f"docker run -d --privileged --cidfile {CIDFILE_DIR}/{ctnr_name} "
     docker_command += "--cap-add SYS_ADMIN "
     # rw mode is okay with cgroup v2, but might be troublesome with cgroup v1
     docker_command += "--volume /sys/fs/cgroup/:/sys/fs/cgroup:rw "
+    if hostname.startswith("pmmserver"):
+        docker_command += "--volume /var/run/docker.sock:/var/run/docker.sock "
+
     docker_command += f"--name {ctnr_name} "
     docker_command += "--tmpfs /run "
+
     docker_command += f"opensql-test-{os_type} "
     docker_command += "/usr/sbin/init"
     return docker_command
