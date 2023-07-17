@@ -23,6 +23,7 @@
   loop_control:
     loop_var: package
   when:
+    - extension_info is defined
     - extension_info.required_package is defined
     - extension_info.required_package|length > 0
   become: true
@@ -33,7 +34,6 @@
     state: "{{ extension_info.state | default('present') }}"
   when:
     - extension_info is defined
-    - pg_extension|length > 0
     - extension_info.pg_repo|default('true')
   become: true
 
@@ -42,8 +42,9 @@
     name: "{{ extension_info.uri }}"
     state: "{{ extension_info.state | default('present') }}"
   when:
-    - pg_extension is defined
-    - pg_extension|length > 0
+    - extension_info is defined
+    - extension_info.uri is defined
+    - extension_info.uri|length > 0
     - not extension_info.pg_repo|default('true')
     - ansible_os_family == 'RedHat'
   become: true
@@ -53,8 +54,21 @@
     deb: "{{ extension_info.uri }}"
     state: "{{ extension_info.state | default('present') }}"
   when:
-    - pg_extension is defined
-    - pg_extension|length > 0
+    - extension_info is defined
+    - extension_info.uri is defined
+    - extension_info.uri|length > 0
     - not extension_info.pg_repo|default('true')
     - ansible_os_family == 'Debian'
   become: true
+
+- name: Install {{ extension_info.name }} using source code
+  include_tasks: install_source.yml
+  vars:
+    extension_name: "{{ extension_info.name }}"
+    extension_source_src: "{{ extension_info.source_src }}"
+    extension_source_dest: "{{ extension_info.source_dest }}"
+  when:
+    - extension_info is defined
+    - extension_info.install_source is defined
+    - extension_info.install_source
+

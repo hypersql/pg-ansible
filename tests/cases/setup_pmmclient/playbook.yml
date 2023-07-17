@@ -1,6 +1,7 @@
 ---
+# not supported setup_pmmserver
 - hosts: all
-  name: Postgres deployment playbook
+  name: Setup pmm-client test deployment playbook
   become: true
   gather_facts: true
 
@@ -16,4 +17,6 @@
     - role: setup_repo
     - role: install_dbserver
     - role: init_dbserver
-    - role: setup_extension
+    - role: setup_replication
+    # - role: setup_pmmserver
+    - role: setup_pmmclient

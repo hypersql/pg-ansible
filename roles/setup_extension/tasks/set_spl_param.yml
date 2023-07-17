@@ -1,0 +1,29 @@
+---
+- name: Check required variables for this role
+  include_role:
+    name: common
+    tasks_from: check_required_variables
+  vars:
+    required_variables:
+      - pg_extension
+
+- name: Check extension supported
+  include_tasks: check_extension.yml
+
+- name: Set fact extension_info
+  set_fact:
+    extension_info: "{{ supported_extension|selectattr('name', 'search', pg_extension)|join('\n') }}"
+  when: pg_extension is defined
+
+- name: Set SPL parameter
+  set_fact:
+    extension_spl_param: >-
+      {{ extension_spl_param | default([]) + [
+        {
+          'name': 'shared_preload_libraries',
+          'value': pg_extension,
+          'state': 'present'
+        }
+      ] }}
+  when:
+    - extension_info.need_spl is defined

@@ -46,3 +46,6 @@ available_roles:
   - setup_repmgr
   - setup_repo
   - common_arch
+  - setup_pmmserver
+  - setup_pmmclient
+  - 2node_2pgpool

@@ -1,0 +1,46 @@
+---
+supported_extension:
+  [
+    {
+      "name": "postgis",
+      "extension_package": "postgis{{ postgis_version }}_{{ pg_major_version }}",
+      "required_package": ["SFCGAL", "gdal34-libs", "geos39", "proj72"],
+    },
+    {
+      "name": "pgaudit",
+      "extension_package": "pgaudit{{ pgaudit_version }}_{{ pg_major_version }}",
+      "need_spl": true
+    },
+    {
+      "name": "pg_hint_plan",
+      "required_package": [
+        "rpm-build",
+        "centos-release-scl-rh",
+        "llvm-toolset-7-clang",
+        "gcc",
+        "postgresql{{ pg_major_version }}-libs-{{ pg_version }}",
+        "postgresql{{ pg_major_version }}-{{ pg_version }}"
+        ],
+      "uri": "{{ rpm_install_path }}-devel-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
+      "source_src": "https://github.com/ossc-db/pg_hint_plan/archive/refs/tags/REL{{ pg_major_version }}_{{ pg_hint_plan_version }}.tar.gz",
+      "source_dest": "pg_hint_plan-REL{{ pg_major_version }}_{{ pg_hint_plan_version }}",
+      "pg_repo": false,
+      "install_source": true,
+      "need_spl": true
+    },
+    {
+      "name": "plpython3u",
+      "uri": "https://download.postgresql.org/pub/repos/yum/{{ pg_major_version }}/redhat/rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}/postgresql{{ pg_major_version }}-plpython3-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
+      "required_package": ["python3-libs"],
+      "pg_repo": false,
+    },
+    {
+      "name": "pg_bigm",
+      "required_package": [""],
+      "source_src": "https://github.com/pgbigm/pg_bigm/releases/download/v{{ pg_bigm_version }}-20200228/pg_bigm-{{ pg_bigm_version }}-20200228.tar.gz",
+      "source_dest": "pg_bigm-{{ pg_bigm_version }}-20200228",
+      "pg_repo": false,
+      "install_source": true,
+      "need_spl": true
+    }
+  ]

@@ -1,0 +1,6 @@
+---
+pmm_server_port: 443
+
+# PostgreSQL
+pg_owner: "postgres"
+pg_port: 5432

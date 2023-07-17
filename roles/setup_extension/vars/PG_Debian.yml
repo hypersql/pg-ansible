@@ -10,4 +10,9 @@ supported_extension:
       "name": "pgaudit",
       "extension_package": "postgresql-{{ pg_major_version }}-pgaudit",
     },
+    {
+      "name": "pg_bigm",
+      "extension_package": "postgis{{ postgis_version }}_{{ pg_major_version }}",
+      "required_package": ["libpq-dev", "libicu-dev"],
+    },
   ]

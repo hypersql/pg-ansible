@@ -4,5 +4,6 @@ tuned_profile: "postgres"
 ssd_disk: false
 
 pg_max_connections: ""
+system_memory_mb: ""
 
 use_system_user: true

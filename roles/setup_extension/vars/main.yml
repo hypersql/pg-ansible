@@ -1,3 +1,15 @@
 ---
+pg_major_version: "{{ pg_version | int }}"
+
 postgis_version: 32
 pgaudit_version: 16
+pg_bigm_version: 1.2
+pg_hint_plan_version: "1_4_1"
+
+pg_database: postgres
+pg_unix_socket_directories:
+  - "/var/run/postgresql"
+
+# Add extensions to postgresql's shared_preload_libraries, and add the extension to the working PostgreSQL server.
+# This parameter can be used when PostgreSQL directories are structured and PostgreSQL is running.
+pg_extension_creates: false

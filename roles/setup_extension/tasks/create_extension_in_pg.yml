@@ -1,0 +1,10 @@
+---
+- name: Create {{ pg_extension }} extension
+  ansible.builtin.include_role:
+    name: manage_dbserver
+    tasks_from: manage_extensions
+  vars:
+    pg_extensions:
+      - name: "{{ pg_extension }}"
+        database: "{{ pg_database }}"
+  no_log: "{{ disable_logging }}"

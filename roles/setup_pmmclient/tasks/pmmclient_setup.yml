@@ -1,0 +1,35 @@
+---
+# Create extension pg_stat_statements
+- name: Create extension pg_stat_statements
+  ansible.builtin.include_role:
+    name: manage_dbserver
+    tasks_from: manage_extensions
+  vars:
+    pg_extensions:
+      - name: pg_stat_statements
+        database: "{{ pg_database }}"
+        state: present
+  no_log: "{{ disable_logging }}"
+
+# Configure pmm-client
+- name: Configure pmm-client
+  ansible.builtin.command: >-
+    pmm-admin config --server-insecure-tls \
+    --server-url=https://admin:admin@{{ pmm_server_host }}:{{ pmm_server_port }}
+  become: true
+
+# Add monitoring database service
+- name: Add monitoring {{ database_type }} service
+  ansible.builtin.command: >-
+    pmm-admin add {{ database_type }} \
+    --query-source={{ query_source }} \
+    --username={{ pg_owner }} \
+    {{ inventory_hostname }}-service \
+    localhost:{{ pg_port }}
+  become: true
+
+# Start Agent
+- name: Start pmm-client
+  ansible.builtin.shell: |
+    nohup pmm-agent run --config-file=/usr/local/percona/pmm2/config/pmm-agent.yaml > /dev/null 2>&1 &
+  become: true
