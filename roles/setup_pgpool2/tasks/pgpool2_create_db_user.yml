@@ -120,6 +120,6 @@
     pg_pgpass_values:
       - user: "{{ pg_owner }}"
         password: "{{ pg_superuser_password[0] }}"
-        port: "5433"
+        port: "{{ pgpool2_port }}"
         create: true
   no_log: "{{ disable_logging }}"
