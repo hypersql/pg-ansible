@@ -6,6 +6,7 @@ supported_os:
   - RedHat7
   - RedHat8
   - Rocky8
+  - Rocky9
   - Ubuntu20
 
 supported_pg_type:

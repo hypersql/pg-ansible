@@ -17,7 +17,6 @@ def test_install_dbserver_pg_centos():
         "postgresql%s" % pg_version,
         "postgresql%s-server" % pg_version,
         "postgresql%s-contrib" % pg_version,
-        "sslutils_%s" % pg_version,
     ]
     if get_os() == "centos7":
         packages += [
@@ -26,7 +25,7 @@ def test_install_dbserver_pg_centos():
             "python2-psycopg2",
             "python-ipaddress",
         ]
-    elif get_os() == "rocky8":
+    elif get_os() == "rocky8" or get_os() == "rocky9":
         packages += ["python3-pycurl", "python3-libselinux", "python3-psycopg2"]
     for package in packages:
         assert host.package(package).is_installed, "Package %s not installed" % packages

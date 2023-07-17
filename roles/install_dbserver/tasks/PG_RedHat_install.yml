@@ -9,7 +9,7 @@
   failed_when: disable_builtin_postgres.rc != 0
   ignore_errors: true
   become: true
-  when: ansible_distribution_major_version == '8'
+  when: ansible_distribution_major_version|int >= 8 
 
 - name: Install require python package on EL7
   package:
@@ -29,6 +29,15 @@
     state: present
   become: true
   when: ansible_distribution_major_version == '8'
+
+- name: Install require python package on EL9
+  package:
+    name:
+      - python3-pycurl
+      - python3-libselinux
+    state: present
+  become: true
+  when: ansible_distribution_major_version == '9'
 
 - name: Install require python package up to PG v14
   package:
@@ -86,10 +95,20 @@
   when: ansible_distribution_major_version == '8'
   become: true
 
-- name: Install sslutils
-  ansible.builtin.package:
+- name: Install psycopg2 on EL9
+  package:
     name:
-      - sslutils_{{ pg_major_version }}
+      - python3-psycopg2
     state: present
+  when: ansible_distribution_major_version == '9'
   become: true
-  when: pg_ssl
+
+#TODO
+#remove this task, add 'Install ssltuils' in setup_extension ransible role
+#- name: Install sslutils
+#  ansible.builtin.package:
+#    name:
+#      - sslutils_{{ pg_major_version }}
+#    state: present
+#  become: true
+#  when: pg_ssl
