@@ -1,12 +1,16 @@
 ---
+- name: Set python barman pacakge EL8
+  set_fact:
+    python_barman_package: "python3-barman-{{ barman_version }}"
+
 - name: Set package names for RedHat distribution
   set_fact:
     _barman_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
       {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
       {{ barman_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
-    _python2_barman_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
+    _python_barman_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
       {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
-      {{ python2_barman_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
+      {{ python_barman_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
     _barman_cli_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
       {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
       {{ barman_cli_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
@@ -27,16 +31,30 @@
     - ansible_os_family == 'RedHat'
   become: true
 
-- name: Install Barman packages on EL
+- name: Install Barman python packages on EL 7
   yum:
     name:
-      - "{{ _python2_barman_package }}"
+      - "{{ _python_barman_package }}"
       - "{{ _barman_package }}"
       - "{{ _barman_cli_package }}"
-      - libselinux-python
       - policycoreutils-python
-    state: present
+      - libselinux-python
   when:
+    - ansible_distribution_major_version == '7'
+    - ansible_os_family == 'RedHat'
+  become: true
+
+- name: Install Barman python packages on EL 8
+  yum:
+    name:
+      - "{{ _python_barman_package }}"
+      - "{{ _barman_package }}"
+      - "{{ _barman_cli_package }}"
+      - python3-policycoreutils
+      - python3-argcomplete
+    disable_gpg_check: true
+  when:
+    - ansible_distribution_major_version == '8'
     - ansible_os_family == 'RedHat'
   become: true
 

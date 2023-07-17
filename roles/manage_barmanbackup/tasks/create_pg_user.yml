@@ -26,7 +26,7 @@
         user: "{{ barman_pg_user }}"
         db: postgres
 
-- name: Ensure privileges for the barman user
+- name: Ensure privileges for the barman user in PG 14 or below
   include_role:
     name: manage_dbserver
     tasks_from: manage_privileges
@@ -41,7 +41,7 @@
         type: function
   when: pg_major_version|int <= 14
 
-- name: Ensure privileges for the barman user
+- name: Ensure privileges for the barman user in PG 15 or higher
   include_role:
     name: manage_dbserver
     tasks_from: manage_privileges
