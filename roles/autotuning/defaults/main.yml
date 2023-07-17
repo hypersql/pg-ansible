@@ -1,8 +1,6 @@
 ---
 pg_instance_name: main
-tuned_profile: "postgres"
 ssd_disk: false
-enable_tuned: false
 
 pg_max_connections: ""
 system_memory_mb: ""
