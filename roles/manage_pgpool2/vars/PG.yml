@@ -6,7 +6,12 @@ pgpool2_user: "postgres"
 pgpool2_group: "postgres"
 pgpool2_bin_path: "/usr/bin"
 pgpool2_pid_file_name: "/var/run/pgpool-II/pgpool.pid"
+# pcp file
 pcp_configuration_file: "/etc/pgpool-II/pcp.conf"
+pcppass_file: "{{ pg_user_home }}/.pcppass"
+pgpool2_pcp_port: 9898
+
+pg_user_home: "/var/lib/pgsql"
 
 # pgpool command
 pgpool_start_command: "{{ pgpool2_bin_path }}/pgpool -f {{ pgpool2_configuration_file }}"

@@ -1,0 +1,30 @@
+---
+- name: Set _ssh_pg_keyname when SSH port is 22
+  set_fact:
+    _ssh_pg_keyname: "{{ server.private_ip }}"
+  when:
+    - ssh_port == 22
+
+- name: Set _ssh_pg_keyname when SSH port is different than 22
+  set_fact:
+    _ssh_pg_keyname: "[{{ server.private_ip }}]:{{ ssh_port }}"
+  when:
+    - ssh_port != 22
+
+- name: Run ssh-keyscan from the pgpool-II server
+  command: ssh-keyscan -p {{ ssh_port }} {{ server.private_ip }}
+  register: _pgpool2_ssh_keyscan_output
+  become: true
+  changed_when: false
+
+- name: Add {{ pg_owner }} SSH public key into pgpool server known hosts
+  known_hosts:
+    path: "{{ pg_user_home + '/.ssh/known_hosts' }}"
+    name: "{{ _ssh_pg_keyname }}"
+    key: "{{ _item }}"
+  with_items: "{{ _pgpool2_ssh_keyscan_output.stdout_lines }}"
+  loop_control:
+    loop_var: _item
+  become: true
+  become_user: "{{ pgpool2_user }}"
+  no_log: "{{ disable_logging }}"

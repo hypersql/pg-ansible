@@ -7,6 +7,9 @@ pgpool2_vip_dev: ""
 # Enable load balancing
 pgpool2_load_balancing: true
 
+# Enable failover
+pgpool2_failover: false
+
 # Enable SSL
 pgpool2_ssl: true
 
@@ -15,15 +18,26 @@ pgpool2_port: 9999
 pgpool2_pg_port: 5432
 pgpool_pg_check_password: ""
 
+# pgpool-II backend values
+pgpool2_backend_flag: "ALLOW_TO_FAILOVER"
+
 # Disable logging
 disable_logging: false
 
 use_hostname: false
 update_etc_file: true
 
+# failover & follow_primary script localhost path
+failover_script_local_path: "./templates/failover.sh.template"
+follow_primary_script_local_path: "./templates/follow_primary.sh.template"
+
 # Database variables
+pg_owner: "postgres"
+pg_group: "postgres"
 pg_data: "{{ pg_user_home + '/' + pg_major_version + '/data' if ansible_os_family == 'RedHat' else \
       pg_user_home + '/' + pg_major_version  + '/' + pg_instance_name if ansible_os_family == 'Debian' }}"
+pg_wal: ""
+pg_local_wal_archive_dir: ""
 
 # watchdog_command
 if_up_command: "/bin/sudo /sbin/ip addr add $_IP_$/24 dev {{ pgpool2_vip_dev }} label {{ pgpool2_vip_dev }}:0"
@@ -31,6 +45,3 @@ if_down_command: "/bin/sudo /sbin/ip addr del $_IP_$/24 dev {{ pgpool2_vip_dev }
 arping_command: "/bin/sudo /sbin/arping -U $_IP_$ -w 1 -I {{ pgpool2_vip_dev }}"
 
 use_system_user: true
-
-# TODO
-# It can changed backend_flag

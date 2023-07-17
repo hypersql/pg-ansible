@@ -37,6 +37,7 @@ pgbouncer_auth_file: "/etc/pgbouncer/userlist.txt"
 # Systemd unit file
 pgbouncer_syslog: 0
 pgbouncer_syslog_ident: "pgbouncer"
+pgbouncer_binds_service: ""
 
 # Configuration file
 pgbouncer_config_file: "/etc/pgbouncer/pgbouncer.ini"

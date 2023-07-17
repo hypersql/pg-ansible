@@ -7,3 +7,10 @@ Environment=BOUNCERCONF={{ pgbouncer_config_file }}
 
 PIDFile={{ pgbouncer_pid_file }}
 LimitNOFILE={{ pgbouncer_fd_limit }}
+
+{% if pgbouncer_binds_service|length > 0 %}
+[Unit]
+# Binds pgbouncer service
+After={{ pgbouncer_binds_service }}
+BindsTo={{ pgbouncer_binds_service }}
+{% endif %}
