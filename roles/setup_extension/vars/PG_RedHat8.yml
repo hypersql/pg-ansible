@@ -15,9 +15,9 @@ supported_extension:
       "name": "pg_hint_plan",
       "required_package": [
         "rpm-build",
-        "centos-release-scl-rh",
-        "llvm-toolset-7-clang",
+        "llvm-toolset",
         "gcc",
+        "ccache",
         "postgresql{{ pg_major_version }}-libs-{{ pg_version }}",
         "postgresql{{ pg_major_version }}-{{ pg_version }}"
         ],
@@ -42,5 +42,16 @@ supported_extension:
       "pg_repo": false,
       "install_source": true,
       "need_spl": true
+    },
+    {
+      "name": "sslutils",
+      "required_package": [
+        "openssl-devel"
+        ],
+      "source_src": "https://github.com/EnterpriseDB/sslutils/archive/refs/tags/v1.3.tar.gz",
+      "source_dest": "sslutils-1.3",
+      "pg_repo": false,
+      "install_source": true,
+      "need_spl": false
     }
   ]

@@ -7,10 +7,10 @@
 
 - name: Download PGDG GPG key for EL8, EL9 
   ansible.builtin.rpm_key:
-    key: "{{ pg_gpg_key_above_8 }}"
+    key: "{{ pg_gpg_key }}"
     state: present
   when:
-    - ansible_distribution_major_version|int >= 8
+    - ansible_distribution_major_version in ['8','9']
     - pg_type == 'PG'
   become: true
 
@@ -19,7 +19,7 @@
     key: "{{ epel_gpg_key }}"
     state: present
   when:
-    - ansible_distribution_major_version|int >= 8
+    - ansible_distribution_major_version in ['8','9']
   become: true
 
 - name: Install EPEL repo for EL7, EL8, EL9
@@ -67,6 +67,12 @@
   when:
     - ansible_distribution_major_version == '8'
     - not ubi_state.stat.exists
+
+- name: Enable codeready-builder for rhel9
+  ansible.builtin.command: >
+    dnf config-manager --enable crb
+  when: 
+    - ansible_distribution_major_version == '9'
 
 - name: Add additional Redhat repositories
   ansible.builtin.yum_repository:

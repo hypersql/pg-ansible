@@ -3,10 +3,11 @@
     "yum_additional_repos":
     [
         {
-            "name": "epel",
-            "description": "EPEL YUM repo",
-            "baseurl": "https://download.fedoraproject.org/pub/epel/$releasever/$basearch/",
-            "gpgcheck": "no"
+            "name": "google-chrome",
+            "description": "google chrome repo",
+            "baseurl": "http://dl.google.com/linux/chrome/rpm/stable/$basearch",
+            "gpgkey":"https://dl-ssl.google.com/linux/linux_signing_key.pub",
+            "gpgcheck": 1
         }
     ],
     "apt_additional_repo_keys": [{"key": "https://dl-ssl.google.com/linux/linux_signing_key.pub"}],

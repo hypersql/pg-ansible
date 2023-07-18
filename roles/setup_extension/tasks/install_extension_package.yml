@@ -15,16 +15,6 @@
     extension_info: "{{ supported_extension|selectattr('name', 'search', pg_extension)|join('\n') }}"
   when: pg_extension is defined
 
-- name: Install flexiblas for postgis on EL9
-  ansible.builtin.command: >
-    dnf --enablerepo=crb install -y flexiblas-netlib64
-  when:
-    - ansible_os_family == 'RedHat'
-    - ansible_distribution_major_version|int >= 9
-  register: repo_try
-  retries: "{{ external_package_retries }}"
-  until: "repo_try is not failed"
-
 - name: Install Required Package for extension
   ansible.builtin.package:
     name: "{{ package }}"

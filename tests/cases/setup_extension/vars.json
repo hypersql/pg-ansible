@@ -4,7 +4,8 @@
       "pgaudit",
       "pg_hint_plan",
       "plpython3u",
-      "pg_bigm"
+      "pg_bigm",
+      "sslutils"
     ],
-    "pg_extension_creates": true
+    "pg_extension_creates": false
 }

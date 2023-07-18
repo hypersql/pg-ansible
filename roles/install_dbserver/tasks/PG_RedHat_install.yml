@@ -103,12 +103,13 @@
   when: ansible_distribution_major_version == '9'
   become: true
 
-#TODO
-#remove this task, add 'Install ssltuils' in setup_extension ransible role
-#- name: Install sslutils
-#  ansible.builtin.package:
-#    name:
-#      - sslutils_{{ pg_major_version }}
-#    state: present
-#  become: true
-#  when: pg_ssl
+- name: Install sslutils
+  ansible.builtin.package:
+    name:
+      - sslutils_{{ pg_major_version }}
+    state: present
+  become: true
+  when: 
+    - pg_ssl
+    - ansible_distribution_major_version in ['7','8']
+    
