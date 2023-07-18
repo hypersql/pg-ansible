@@ -121,7 +121,9 @@ def main():
         common.Logger().info(f"{traceback.format_exc()}")
         error = str(e) if len(str(e)) > 0 else "Undefined Behavior..."
         print(f"ERROR: {error}")
-        remove_all_containers()
+
+        if args.remove_containers:
+            remove_all_containers()
 
 def get_input_arguments():
     parser = argparse.ArgumentParser()

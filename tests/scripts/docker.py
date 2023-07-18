@@ -72,6 +72,6 @@ class DockerContainer():
     def setup_ssh_server(self):
         self.exec('mkdir -p /run/sshd')
         self.exec('chmod 755 /run/sshd')
-        self.exec('ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key')
-        self.exec('ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key')
+        self.exec("sh -c 'ssh-keygen -t rsa -N \"\" -f /etc/ssh/ssh_host_rsa_key <<< y'")
+        self.exec("sh -c 'ssh-keygen -t dsa -N \"\" -f /etc/ssh/ssh_host_dsa_key <<< y'")
         self.exec('/usr/sbin/sshd')
