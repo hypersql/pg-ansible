@@ -14,8 +14,8 @@
 # Configure pmm-client
 - name: Configure pmm-client
   ansible.builtin.command: >-
-    pmm-admin config --server-insecure-tls \
-    --server-url=https://admin:admin@{{ pmm_server_host }}:{{ pmm_server_port }}
+    pmm-admin config --server-insecure-tls --force \
+    --server-url=https://{{ pmm_admin_id }}:{{ pmm_admin_password }}@{{ pmm_server_host }}:{{ pmm_server_port }}
   become: true
   register: configure_pmm_client
   changed_when: configure_pmm_client.rc == 0

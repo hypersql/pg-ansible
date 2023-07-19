@@ -1,2 +1,12 @@
 ---
-pmm_server_image: "percona/pmm-server:2.37.1"
+pmm_server_image: "docker.io/percona/pmm-server:2"
+
+docker_package:
+  - docker
+  - docker-client
+  - docker-clietn-latest
+  - docker-common
+  - docker-latest
+  - docker-latest-logrotate
+  - docker-logrotate
+  - docker-engine

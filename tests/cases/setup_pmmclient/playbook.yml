@@ -1,6 +1,6 @@
 ---
 - hosts: all
-  name: set docker in docker
+  name: set docker in docker in centos7, docker out docker in centos8 above
   tasks:
     - name: Install epel repository
       ansible.builtin.package:
@@ -8,7 +8,7 @@
           - epel-release
       become: true
 
-    - name: Install packages
+    - name: Install test required packages
       ansible.builtin.package:
         name:
           - supervisor
@@ -40,6 +40,10 @@
       ansible.builtin.shell: |
         dnf install -y containernetworking-plugins;
       when: ansible_distribution_major_version in ['8','9']
+    - name: Set in RHEL7
+      set_fact:
+        ansible_module_running_in_container: false
+      when: ansible_distribution_major_version == '7'
 
 - hosts: all
   name: Setup pmm-client test deployment playbook
