@@ -89,6 +89,10 @@ def get_primary():
     return get_hosts("primary")[0]
 
 
+def get_pmmserver():
+    return get_hosts("pmmserver")[0]
+
+
 def get_pemserver():
     return get_hosts("pemserver")[0]
 

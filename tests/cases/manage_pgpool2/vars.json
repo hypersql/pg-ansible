@@ -2,6 +2,7 @@
   "use_hostname": false,
   "pg_data": "/opt/pgdata",
   "pg_wal": "/opt/pgwal",
+  "pg_extension_list": ["sslutils"],
   "pgpool2_load_balancing": true,
   "pgpool2_port": 5433,
   "pgpool2_configuration": [

@@ -2,11 +2,11 @@
 - name: Check pcp_users validation
   fail:
     msg: "pcp_users.password is not defined."
-  with_items: "{{ pcp_users }}"
+  with_items: "{{ input_pcp_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pcp_users|length > 0
+    - input_pcp_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - user_item.pass is not defined or user_item.pass|length < 1
 
@@ -14,7 +14,7 @@
   stat:
     path: "{{ pcp_configuration_file }}"
   register: pcp_conf
-  when: pcp_users|length > 0
+  when: input_pcp_users|length > 0
 
 - name: Create pcp.conf if not exists
   copy:
@@ -26,7 +26,7 @@
     remote_src: true
   when:
     - not pcp_conf.stat.exists
-    - pcp_users|length > 0
+    - input_pcp_users|length > 0
   become: true
   become_user: "{{ pgpool2_user }}"
 
@@ -37,20 +37,20 @@
       {{ user_item.name }}:
     regexp: "^{{ user_item.name | regex_escape() }}\\:"
     state: "absent"
-  loop: "{{ pcp_users }}"
+  loop: "{{ input_pcp_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pcp_users|length > 0
+    - input_pcp_users|length > 0
     - user_item.state is defined
     - user_item.state == 'absent'
   become: true
 
 - name: Add pcp users
   include_tasks: pcp_add_user.yml
-  loop: "{{ pcp_users }}"
+  loop: "{{ input_pcp_users }}"
   loop_control:
     loop_var: pcp_user
   when:
-    - pcp_users|length > 0
+    - input_pcp_users|length > 0
     - pcp_user.state is not defined or pcp_user.state == 'present'

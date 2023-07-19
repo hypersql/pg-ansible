@@ -2,6 +2,7 @@
   "use_hostname": false,
   "pg_data": "/opt/pgdata",
   "pg_wal": "/opt/pgwal",
+  "pg_extension_list": ["sslutils"],
   "pgbouncer_listen_port": 6432,
   "pgbouncer_listen_addr": "*",
   "pgbouncer_admin_users": "pgbouncer_admin",

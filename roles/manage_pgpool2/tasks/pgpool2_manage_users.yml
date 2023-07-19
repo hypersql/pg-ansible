@@ -1,12 +1,12 @@
 ---
-- name: Check pgpool2_manage_users validation
+- name: Check input_pgpool2_users validation
   fail:
-    msg: "pgpool2_manage_users.password is not defined or pgpool2_manage_users.auth is not supported."
-  with_items: "{{ pgpool2_manage_users }}"
+    msg: "input_pgpool2_users.password is not defined or input_pgpool2_users.auth is not supported."
+  with_items: "{{ input_pgpool2_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_manage_users|length > 0
+    - input_pgpool2_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - (user_item.pass is not defined or user_item.pass|length < 1) or (user_item.auth not in ('scram', 'md5'))
 
@@ -17,11 +17,11 @@
       {{ user_item.name }}:
     regexp: "^{{ user_item.name | regex_escape() }}\\:"
     state: "absent"
-  loop: "{{ pgpool2_manage_users }}"
+  loop: "{{ input_pgpool2_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_manage_users|length > 0
+    - input_pgpool2_users|length > 0
     - user_item.state is defined
     - user_item.state == 'absent'
   become: true
@@ -33,11 +33,11 @@
     stdin: "{{ user_item.pass }}"
   become: true
   become_user: "{{ pgpool2_user }}"
-  loop: "{{ pgpool2_manage_users }}"
+  loop: "{{ input_pgpool2_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_manage_users|length > 0
+    - input_pgpool2_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - user_item.auth == 'scram'
 
@@ -48,10 +48,10 @@
     stdin: "{{ user_item.pass }}"
   become: true
   become_user: "{{ pgpool2_user }}"
-  loop: "{{ pgpool2_manage_users }}"
+  loop: "{{ input_pgpool2_users }}"
   loop_control:
     loop_var: user_item
   when:
-    - pgpool2_manage_users|length > 0
+    - input_pgpool2_users|length > 0
     - user_item.state is not defined or user_item.state == 'present'
     - user_item.auth == 'md5'

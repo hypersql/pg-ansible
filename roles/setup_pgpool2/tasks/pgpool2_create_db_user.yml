@@ -78,7 +78,7 @@
     name: manage_pgpool2
     tasks_from: pgpool2_manage_users
   vars:
-    pgpool2_manage_users:
+    input_pgpool2_users:
       - name: "{{ pg_pgpool_user }}"
         pass: "{{ pg_pgpool_user_password }}"
         auth: scram
@@ -105,7 +105,7 @@
     name: manage_pgpool2
     tasks_from: pgpool2_manage_users
   vars:
-    pgpool2_manage_users:
+    input_pgpool2_users:
       - name: "{{ pg_owner }}"
         pass: "{{ pg_superuser_password[0] }}"
         auth: scram

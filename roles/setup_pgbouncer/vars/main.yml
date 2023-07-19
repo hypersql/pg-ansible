@@ -33,8 +33,13 @@ supported_os:
   - CentOS8
   - RHEL7
   - RHEL8
+  - RHEL9
   - Rocky8
+  - Rocky9
 
 supported_pgbouncer_version:
-  - 1.6
-  - 1.7
+  - "1.19.1-42"
+  - "1.19.1-1"
+
+external_package_retries: 15
+package_retry_delay: 10

@@ -342,7 +342,7 @@ def get_inventory_hostnames_for_test_case(case_name):
     if case_name == "setup_pmmclient":
         hostnames.append("standby1")
         hostnames.append("standby2")
-        hostnames.append("pmmserver")
+        hostnames.append("pmmserver1")
 
     common.Logger().debug(slice_to_log_str("hostnames", hostnames))
     return hostnames
@@ -370,6 +370,7 @@ def get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname
     docker_command += "--volume /sys/fs/cgroup/:/sys/fs/cgroup:rw "
     if hostname.startswith("pmmserver"):
         docker_command += "--volume /var/run/docker.sock:/var/run/docker.sock "
+        docker_command += "--volume /var/lib/containers:/var/lib/containers "
 
     docker_command += f"--name {ctnr_name} "
     docker_command += "--tmpfs /run "

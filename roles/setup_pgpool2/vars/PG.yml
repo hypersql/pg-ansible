@@ -93,7 +93,9 @@ supported_os:
   - CentOS8
   - RHEL7
   - RHEL8
+  - RHEL9
   - Rocky8
+  - Rocky9
 
 supported_pg_version:
   - 14.0

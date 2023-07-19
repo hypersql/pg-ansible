@@ -21,7 +21,7 @@
     name: manage_pgpool2
     tasks_from: pcp_manage_users
   vars:
-    pcp_users:
+    input_pcp_users:
       - name: "{{ pcp_admin_user }}"
         pass: "{{ pcp_admin_user_password }}"
   no_log: "{{ disable_logging }}"
