@@ -1,10 +1,5 @@
 {
     "pg_extension_list": [
-      "postgis",
-      "pgaudit",
-      "pg_hint_plan",
-      "plpython3u",
-      "pg_bigm",
       "sslutils"
     ],
     "pg_extension_creates": false

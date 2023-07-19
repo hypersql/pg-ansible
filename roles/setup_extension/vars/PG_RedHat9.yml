@@ -46,7 +46,11 @@ supported_extension:
     {
       "name": "sslutils",
       "required_package": [
-        "openssl-devel"
+        "rpm-build",
+        "postgresql{{ pg_major_version }}-devel",
+        "openssl-devel",
+        "ccache",
+        "llvm-toolset"
         ],
       "source_src": "https://github.com/EnterpriseDB/sslutils/archive/refs/tags/v1.3.tar.gz",
       "source_dest": "sslutils-1.3",

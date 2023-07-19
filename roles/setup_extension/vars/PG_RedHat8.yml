@@ -45,13 +45,6 @@ supported_extension:
     },
     {
       "name": "sslutils",
-      "required_package": [
-        "openssl-devel"
-        ],
-      "source_src": "https://github.com/EnterpriseDB/sslutils/archive/refs/tags/v1.3.tar.gz",
-      "source_dest": "sslutils-1.3",
-      "pg_repo": false,
-      "install_source": true,
-      "need_spl": false
+      "extension_package": "sslutils_{{ pg_major_version }}",
     }
   ]
