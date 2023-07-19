@@ -1,4 +1,4 @@
-from conftest import get_pg_type, get_pgpool2, get_primary, load_ansible_vars
+from conftest import get_pgpool2, get_primary, load_ansible_vars
 
 
 def test_manage_pgpool_pcp_user():

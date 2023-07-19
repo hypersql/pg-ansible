@@ -1,4 +1,4 @@
-from conftest import get_pg_type, get_pg_unix_socket_dir, get_primary, get_standbys, load_ansible_vars
+from conftest import get_pg_unix_socket_dir, get_primary, get_standbys, load_ansible_vars
 
 
 def test_setup_replication_user():

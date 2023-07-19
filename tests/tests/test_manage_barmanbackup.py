@@ -1,6 +1,5 @@
 from conftest import (
     get_barmanserver,
-    get_pg_type,
     get_pg_unix_socket_dir,
     get_primary,
     load_ansible_vars,

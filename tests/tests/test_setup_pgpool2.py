@@ -1,10 +1,8 @@
 import pytest
-from conftest import get_pg_type, get_pg_version, get_pgpool2, get_primary, load_ansible_vars
+from conftest import get_pg_version, get_pgpool2, get_primary, load_ansible_vars
 
 
 def test_setup_pgpool2_PG():
-    if get_pg_type() != "PG":
-        pytest.skip()
     host = get_pgpool2()[0]
     service = "pgpool-II"
 
@@ -14,8 +12,6 @@ def test_setup_pgpool2_PG():
 
 
 def test_setup_pgpool_PG_packages():
-    if get_pg_type() != "PG":
-        pytest.skip()
     host = get_pgpool2()[0]
     pg_version = get_pg_version()
     packages = ["pgpool-II-pg%s" % pg_version, "openssl"]

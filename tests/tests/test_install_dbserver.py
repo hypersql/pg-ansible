@@ -1,11 +1,9 @@
 import pytest
-from conftest import get_os, get_pg_type, get_pg_version, get_primary, os_family
+from conftest import get_os, get_pg_version, get_primary, os_family
 
 
 def test_install_dbserver_pg_centos():
     if os_family() != "RedHat":
-        pytest.skip()
-    if get_pg_type() != "PG":
         pytest.skip()
 
     host = get_primary()
@@ -32,8 +30,6 @@ def test_install_dbserver_pg_centos():
 
 def test_install_dbserver_pg_debian():
     if os_family() != "Debian":
-        pytest.skip()
-    if get_pg_type() != "PG":
         pytest.skip()
 
     host = get_primary()

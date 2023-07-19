@@ -1,12 +1,9 @@
 import pytest
-from conftest import get_pg_type, get_primary, os_family
+from conftest import get_primary, os_family
 
 
 def test_setup_repo_pgdg_centos():
     if os_family() != "RedHat":
-        pytest.skip()
-
-    if get_pg_type() != "PG":
         pytest.skip()
 
     host = get_primary()
@@ -16,9 +13,6 @@ def test_setup_repo_pgdg_centos():
 
 def test_setup_repo_pgdg_debian():
     if os_family() != "Debian":
-        pytest.skip()
-
-    if get_pg_type() != "PG":
         pytest.skip()
 
     host = get_primary()
