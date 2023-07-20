@@ -11,8 +11,8 @@
     name: "{{ line_item.name }}"
     value: "{{ line_item.value }}"
   when:
-    - pg_postgres_conf_params|length > 0
-  with_items: "{{ pg_postgres_conf_params }}"
+    - input_pg_postgres_conf_params|length > 0
+  with_items: "{{ input_pg_postgres_conf_params }}"
   become: true
   become_user: "{{ pg_owner }}"
   loop_control:
@@ -24,7 +24,7 @@
   set_fact:
     params_restart_required: true
   when:
-    - pg_postgres_conf_params|length > 0
+    - input_pg_postgres_conf_params|length > 0
     - line_item.changed and line_item.restart_required
   with_items: "{{ params.results }}"
   loop_control:
@@ -46,7 +46,7 @@
   ansible.builtin.command: >
     kill -HUP {{ postgres_pid.stdout }}
   when:
-    - pg_postgres_conf_params|length > 0
+    - input_pg_postgres_conf_params|length > 0
     - params.changed
     - params_restart_required is defined
     - not params_restart_required
@@ -56,7 +56,7 @@
 - name: Restart PostgreSQL
   import_tasks: postgres_restart.yml
   when:
-    - pg_postgres_conf_params|length > 0
+    - input_pg_postgres_conf_params|length > 0
     - params.changed
     - params_restart_required is defined
     - params_restart_required

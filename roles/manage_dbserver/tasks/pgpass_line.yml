@@ -9,10 +9,10 @@
 
 - name: Prepare regex and entry line
   set_fact:
-    search_line: "{{ line_item.host | default('*') }}:{{ line_item.port | default(pg_port) }}:{{ line_item.database | default('*') }}:{{ line_item.user }}"
-    pgpass_line: "{{ line_item.host | default('*') }}:{{ line_item.port | default(pg_port) }}:{{ line_item.database | default('*') }}:{{ line_item.user }}:{{ line_item.password }}"
+    search_line: "{{ pg_pass_value.host | default('*') }}:{{ pg_pass_value.port | default(pg_port) }}:{{ pg_pass_value.database | default('*') }}:{{ pg_pass_value.user }}"
+    pgpass_line: "{{ pg_pass_value.host | default('*') }}:{{ pg_pass_value.port | default(pg_port) }}:{{ pg_pass_value.database | default('*') }}:{{ pg_pass_value.user }}:{{ pg_pass_value.password }}"
   when:
-    - pg_pgpass_values|length > 0
+    - input_pg_pgpass_values|length > 0
 
 - name: Delete entries in .pgpass
   lineinfile:
@@ -20,7 +20,7 @@
     regexp: "{{ search_line | regex_escape() }}"
     state: absent
   when:
-    - pg_pgpass_values|length > 0
+    - input_pg_pgpass_values|length > 0
     - pgpass_file_exists is defined
     - pgpass_file_exists.stat.exists
   no_log: "{{ disable_logging }}"
@@ -31,17 +31,17 @@
   lineinfile:
     path: "{{ pgpass_file | default('~/.pgpass') }}"
     line: "{{ pgpass_line }}"
-    state: "{{ line_item.state | default('present') }}"
-    create: "{{ line_item.create | default(omit) }}"
+    state: "{{ pg_pass_value.state | default('present') }}"
+    create: "{{ pg_pass_value.create | default(omit) }}"
     owner: "{{ pg_owner }}"
     group: "{{ pg_owner }}"
     mode: "0600"
   when: >
-    pg_pgpass_values|length > 0 and
+    input_pg_pgpass_values|length > 0 and
     (( pgpass_file_exists is defined and pgpass_file_exists.stat.exists )
-      or (line_item.create is defined and
-      (line_item.create == 'true' or line_item.create == 'true'
-       or line_item.create == 'True' or line_item.create )))
+      or (pg_pass_value.create is defined and
+      (pg_pass_value.create == 'true' or pg_pass_value.create == 'true'
+       or pg_pass_value.create == 'True' or pg_pass_value.create )))
   no_log: "{{ disable_logging }}"
   become: true
   become_user: "{{ pg_owner }}"

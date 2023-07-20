@@ -6,8 +6,8 @@
     owner: "{{ line_item.owner | default(pg_owner) }}"
     group: "{{ line_item.group | default(pg_owner) }}"
     mode: "{{ line_item.mode | default('0644') }}"
-  with_items: "{{ pg_copy_files }}"
+  with_items: "{{ input_pg_copy_files }}"
   loop_control:
     loop_var: line_item
-  when: pg_copy_files|length > 0
+  when: input_pg_copy_files|length > 0
   become: true

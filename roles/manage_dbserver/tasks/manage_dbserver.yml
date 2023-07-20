@@ -19,14 +19,24 @@
   block:
     - name: Import manage_pgpass task
       import_tasks: manage_pgpass.yml
+      vars:
+        input_pg_pgpass_values: "{{ pg_pgpass_values }}"
     - name: Import manage_postgres_params task
       import_tasks: manage_postgres_params.yml
+      vars:
+        input_pg_postgres_conf_params: "{{ pg_postgres_conf_params }}"
     - name: Import manage_multi_params task
       import_tasks: manage_multi_params.yml
+      vars:
+        input_pg_multi_params: "{{ pg_multi_params }}"
     - name: Import manage_slots task
       import_tasks: manage_slots.yml
+      vars:
+        input_pg_slots: "{{ pg_slots }}"
     - name: Import manage_hba_conf task
       import_tasks: manage_hba_conf.yml
+      vars:
+        input_pg_hba_ip_addresses: "{{ pg_hba_ip_addresses }}"
 
 - name: Include manage dbserver tasks
   block:
@@ -36,25 +46,39 @@
         - input_pg_users: "{{ pg_users }}"
     - name: Import manage_db
       import_tasks: manage_db.yml
+      vars:
+        - input_pg_databases: "{{ pg_databases }}"
     - name: Import manage_extensions task
       import_tasks: manage_extensions.yml
       vars:
         - input_pg_extensions: "{{ pg_extensions }}"
     - name: Import manage_roles task
       import_tasks: manage_roles.yml
+      vars:
+        - input_pg_grant_roles: "{{ pg_grant_roles }}"
     - name: Import manage_privilieges task
       import_tasks: manage_privileges.yml
+      vars:
+        - input_pg_grant_privileges: "{{ pg_grant_privileges }}"
     - name: Import manage_tablespaces task
       import_tasks: manage_tablespaces.yml
+      vars:
+        - input_pg_tablespaces: "{{ pg_tablespaces }}"
 
 - name: Execute SQL scripts and query
   block:
     - name: Import copy_files task
       import_tasks: copy_files.yml
+      vars:
+        - input_pg_copy_files: "{{ pg_copy_files }}"
     - name: Import execute_sql_scripts task
       import_tasks: execute_sql_scripts.yml
+      vars:
+        - input_pg_sql_scripts: "{{ pg_sql_scripts }}"
     - name: Import execute_query task
       import_tasks: execute_query.yml
+      vars:
+        - input_pg_query: "{{ pg_query }}"
 
 - name: Include shell profile creation task
   import_tasks: manage_profile.yml

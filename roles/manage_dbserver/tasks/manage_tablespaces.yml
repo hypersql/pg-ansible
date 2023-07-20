@@ -13,11 +13,11 @@
     state: "{{ 'absent' if line_item.state is defined and line_item.state == 'absent' else 'directory' }}"
   no_log: "{{ disable_logging }}"
   become: true
-  with_items: "{{ pg_tablespaces }}"
+  with_items: "{{ input_pg_tablespaces }}"
   loop_control:
     loop_var: line_item
   when:
-    - pg_tablespaces|length > 0
+    - input_pg_tablespaces|length > 0
 
 - name: Manage optional user defined tablespaces
   community.postgresql.postgresql_tablespace:
@@ -36,9 +36,9 @@
   no_log: "{{ disable_logging }}"
   become: true
   become_user: "{{ pg_owner }}"
-  with_items: "{{ pg_tablespaces }}"
+  with_items: "{{ input_pg_tablespaces }}"
   loop_control:
     loop_var: line_item
   when:
     - not host_is_standby
-    - pg_tablespaces|length > 0
+    - input_pg_tablespaces|length > 0

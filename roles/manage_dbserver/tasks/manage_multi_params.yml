@@ -2,19 +2,19 @@
 - name: Check multi parameters
   fail:
     msg: "{{ param.name }} is not multi parameter."
-  with_items: "{{ pg_multi_params }}"
+  with_items: "{{ input_pg_multi_params }}"
   loop_control:
     loop_var: param
   when:
-    - pg_multi_params|length > 0
+    - input_pg_multi_params|length > 0
     - param.name not in multi_param_list
 
 - name: Set multi parameters
   include_tasks: update_multi_params.yml
-  loop: "{{ pg_multi_params }}"
+  loop: "{{ input_pg_multi_params }}"
   loop_control:
     loop_var: param
-  when: pg_multi_params|length > 0
+  when: input_pg_multi_params|length > 0
 
 - name: Reset temporary multi paramters
   set_fact:

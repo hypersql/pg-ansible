@@ -1,8 +1,8 @@
 ---
 - name: Manage entries in .pgpass
   include_tasks: pgpass_line.yml
-  when: pg_pgpass_values|length > 0
+  when: input_pg_pgpass_values|length > 0
   no_log: "{{ disable_logging }}"
-  with_items: "{{ pg_pgpass_values }}"
+  with_items: "{{ input_pg_pgpass_values }}"
   loop_control:
-    loop_var: line_item
+    loop_var: pg_pass_value

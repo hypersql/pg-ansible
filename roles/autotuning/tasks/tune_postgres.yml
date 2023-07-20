@@ -163,5 +163,5 @@
     name: manage_dbserver
     tasks_from: manage_postgres_params
   vars:
-    pg_postgres_conf_params: "{{ _pg_postgres_conf_params }}"
+    input_pg_postgres_conf_params: "{{ _pg_postgres_conf_params }}"
   no_log: "{{ disable_logging }}"

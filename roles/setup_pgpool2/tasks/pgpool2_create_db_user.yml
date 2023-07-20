@@ -63,7 +63,7 @@
     apply:
       delegate_to: "{{ pgpool2_primary_inventory_hostname }}"
   vars:
-    pg_grant_privileges:
+    input_pg_grant_privileges:
       - roles: "{{ pg_pgpool_user }}"
         database: "{{ pg_pgpool_database }}"
         privileges: execute
@@ -117,7 +117,7 @@
     name: manage_dbserver
     tasks_from: manage_pgpass
   vars:
-    pg_pgpass_values:
+    input_pg_pgpass_values:
       - user: "{{ pg_owner }}"
         password: "{{ pg_superuser_password[0] }}"
         port: "{{ pgpool2_port }}"

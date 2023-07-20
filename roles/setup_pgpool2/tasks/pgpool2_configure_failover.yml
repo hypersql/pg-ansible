@@ -40,7 +40,7 @@
     apply:
       delegate_to: "{{ server.inventory_hostname }}"
   vars:
-    pg_hba_ip_addresses: "{{ pg_hba_entries }}"
+    input_pg_hba_ip_addresses: "{{ pg_hba_entries }}"
   loop: "{{ _pg_cluster_nodes }}"
   loop_control:
     loop_var: server

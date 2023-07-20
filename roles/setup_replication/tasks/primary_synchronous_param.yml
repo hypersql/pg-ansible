@@ -24,7 +24,7 @@
     name: manage_dbserver
     tasks_from: manage_postgres_params
   vars:
-    pg_postgres_conf_params:
+    input_pg_postgres_conf_params:
       - name: synchronous_standby_names
         value: "{{ synchronous_standby_names }}"
   when: synchronous_standby_names|length > 0

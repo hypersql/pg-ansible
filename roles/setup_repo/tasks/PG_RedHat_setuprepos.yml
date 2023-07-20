@@ -5,7 +5,7 @@
     state: latest
   become: true
 
-- name: Download PGDG GPG key for EL8, EL9 
+- name: Download PGDG GPG key for EL8, EL9
   ansible.builtin.rpm_key:
     key: "{{ pg_gpg_key }}"
     state: present
@@ -71,7 +71,7 @@
 - name: Enable codeready-builder for rhel9
   ansible.builtin.command: >
     dnf config-manager --enable crb
-  when: 
+  when:
     - ansible_distribution_major_version == '9'
 
 - name: Add additional Redhat repositories

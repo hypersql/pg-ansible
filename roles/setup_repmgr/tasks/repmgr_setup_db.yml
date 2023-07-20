@@ -3,7 +3,7 @@
     name: manage_dbserver
     tasks_from: manage_db
   vars:
-    pg_databases:
+    input_pg_databases:
       - name: "{{ pg_repmgr_dbname }}"
         owner: "{{ pg_repmgr_user }}"
 

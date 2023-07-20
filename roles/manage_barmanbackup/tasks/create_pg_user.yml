@@ -18,7 +18,7 @@
     name: manage_dbserver
     tasks_from: manage_roles
   vars:
-    pg_grant_roles:
+    input_pg_grant_roles:
       - role: pg_read_all_settings
         user: "{{ barman_pg_user }}"
         db: postgres
@@ -31,7 +31,7 @@
     name: manage_dbserver
     tasks_from: manage_privileges
   vars:
-    pg_grant_privileges:
+    input_pg_grant_privileges:
       - roles: "{{ barman_pg_user }}"
         database: postgres
         privileges: execute
@@ -46,7 +46,7 @@
     name: manage_dbserver
     tasks_from: manage_privileges
   vars:
-    pg_grant_privileges:
+    input_pg_grant_privileges:
       - roles: "{{ barman_pg_user }}"
         database: postgres
         privileges: execute

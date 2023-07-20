@@ -30,7 +30,7 @@
     name: manage_dbserver
     tasks_from: manage_privileges
   vars:
-    pg_grant_privileges:
+    input_pg_grant_privileges:
       - type: function
         privileges: execute
         schema: pg_catalog
