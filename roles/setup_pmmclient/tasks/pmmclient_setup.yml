@@ -5,7 +5,7 @@
     name: manage_dbserver
     tasks_from: manage_extensions
   vars:
-    pg_extensions:
+    input_pg_extensions:
       - name: pg_stat_statements
         database: "{{ pg_database }}"
         state: present

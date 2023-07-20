@@ -54,7 +54,6 @@
   ansible.builtin.stat:
     path: /etc/yum.repos.d/ubi.repo
   register: ubi_state
-  when: ansible_distribution_major_version == '8'
 
 - name: Enable ubi-8-codeready-builder
   ansible.builtin.command: >

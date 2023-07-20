@@ -12,7 +12,7 @@
     name: manage_dbserver
     tasks_from: manage_extensions
   vars:
-    pg_extensions:
+    input_pg_extensions:
       - name: repmgr
         database: "{{ pg_repmgr_dbname }}"
   when: "'primary' in group_names"

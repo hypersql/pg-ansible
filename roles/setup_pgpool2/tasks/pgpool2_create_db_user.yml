@@ -48,7 +48,7 @@
     apply:
       delegate_to: "{{ pgpool2_primary_inventory_hostname }}"
   vars:
-    pg_users:
+    input_pg_users:
       - name: "{{ pg_pgpool_user }}"
         pass: "{{ pg_pgpool_user_password }}"
         role_attr_flags: replication

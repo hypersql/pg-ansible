@@ -17,7 +17,7 @@
     name: manage_dbserver
     tasks_from: manage_users
   vars:
-    pg_users:
+    input_pg_users:
       - name: "{{ pg_repmgr_user }}"
         pass: "{{ pg_repmgr_user_password }}"
         role_attr_flags: superuser

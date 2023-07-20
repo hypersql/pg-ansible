@@ -52,6 +52,9 @@ pg_extensions:
   - name: "pgaudit"
     database: "postgres"
     state: present
+    - name: "sslutils"
+    database: "postgres"
+    state: present
 #
 # Set specify privilieges or roles.
 #pg_grant_privileges:

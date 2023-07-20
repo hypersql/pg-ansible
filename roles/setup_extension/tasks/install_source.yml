@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ extension_source_src }}"
     dest: "/tmp/{{ extension_source_dest }}.tar.gz"
+    timeout: 30
 
 - name: Unzip {{ extension_source_dest }}.tar.gz
   unarchive:

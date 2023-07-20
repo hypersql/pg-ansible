@@ -40,7 +40,7 @@
     name: manage_dbserver
     tasks_from: manage_extensions
   vars:
-    pg_extensions:
+    input_pg_extensions:
       - name: sslutils
         database: "{{ pg_database }}"
         state: present

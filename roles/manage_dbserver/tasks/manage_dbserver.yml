@@ -32,10 +32,14 @@
   block:
     - name: Import manage_users
       import_tasks: manage_users.yml
+      vars:
+        - input_pg_users: "{{ pg_users }}"
     - name: Import manage_db
       import_tasks: manage_db.yml
     - name: Import manage_extensions task
       import_tasks: manage_extensions.yml
+      vars:
+        - input_pg_extensions: "{{ pg_extensions }}"
     - name: Import manage_roles task
       import_tasks: manage_roles.yml
     - name: Import manage_privilieges task

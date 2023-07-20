@@ -8,7 +8,7 @@
     name: manage_dbserver
     tasks_from: manage_users
   vars:
-    pg_users:
+    input_pg_users:
       - name: "{{ barman_pg_user }}"
         pass: "{{ barman_pg_password }}"
         role_attr_flags: "{{ _role_attr_flags }}"

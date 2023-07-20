@@ -12,6 +12,7 @@
       "name": "test_user"
     }
   ],
+  "pg_extension_list": ["sslutils"],
   "pg_multi_params": [
       {
         "name": "listen_addresses",
