@@ -3,11 +3,19 @@
 supported_os:
   - CentOS7
   - CentOS8
-  - RedHat7
+  - Debian10
+  - Debian11
+  - Debian12
+  - Debian13
+  - OracleLinux7
+  - OracleLinux8
+  - OracleLinux9
   - RedHat8
+  - RedHat9
   - Rocky8
   - Rocky9
   - Ubuntu20
+  - Ubuntu22
 
 supported_pg_type:
   - PG

@@ -4,9 +4,9 @@
     os: "{{ ansible_distribution | replace('RedHat', 'RHEL') }}{{ ansible_distribution_major_version }}"
 
 - name: Check support for Operating System
-  fail:
-    msg: "Operating System = {{ os }} not supported."
-  when: os not in supported_os
+  ansible.builtin.include_role:
+    name: common
+    tasks_from: check_version.yml
 
 - name: Include the package installation tasks
   include_tasks: install_packages.yml

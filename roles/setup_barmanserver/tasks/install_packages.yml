@@ -1,19 +1,22 @@
 ---
-- name: Set python barman pacakge EL8
+- name: Set python barman package RHEL8
   set_fact:
     python_barman_package: "python3-barman-{{ barman_version }}"
+  when:
+    - ansible_distribution_major_version == '8'
+    - ansible_os_family == 'RedHat'
 
 - name: Set package names for RedHat distribution
   set_fact:
-    _barman_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
-      {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
-      {{ barman_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
-    _python_barman_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
-      {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
-      {{ python_barman_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
-    _barman_cli_package: "https://dl.2ndquadrant.com/default/release/browse/rpm/packages/ol/\
-      {{ ansible_distribution_major_version }}/x86_64/{{ pg_major_version }}/\
-      {{ barman_cli_package }}.el{{ ansible_distribution_major_version }}.noarch.rpm"
+    _barman_package: "https://ftp.postgresql.org/pub/repos/yum/common/redhat/\
+      rhel-{{ ansible_distribution_major_version }}-x86_64/{{ barman_package }}.\
+      rhel{{ ansible_distribution_major_version }}.noarch.rpm"
+    _python_barman_package: "https://ftp.postgresql.org/pub/repos/yum/common/redhat/\
+      rhel-{{ ansible_distribution_major_version }}-x86_64/{{ python_barman_package }}.\
+      rhel{{ ansible_distribution_major_version }}.noarch.rpm"
+    _barman_cli_package: "https://ftp.postgresql.org/pub/repos/yum/common/redhat/\
+      rhel-{{ ansible_distribution_major_version }}-x86_64/{{ barman_cli_package }}.\
+      rhel{{ ansible_distribution_major_version }}.noarch.rpm"
   when:
     - ansible_os_family == 'RedHat'
 
@@ -21,7 +24,7 @@
 # later pull the right version. We need to remove it first because the version
 # coming from barman repo is a replacement of the default package, not an
 # upgrade.
-- name: Remove require python package on EL7
+- name: Remove require python package on RHEL7
   package:
     name:
       - python-psycopg2
@@ -31,7 +34,7 @@
     - ansible_os_family == 'RedHat'
   become: true
 
-- name: Install Barman python packages on EL 7
+- name: Install Barman python packages on RHEL 7
   yum:
     name:
       - "{{ _python_barman_package }}"
@@ -44,7 +47,7 @@
     - ansible_os_family == 'RedHat'
   become: true
 
-- name: Install Barman python packages on EL 8
+- name: Install Barman python packages on RHEL 8 or Higher
   yum:
     name:
       - "{{ _python_barman_package }}"
@@ -54,7 +57,7 @@
       - python3-argcomplete
     disable_gpg_check: true
   when:
-    - ansible_distribution_major_version == '8'
+    - ansible_distribution_major_version >= '8'
     - ansible_os_family == 'RedHat'
   become: true
 
