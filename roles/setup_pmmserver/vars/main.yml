@@ -1,2 +1,2 @@
 ---
-pmm_server_image: "percona/pmm-server:2"
+pmm_server_image: "percona/pmm-server:2.37.1"

@@ -1,2 +1,3 @@
 ---
+percona_gpg_key: "https://www.percona.com/downloads/RPM-GPG-KEY-percona"
 percona_repo: "https://repo.percona.com/yum/percona-release-latest.noarch.rpm"

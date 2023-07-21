@@ -1,13 +1,10 @@
 ---
-- name: Install Dependency Packages
-  ansible.builtin.package:
-    name:
-      - wget
-      - curl
-      - redhat-lsb-core
+- name: Download PGDG GPG key
+  ansible.builtin.rpm_key:
+    key: "{{ percona_gpg_key }}"
     state: present
-  become: true
   when: ansible_os_family == 'RedHat'
+  become: true
 
 # Install Repoistory
 - name: Install percona repository in RedHat

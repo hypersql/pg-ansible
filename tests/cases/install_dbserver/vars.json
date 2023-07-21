@@ -1,4 +1,5 @@
 {
+    "pg_extension_list": ["sslutils"],
     "force_install": true,
     "rpm_install": true,
     "deb_install": true,
