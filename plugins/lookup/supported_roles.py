@@ -94,6 +94,7 @@ GROUP_ROLES = {
     "witness": [
         "setup_repo",
         "install_dbserver",
+        "setup_extension",
         "setup_repmgr",
         "manage_dbpatches",
     ],

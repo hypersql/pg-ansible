@@ -3,3 +3,9 @@
     name: "{{ repmgr_package_name }}"
     state: present
   become: true
+
+- name: Ensure socket directory priviledge for {{ pg_owner }}
+  ansible.builtin.file:
+    path: "{{ pg_unix_socket_directories[0] }}"
+    owner: "{{ pg_owner }}"
+    group: "{{ pg_group }}"

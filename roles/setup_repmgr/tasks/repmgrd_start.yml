@@ -1,8 +1,16 @@
 ---
+- name: Ensure repmgr_pid_file directory privilege
+  file:
+    path: "{{ repmgr_pid_file | dirname }}"
+    state: "directory"
+    owner: "{{ pg_owner }}"
+    group: "{{ pg_group }}"
+  become: true
+
 - name: Enable and start repmgrd
   ansible.builtin.systemd:
     name: "{{ repmgrd_service }}"
-    state: restarted
+    state: started
     daemon_reload: true
   become: true
   when: use_system_user
