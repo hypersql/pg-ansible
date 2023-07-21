@@ -1,4 +1,5 @@
 {
+    "use_system_user": false,
     "pg_extension_list": ["sslutils"],
     "force_install": true,
     "rpm_install": true,

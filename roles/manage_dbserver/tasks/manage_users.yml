@@ -29,4 +29,16 @@
     - not host_is_standby
     - input_pg_users|length > 0
 
-#TODO: saved user password in ansible control node.
+- name: Ensure user password file in local
+  include_role:
+    name: common
+    tasks_from: register_password.yml
+  vars:
+    input_user: "{{ pg_user.name }}"
+    input_password: "{{ pg_user.pass }}"
+  with_items: "{{ input_pg_users }}"
+  loop_control:
+    loop_var: pg_user
+  when:
+    - pg_user.pass is defined
+    - pg_user.pass|length > 0

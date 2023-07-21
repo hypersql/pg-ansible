@@ -23,7 +23,7 @@
       {{ pg_hba_entries | default([]) + [
           {
             'contype': 'hostssl',
-            'users': pg_owner,
+            'users': pg_superuser,
             'databases': pg_database,
             'source': server.private_ip + '/32'
           }

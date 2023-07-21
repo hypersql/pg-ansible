@@ -1,4 +1,5 @@
 {
+  "use_system_user": false,
   "pg_owner": "opensql",
   "pg_group": "opensql",
   "use_hostname": false,

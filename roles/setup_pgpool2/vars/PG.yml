@@ -86,6 +86,10 @@ pgpass_file: "{{ pg_user_home }}/.pgpass"
 # pg replication user
 pg_replication_user: "repuser"
 
+# postgres superuser
+pg_superuser: "postgres"
+pg_superuser_password: ""
+
 ssh_port: 22
 
 supported_os:

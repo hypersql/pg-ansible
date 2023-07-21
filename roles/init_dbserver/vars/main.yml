@@ -25,6 +25,8 @@ use_replication_slots: true
 pg_instance_name: main
 
 # postgres superuser
+pg_superuser: "postgres"
+pg_superuser_password: ""
 pg_random_password: true
 pg_shared_libraries_list:
   - "$libdir/pg_stat_statements"

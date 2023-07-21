@@ -3,12 +3,21 @@ from conftest import get_pg_version, get_pgpool2, get_primary, load_ansible_vars
 
 
 def test_setup_pgpool2_PG():
+    ansible_vars = load_ansible_vars()
     host = get_pgpool2()[0]
     service = "pgpool-II"
+    use_system_user = ansible_vars["use_system_user"]
 
-    assert host.service(service).is_running, "pgpool2 service not running"
+    if use_system_user:
+        assert host.service(service).is_running, "pgpool2 service not running"
 
-    assert host.service(service).is_enabled, "pgpool2 service not enabled"
+        assert host.service(service).is_enabled, "pgpool2 service not enabled"
+    elif not use_system_user:
+        pid_file_path = "/var/run/pgpool-II/pgpool.pid"
+        pgpool_pid = host.file("%s" % pid_file_path).content_string.split()
+        pgpool_pid[0] = pgpool_pid[0].replace("\x00", "")
+
+        assert len(host.process.filter(pid=pgpool_pid[0])) > 0, "pgpool2 process not running"
 
 
 def test_setup_pgpool_PG_packages():

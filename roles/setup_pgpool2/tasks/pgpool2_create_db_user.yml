@@ -86,16 +86,16 @@
   when: pg_pgpool_user_password|length > 1
 
 # This task need that manage_dbserver done 'cause need password file of pg_owner as superuser
-- name: Check {{ pg_owner }} password file
+- name: Check {{ pg_superuser }} password file
   ansible.builtin.stat:
-    path: "~/.pgpassfile/{{ pg_owner }}_pass"
+    path: "~/.pgpassfile/{{ pg_superuser }}_pass"
   become: false
   delegate_to: localhost
   register: pg_superuser_pass_file
 
-- name: Read {{ pg_owner }} pass
+- name: Read {{ pg_superuser }} pass
   set_fact:
-    pg_superuser_password: "{{ lookup('file', '~/.pgpassfile/{{ pg_owner }}_pass').split('\n') }}"
+    pg_superuser_password: "{{ lookup('file', '~/.pgpassfile/{{ pg_superuser }}_pass').split('\n') }}"
   become: false
   delegate_to: localhost
   when: pg_superuser_pass_file.stat.exists
@@ -106,20 +106,33 @@
     tasks_from: pgpool2_manage_users
   vars:
     input_pgpool2_users:
-      - name: "{{ pg_owner }}"
+      - name: "{{ pg_superuser }}"
         pass: "{{ pg_superuser_password[0] }}"
         auth: scram
   no_log: "{{ disable_logging }}"
   when: pg_superuser_password[0]|length > 0
 
-- name: Add password in pgpass
-  include_role:
-    name: manage_dbserver
-    tasks_from: manage_pgpass
-  vars:
-    input_pg_pgpass_values:
-      - user: "{{ pg_owner }}"
-        password: "{{ pg_superuser_password[0] }}"
-        port: "{{ pgpool2_port }}"
-        create: true
+- name: Check if pgpass exists or not
+  stat:
+    path: "{{ pgpass_file | default('~/.pgpass') }}"
+  become: true
+  become_user: "{{ pgpool2_user }}"
+  register: pgpass_file_exists
   no_log: "{{ disable_logging }}"
+
+- name: Prepare regex and entry line
+  set_fact:
+    pgpass_line: "*:{{ pgpool2_port }}:*:{{ pg_superuser }}:{{ pg_superuser_password[0] }}"
+
+- name: Manage entries in .pgpass
+  lineinfile:
+    path: "{{ pgpass_file | default('~/.pgpass') }}"
+    line: "{{ pgpass_line }}"
+    state: "present"
+    create: true
+    owner: "{{ pgpool2_user }}"
+    group: "{{ pgpool2_group }}"
+    mode: "0600"
+  no_log: "{{ disable_logging }}"
+  become: true
+  become_user: "{{ pgpool2_user }}"

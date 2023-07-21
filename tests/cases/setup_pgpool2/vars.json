@@ -1,9 +1,13 @@
 {
   "use_hostname": false,
+  "use_system_user": false,
+  "pg_owner": "opensql",
+  "pg_group": "opensql",
   "pg_data": "/opt/pgdata",
   "pg_wal": "/opt/pgwal",
   "pg_extension_list": ["sslutils"],
   "pgpool2_load_balancing": true,
+  "pgpool2_failover": true,
   "pgpool2_port": 5433,
   "pgpool2_users": [
     {
