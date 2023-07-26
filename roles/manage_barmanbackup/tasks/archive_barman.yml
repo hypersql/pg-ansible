@@ -28,7 +28,7 @@
 
 - name: Set timeline ID
   set_fact:
-    _timeline_id : "{{ _timeline_id.query_result[0].timeline_id }}"
+    _timeline_id: "{{ _timeline_id.query_result[0].timeline_id }}"
 
 - name: Create wals directory
   file:
@@ -44,6 +44,7 @@
     src: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/streaming/"
     dest: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/wals/{{ _timeline_id }}/"
     remote_src: true
+    mode: 0700
   delegate_to: "{{ _barman_server_inventory_hostname }}"
   failed_when: false
 
@@ -52,6 +53,7 @@
     src: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/incoming/"
     dest: "{{ barman_home }}/{{ inventory_hostname }}-{{ pg_instance_name }}/wals/{{ _timeline_id }}/"
     remote_src: true
+    mode: 0700
   delegate_to: "{{ _barman_server_inventory_hostname }}"
   failed_when: false
 

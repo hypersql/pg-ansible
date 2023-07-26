@@ -43,42 +43,42 @@
     - name: Import manage_users
       import_tasks: manage_users.yml
       vars:
-        - input_pg_users: "{{ pg_users }}"
+        input_pg_users: "{{ pg_users }}"
     - name: Import manage_db
       import_tasks: manage_db.yml
       vars:
-        - input_pg_databases: "{{ pg_databases }}"
+        input_pg_databases: "{{ pg_databases }}"
     - name: Import manage_extensions task
       import_tasks: manage_extensions.yml
       vars:
-        - input_pg_extensions: "{{ pg_extensions }}"
+        input_pg_extensions: "{{ pg_extensions }}"
     - name: Import manage_roles task
       import_tasks: manage_roles.yml
       vars:
-        - input_pg_grant_roles: "{{ pg_grant_roles }}"
+        input_pg_grant_roles: "{{ pg_grant_roles }}"
     - name: Import manage_privilieges task
       import_tasks: manage_privileges.yml
       vars:
-        - input_pg_grant_privileges: "{{ pg_grant_privileges }}"
+        input_pg_grant_privileges: "{{ pg_grant_privileges }}"
     - name: Import manage_tablespaces task
       import_tasks: manage_tablespaces.yml
       vars:
-        - input_pg_tablespaces: "{{ pg_tablespaces }}"
+        input_pg_tablespaces: "{{ pg_tablespaces }}"
 
 - name: Execute SQL scripts and query
   block:
     - name: Import copy_files task
       import_tasks: copy_files.yml
       vars:
-        - input_pg_copy_files: "{{ pg_copy_files }}"
+        input_pg_copy_files: "{{ pg_copy_files }}"
     - name: Import execute_sql_scripts task
       import_tasks: execute_sql_scripts.yml
       vars:
-        - input_pg_sql_scripts: "{{ pg_sql_scripts }}"
+        input_pg_sql_scripts: "{{ pg_sql_scripts }}"
     - name: Import execute_query task
       import_tasks: execute_query.yml
       vars:
-        - input_pg_query: "{{ pg_query }}"
+        input_pg_query: "{{ pg_query }}"
 
 - name: Include shell profile creation task
   import_tasks: manage_profile.yml

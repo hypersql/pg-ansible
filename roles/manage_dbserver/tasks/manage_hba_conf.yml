@@ -45,6 +45,7 @@
   shell: |
     set -o pipefail && cat {{ pg_default_data }}/postmaster.pid  | head -1
   register: postgres_pid
+  changed_when: postgres_pid|length > 0
 
 - name: Reload the pg process
   ansible.builtin.command: >

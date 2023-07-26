@@ -2,9 +2,10 @@
 - name: Ensure repmgr_pid_file directory privilege
   file:
     path: "{{ repmgr_pid_file | dirname }}"
-    state: "directory"
+    state: directory
     owner: "{{ pg_owner }}"
     group: "{{ pg_group }}"
+    mode: 0700
   become: true
 
 - name: Enable and start repmgrd

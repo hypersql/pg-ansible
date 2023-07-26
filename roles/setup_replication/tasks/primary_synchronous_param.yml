@@ -1,7 +1,8 @@
 ---
 - name: Set _synchronous_standby_names
   set_fact:
-    _synchronous_standby_names: "{{ ' ' + _synchronous_standbys | default([]) | length | string() + '(' + _synchronous_standbys | map('to_json') | join(',') + ')' }}"
+    _synchronous_standby_names: >-
+      "{{ ' ' + _synchronous_standbys | default([]) | length | string() + '(' + _synchronous_standbys | map('to_json') | join(',') + ')' }}"
   when:
     - synchronous_standby_names|length < 1
 

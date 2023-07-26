@@ -3,6 +3,7 @@
   ansible.builtin.get_url:
     url: "{{ extension_source_src }}"
     dest: "/tmp/{{ extension_source_dest }}.tar.gz"
+    mode: 0600
     timeout: 30
 
 - name: Unzip {{ extension_source_dest }}.tar.gz
@@ -23,4 +24,3 @@
     PATH: "{{ path_env_var }}:/usr/pgsql-{{ pg_major_version }}/bin"
     USE_PGXS: "true"
   become: true
-

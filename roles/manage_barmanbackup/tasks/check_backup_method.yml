@@ -37,6 +37,7 @@
   register: _backup_method
   become_user: "{{ barman_user }}"
   failed_when: false
+  changed_when: _backup_method|length > 0
   delegate_to: "{{ _barman_server_inventory_hostname }}"
 
 - name: Set opposite backup method
