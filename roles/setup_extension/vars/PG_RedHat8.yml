@@ -16,6 +16,7 @@ supported_extension:
       "required_package": [
         "rpm-build",
         "llvm-toolset",
+        "make",
         "gcc",
         "ccache",
         "postgresql{{ pg_major_version }}-libs-{{ pg_version }}",
