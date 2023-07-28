@@ -1,11 +1,4 @@
 ---
-- name: Set python barman package RHEL8
-  set_fact:
-    python_barman_package: "python3-barman-{{ barman_version }}"
-  when:
-    - ansible_distribution_major_version == '8'
-    - ansible_os_family == 'RedHat'
-
 - name: Set package names for RedHat distribution
   set_fact:
     _barman_package: "https://ftp.postgresql.org/pub/repos/yum/common/redhat/\
@@ -19,20 +12,6 @@
       rhel{{ ansible_distribution_major_version }}.noarch.rpm"
   when:
     - ansible_os_family == 'RedHat'
-
-# Remove default python-psycopg2 package, if any. Barman installation will
-# later pull the right version. We need to remove it first because the version
-# coming from barman repo is a replacement of the default package, not an
-# upgrade.
-- name: Remove require python package on RHEL7
-  package:
-    name:
-      - python-psycopg2
-    state: absent
-  when:
-    - ansible_distribution_major_version == '7'
-    - ansible_os_family == 'RedHat'
-  become: true
 
 - name: Install Barman python packages on RHEL 7
   yum:

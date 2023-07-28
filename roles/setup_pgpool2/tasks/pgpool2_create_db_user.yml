@@ -112,14 +112,6 @@
   no_log: "{{ disable_logging }}"
   when: pg_superuser_password[0]|length > 0
 
-- name: Check if pgpass exists or not
-  stat:
-    path: "{{ pgpass_file | default('~/.pgpass') }}"
-  become: true
-  become_user: "{{ pgpool2_user }}"
-  register: pgpass_file_exists
-  no_log: "{{ disable_logging }}"
-
 - name: Prepare regex and entry line
   set_fact:
     pgpass_line: "*:{{ pgpool2_port }}:*:{{ pg_superuser }}:{{ pg_superuser_password[0] }}"
