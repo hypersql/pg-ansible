@@ -20,9 +20,10 @@ The requirements for this Ansible Role are:
    repository
 4. `tmax_opensql.postgres` -> `install_dbserver` - for installing the PG
    binaries
-5. `tmax_opensql.postgres` -> `init_dbserver` - for initializing the PG
+5. `tmax_opensql.postgres` -> `setup_extension` - for installation of PostgreSQL extension: sslutils that provides SSL certicate generation functions to Postgres.
+6. `tmax_opensql.postgres` -> `init_dbserver` - for initializing the PG
    data directory and configuring a primary node.
-6. `tmax_opensql.postgres` -> `setup_replication` - for creating the standby.
+7. `tmax_opensql.postgres` -> `setup_replication` - for creating the standby.
 
 ## Role variables
 
@@ -148,6 +149,8 @@ Below is an example of how to include the `setup_repmgr` role:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

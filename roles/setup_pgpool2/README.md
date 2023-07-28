@@ -8,8 +8,13 @@ connection pooler for PostgreSQL.
 Following are the requirements of this role.
 
 1. Ansible
-2. `tmax_opensql.postgres` -> `setup_repo` role for setting the repository on
-   the systems.
+2. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
+3. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
+   PostgreSQL binaries.
+4. `tmax_opensql.postgres` -> `setup_extension` - for installation of
+   PostgreSQL binaries.
+5. `tmax_opensql.postgres` -> `init_dbserver` - for the initialization of
+   primary server
 
 ## Role Variables
 
@@ -249,6 +254,8 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

@@ -7,7 +7,9 @@ This role is for managing PgpoolII configuration parameters and user list.
 Following are the dependencies and requirement of this role.
 
 1. Ansible
-2. `tmax_opensql.postgres` -> `setup_pgpool2` - role for setting up PgpoolII
+2. `tmax_opensql.postgres` -> `setup_repo` role for setting the repository on
+   the systems.
+3. `tmax_opensql.postgres` -> `setup_pgpool2` - role for setting up PgpoolII
    on the systems.
 
 ## Role Variables
@@ -194,6 +196,8 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

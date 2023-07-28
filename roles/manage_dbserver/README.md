@@ -10,7 +10,10 @@ Following are the dependencies and requirement of this role.
 
 1. Ansible
 2. `community.general` Ansible Module - Utilized when creating aditional
-   users during a Postgres Install
+   users during a Postgres Install. Only on primary nodes.
+3. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
+4. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
+   PostgreSQL binaries.
 
 ## Role variables
 
@@ -294,6 +297,8 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

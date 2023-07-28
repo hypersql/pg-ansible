@@ -8,13 +8,11 @@ configured.
 The requirements for this ansible galaxy role are:
 
 1. Ansible
-2. `community.general` - utilized when creating aditional users during a
-   Postgres Install. Only on primary nodes.
-3. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
-4. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
+2. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
+3. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
    PostgreSQL binaries.
-5. `tmax_opensql.postgres` -> `init_dbserver` - for the initialization of
-   primary server
+4. `tmax_opensql.postgres` -> `setup_extension` - for installation of
+   PostgreSQL binaries.
 
 ## Role variables
 
@@ -127,6 +125,8 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8
