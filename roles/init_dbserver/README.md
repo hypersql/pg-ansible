@@ -1,6 +1,6 @@
 # init_dbserver
 
-This Ansible Galaxy Role Initializes Postgres versions: 14, 15 on instances previously configured.
+This Ansible Galaxy Role initializes Postgres on instances previously configured.
 
 **Not all Distribution or versions are supported on all the operating systems
 available.**
@@ -25,7 +25,7 @@ The only dependencies required for this ansible galaxy role are:
 3. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
 4. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
    PostgreSQL binaries.
-5. `tmax_opensql.postgres` -> `setup_extension` - for installation of PostgreSQL extension: sslutils that provides SSL certicate generation functions to Postgres 
+5. `tmax_opensql.postgres` -> `setup_extension` - for installation of PostgreSQL extension: sslutils that provides SSL certicate generation functions to Postgres
 
 ## Role variables
 
