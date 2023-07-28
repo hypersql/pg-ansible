@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM jrei/systemd-ubuntu:20.04
+FROM ubuntu:focal
 
 RUN apt update
 RUN apt install iproute2 -y
@@ -14,4 +14,3 @@ RUN apt install gpg -y
 RUN apt install acl -y
 RUN apt install apt-transport-https -y
 RUN apt install iputils-ping -y
-RUN systemctl disable ssh

@@ -22,23 +22,23 @@
   no_log: "{{ disable_logging }}"
   become: true
   become_user: "{{ pg_owner }}"
-  with_items: "{{ pg_users }}"
+  with_items: "{{ input_pg_users }}"
   loop_control:
     loop_var: line_item
   when:
     - not host_is_standby
-    - pg_users|length > 0
+    - input_pg_users|length > 0
 
-- name: Add the passwords of users in pg_users to local pgpass file
+- name: Ensure user password file in local
   include_role:
     name: common
-    tasks_from: generate_password
+    tasks_from: register_password.yml
   vars:
     input_user: "{{ pg_user.name }}"
     input_password: "{{ pg_user.pass }}"
-  no_log: "{{ disable_logging }}"
-  loop: "{{ pg_users }}"
+  with_items: "{{ input_pg_users }}"
   loop_control:
     loop_var: pg_user
   when:
-    - pg_users|length > 0
+    - pg_user.pass is defined
+    - pg_user.pass|length > 0

@@ -3,4 +3,4 @@
     name: manage_dbserver
     tasks_from: manage_hba_conf
   vars:
-    pg_hba_ip_addresses: "{{ repmgr_allow_ip_addresses }}"
+    input_pg_hba_ip_addresses: "{{ repmgr_allow_ip_addresses }}"

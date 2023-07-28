@@ -20,10 +20,10 @@
     login_unix_socket: "{{ pg_unix_socket_directories[0] }}"
   become: true
   become_user: "{{ pg_owner }}"
-  with_items: "{{ pg_databases }}"
+  with_items: "{{ input_pg_databases }}"
   loop_control:
     loop_var: line_item
   when:
     - not host_is_standby
-    - pg_databases|length > 0
+    - input_pg_databases|length > 0
   no_log: "{{ disable_logging }}"

@@ -21,8 +21,12 @@
     - name: Stop pgpool-II process
       command: "{{ pgpool_stop_command }}"
       when: pgpool2_pid_file_exists.stat.exists
+      register: pgpool2_stop_output
+      changed_when: pgpool2_stop_output.rc == 0
     - name: Restart pgpool-II process
       command: "{{ pgpool_start_command }} -D"
+      register: pgpool2_restart_output
+      changed_when: pgpool2_restart_output.rc == 0
 
 - name: Wait for port {{ pgpool2_port }}
   wait_for:

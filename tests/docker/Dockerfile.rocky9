@@ -1,0 +1,16 @@
+# syntax=docker/dockerfile:1
+
+FROM rockylinux/rockylinux:9.2
+ENV container docker
+
+RUN dnf install glibc-langpack-en -y
+RUN dnf -qy module disable postgresql -y
+RUN dnf update -y
+RUN dnf install sudo -y
+RUN dnf install python3 -y
+RUN dnf install ca-certificates -y
+RUN dnf install openssh-clients -y
+RUN dnf install openssh-server -y
+RUN dnf install which -y
+RUN dnf install iproute -y
+RUN dnf install procps -y

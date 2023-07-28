@@ -86,6 +86,10 @@ pgpass_file: "{{ pg_user_home }}/.pgpass"
 # pg replication user
 pg_replication_user: "repuser"
 
+# postgres superuser
+pg_superuser: "postgres"
+pg_superuser_password: ""
+
 ssh_port: 22
 
 supported_os:
@@ -93,7 +97,9 @@ supported_os:
   - CentOS8
   - RHEL7
   - RHEL8
+  - RHEL9
   - Rocky8
+  - Rocky9
 
 supported_pg_version:
   - 14.0

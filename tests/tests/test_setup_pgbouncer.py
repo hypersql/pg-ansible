@@ -1,5 +1,4 @@
 from conftest import (
-    get_pg_type,
     get_pgbouncer,
     get_primary,
     load_ansible_vars,

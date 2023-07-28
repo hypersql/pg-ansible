@@ -1,6 +1,5 @@
 {
-  "use_system_user": false,
-  "ansible_module_running_in_container": false,
+  "pg_extension_list": ["sslutils"],
   "pg_owner": "opensql",
   "pg_group": "opensql",
   "standby_quorum_type": "first",

@@ -11,16 +11,20 @@
   service:
     name: docker
     state: started
-    enabled: yes
+    enabled: true
   when: use_system_user
   become: true
 
 # Pull pmm-server docker image
 - name: Pull pmm-server docker image
-  ansible.builtin.command: >
+  ansible.builtin.command: >-
     docker pull {{ pmm_server_image }}
+  register: docker_pull_image
+  changed_when: docker_pull_image.rc == 0
 
 # Create Volume
 - name: Create Volume
   ansible.builtin.command: >
     docker volume create {{ inventory_hostname }}-data
+  register: docker_volume_create
+  changed_when: docker_volume_create.rc == 0

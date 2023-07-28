@@ -4,7 +4,7 @@
     name: manage_dbserver
     tasks_from: manage_pgpass
   vars:
-    pg_pgpass_values:
+    input_pg_pgpass_values:
       - user: "{{ pg_replication_user }}"
         password: "{{ pg_replication_user_password }}"
         create: true
@@ -16,7 +16,7 @@
     name: manage_dbserver
     tasks_from: manage_hba_conf
   vars:
-    pg_hba_ip_addresses: "{{ pg_allow_ip_addresses }}"
+    input_pg_hba_ip_addresses: "{{ pg_allow_ip_addresses }}"
   no_log: "{{ disable_logging }}"
   run_once: true
 
@@ -25,7 +25,7 @@
     name: manage_dbserver
     tasks_from: manage_slots
   vars:
-    pg_slots:
+    input_pg_slots:
       - name: "{{ inventory_hostname | regex_replace('[^a-zA-Z0-9_]', '_') }}"
         slot_type: physical
   no_log: "{{ disable_logging }}"

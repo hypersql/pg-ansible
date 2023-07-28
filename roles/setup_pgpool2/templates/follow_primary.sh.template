@@ -39,21 +39,22 @@ PCP_USER={{ pcp_admin_user }}
 PGPOOL_PATH={{ pgpool2_bin_path }}
 PCP_PORT={{ pgpool2_pcp_port }}
 POSTGRESQL_STARTUP_USER={{ pg_owner }}
-POSTGRESQL_SUPER_USER={{ pg_owner }}
+POSTGRESQL_SUPER_USER={{ pg_superuser }}
 POSTGRESQL_DATABASE={{ pg_database }}
 POSTGRESQL_CONF_FILE=postgresql.auto.conf
 SLOT_NAMES=({{ _slot_name_array }})
 PGPASSFILE={{ pgpass_file }}
 SSH_KEY_FILE=id_rsa
 SSH_OPTIONS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/${SSH_KEY_FILE}"
+FAILOVER_LOG={{ pgpool2_logdir }}/failover.log
 
-echo follow_primary.sh: start: Standby node ${NODE_ID}
+echo follow_primary.sh: start: Standby node ${NODE_ID} >> ${FAILOVER_LOG}
 
 # Check the connection status of Standby
 ${PGHOME}/bin/pg_isready -h ${NODE_HOST} -p ${NODE_PORT} > /dev/null 2>&1
 
 if [ $? -ne 0 ]; then
-    echo follow_primary.sh: node_id=${NODE_ID} is not running. skipping follow primary command
+    echo follow_primary.sh: node_id=${NODE_ID} is not running. skipping follow primary command >> ${FAILOVER_LOG}
     exit 0
 fi
 
@@ -69,7 +70,7 @@ fi
 PGVERSION=`${PGHOME}/bin/initdb -V | awk '{print $3}' | sed 's/\..*//' | sed 's/\([0-9]*\)[a-zA-Z].*/\1/'`
 
 # Synchronize Standby with the new Primary.
-echo follow_primary.sh: pg_rewind for node ${NODE_ID}
+echo follow_primary.sh: pg_rewind for node ${NODE_ID} >> ${FAILOVER_LOG}
 
 # Create replication slot "${SLOT_NAMES[$NODE_ID]}"
 
@@ -79,7 +80,7 @@ ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NEW_PRIMARY_NODE_HOST} "
 "
 
 if [ $? -ne 0 ]; then
-    echo follow_primary.sh: create replication slot \"${SLOT_NAMES[$NODE_ID]}\" failed. You may need to create replication slot manually.
+    echo follow_primary.sh: create replication slot \"${SLOT_NAMES[$NODE_ID]}\" failed. You may need to create replication slot manually. >> ${FAILOVER_LOG}
 fi
 
 ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NODE_HOST} "
@@ -94,62 +95,11 @@ ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NODE_HOST} "
 
     ${PGHOME}/bin/pg_ctl -l /dev/null -w -D ${NODE_PGDATA} start
 
+    ${PGHOME}/bin/psql -U ${POSTGRESQL_SUPER_USER} -d ${POSTGRESQL_DATABASE} -p ${NODE_PORT} \
+        -c \"ALTER SYSTEM SET primary_conninfo = 'user=${REPLUSER} passfile=''${PGPASSFILE}'' host=${NEW_PRIMARY_NODE_HOST} port=${NEW_PRIMARY_NODE_PORT} application_name=${SLOT_NAMES[$NODE_ID]}'\"
+
+    ${PGHOME}/bin/pg_ctl -D ${NODE_PGDATA} reload
 "
-{% raw %}
-# If pg_rewind failed, try pg_basebackup
-if [ $? -ne 0 ]; then
-    echo follow_primary.sh: end: pg_rewind failed. Try pg_basebackup.
-
-    ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NODE_HOST} "
-
-        set -o errexit
-
-        rm -rf ${NODE_PGDATA}/*
-        if [ ${#ARCHIVEDIR} -gt 0 ]; then
-            rm -rf ${ARCHIVEDIR}/*
-        fi
-        if [ ${#WALDIR} -gt 0 ]; then
-            rm -rf ${WALDIR}/*
-        fi
-
-        if [ ${#WALDIR} -gt 0 ]; then
-            ${PGHOME}/bin/pg_basebackup -R -l standby --slot=${SLOT_NAMES[$NODE_ID]} -h ${NEW_PRIMARY_NODE_HOST} -U $REPLUSER -p ${NEW_PRIMARY_NODE_PORT} -D ${NODE_PGDATA} -X stream --waldir=$WALDIR
-        else
-            ${PGHOME}/bin/pg_basebackup -R -l standby --slot=${SLOT_NAMES[$NODE_ID]} -h ${NEW_PRIMARY_NODE_HOST} -U $REPLUSER -p ${NEW_PRIMARY_NODE_PORT} -D ${NODE_PGDATA} -X stream
-        fi
-
-        sed -i \
-            -e \"s/#*port = .*/port = ${NODE_PORT}/\" \
-            ${NODE_PGDATA}/${POSTGRESQL_CONF_FILE}
-
-        if [ ${#ARCHIVEDIR} -gt 0 ]; then
-            sed -i \
-                -e \"s@#*archive_command = .*@archive_command = 'cp \\\"%p\\\" \\\"${ARCHIVEDIR}/%f\\\"'@\" \
-                ${NODE_PGDATA}/${POSTGRESQL_CONF_FILE}
-        fi
-    "
-
-    if [ $? -ne 0 ]; then
-
-        # drop replication slot
-        ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NEW_PRIMARY_NODE_HOST} "
-            ${PGHOME}/bin/psql -p ${NEW_PRIMARY_NODE_PORT} -U ${POSTGRESQL_SUPER_USER} \
-                -c \"SELECT pg_drop_replication_slot('${SLOT_NAMES[$NODE_ID]}');\"  >/dev/null 2>&1
-        "
-
-        if [ $? -ne 0 ]; then
-            echo ERROR: follow_primary.sh: drop replication slot \"${SLOT_NAMES[$NODE_ID]}\" failed. You may need to drop replication slot manually.
-        fi
-
-        echo follow_primary.sh: end: pg_basebackup failed
-        exit 1
-    fi
-
-    # start Standby node on ${NODE_HOST}
-    ssh -T ${SSH_OPTIONS} ${POSTGRESQL_STARTUP_USER}@${NODE_HOST} $PGHOME/bin/pg_ctl -l /dev/null -w -D ${NODE_PGDATA} start
-
-fi
-{% endraw %}
 
 # If start Standby successfully, attach this node
 if [ $? -eq 0 ]; then
@@ -158,7 +108,7 @@ if [ $? -eq 0 ]; then
     ${PGPOOL_PATH}/pcp_attach_node -w -h localhost -U $PCP_USER -p ${PCP_PORT} -n ${NODE_ID}
 
     if [ $? -ne 0 ]; then
-        echo ERROR: follow_primary.sh: end: pcp_attach_node failed
+        echo ERROR: follow_primary.sh: end: pcp_attach_node failed >> ${FAILOVER_LOG}
         exit 1
     fi
 
@@ -171,12 +121,12 @@ else
     "
 
     if [ $? -ne 0 ]; then
-        echo ERROR: follow_primary.sh: drop replication slot \"${SLOT_NAMES[$NODE_ID]}\" failed. You may need to drop replication slot manually.
+        echo ERROR: follow_primary.sh: drop replication slot \"${SLOT_NAMES[$NODE_ID]}\" failed. You may need to drop replication slot manually. >> ${FAILOVER_LOG}
     fi
 
-    echo ERROR: follow_primary.sh: end: follow primary command failed
+    echo ERROR: follow_primary.sh: end: follow primary command failed >> ${FAILOVER_LOG}
     exit 1
 fi
 
-echo follow_primary.sh: end: follow primary command is completed successfully
+echo follow_primary.sh: end: follow primary command is completed successfully >> ${FAILOVER_LOG}
 exit 0

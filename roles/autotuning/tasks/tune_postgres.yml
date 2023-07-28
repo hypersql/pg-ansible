@@ -96,7 +96,7 @@
 - name: Set the variable pg_work_mem_mb
   set_fact:
     pg_work_mem_mb: >-
-      {{ ((sys_memtotal_mb | int - pg_shared_buffers_mb | int) / 16 / pg_max_connections|int) | round | int }}
+      {{ ((sys_memtotal_mb | int - pg_shared_buffers_mb | int) / 16 / pg_max_connections | int) | round | int }}
 
 # Set the maintenance_work_mem_mb value to:
 # MAX(15% x (Total RAM - shared_buffers) / autovacuum_max_workers, 1GB)
@@ -163,5 +163,5 @@
     name: manage_dbserver
     tasks_from: manage_postgres_params
   vars:
-    pg_postgres_conf_params: "{{ _pg_postgres_conf_params }}"
+    input_pg_postgres_conf_params: "{{ _pg_postgres_conf_params }}"
   no_log: "{{ disable_logging }}"

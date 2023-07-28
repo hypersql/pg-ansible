@@ -1,211 +1,110 @@
-# pg-ansible tests
+# OpenSQL Ansible Collection Test Framework
+This is a test framework for OpenSQL ansible collection.
 
-## Introduction
+## Authors
+- [Sung Woo Chang](https://github.com/dbxpert)
 
-This folder contains the necessary software infrastructure required to execute
-the non-regression test cases of the **tmax_opensql.postgres** Ansible Collection.
-
-The tests are grouped by a common subject into multiple _test cases_. This
-common subject could be related to a specific Role we want to test, or a
-combination of several Roles with particular parameters for example.
-
-This testing framework relies mainly on `docker` containers, `docker compose`
-and `pytest`.
-
-## Testing framework
-
-Executing a test case consists basically in:
-
-1. Spinning up one `docker` container in charge of running the Ansible playbook
-   attached to the test case, and the tests themselves.
-2. Spinning up one or more `docker` containers in charge of hosting the
-   components deployed by the previous execution of the Ansible playbook.
-3. Destroying the containers at the end of tests execution.
-
-The tests are written in Python and rely on `pytest` and its `testinfra`
-module. Tests related to the same test case must be located in the same file
-named: `tests/test_<test_case_name>.py`.
-
-## Directory structure
-
-- `cases`: this folder contains one sub-folder per test case.
-- `docker`: docker files and scripts.
-- `scripts`: python scripts used to apply additional configuration on the
-  containers.
-- `tests`: `py.test` files.
-
-### Test case directory
-
-The test case directories are used to store all the required files necessary to
-create the docker infrastructure (`docker-compose.yml`) and the Ansible files
-(`inventory.yml` template, `playbook.yml`, and `vars.json`) needed to deploy
-the components related to the test case.
-
-## Running the tests
-
-### Prerequisites
+## Prerequisites
 
 This testing framework requires the following commands/tools:
-
 - `python3`
 - `pip3`
-- `docker` and `docker compose`
-- `make`
+- `docker`
 
 To install the dependencies:
-
 ```shell
 pip3 install -r requirements.txt
 ```
 
-### Docker CE and compose plugin installation on Debian11
-
-#### cgroup configuration
-
-In order to use systemd based docker images, make sure the following grub configuration is being used in `/etc/default/grub`:
-
+## Configuration
+In order for the test framework to find the Ansible project home, it needs an env variable PG_ANSIBLE_HOME set.
+Use the following command to auto-configure:
 ```shell
-GRUB_CMDLINE_LINUX_DEFAULT="quiet cgroup_enable=memory swapaccount=1"
-GRUB_CMDLINE_LINUX="systemd.unified_cgroup_hierarchy=false"
+cd [pg-ansible home directory]
+. .env `pwd`
 ```
 
-Apply grub configuration changes:
-
+## Running Test
+Use the following command to see the options for the test framework:
 ```shell
-sudo update-grub
+cd $PG_ANSIBLE_HOME/tests
+python3 scripts/test-runner.py --help
 ```
 
-Reboot the host.
-
-#### Docker CE installation
-
-Packages installation:
-
+## Usage Examples
+### First Run
+If it is your first time running the test framework, you need to deploy ansible collection tar ball for the test.
+Use the following option to initialize the ansible collection tar ball:
 ```shell
-sudo apt -y install \
-  apt-transport-https ca-certificates curl gnupg2 software-properties-common
-curl -fsSL https://download.docker.com/linux/debian/gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/docker-archive-keyring.gpg
-sudo add-apt-repository \
-   "deb [arch=amd64] https://download.docker.com/linux/debian \
-   $(lsb_release -cs) \
-   stable"
-sudo apt -y install \
-  docker-ce docker-ce-cli containerd.io docker-compose-plugin
+python3 scripts/test-runner.py --build-ansible-tarball ...
 ```
-
-Starting docker:
-
-```shell
-sudo systemctl enable --now docker
-```
-
-Adding the current user to the `docker` system group:
-
-```shell
-sudo usermod -aG docker $USER
-newgrp docker
-```
-
-### Test execution
-
-The `test-runner.py` script is intended to ease test execution through only one
-command line.
-
-Usage:
-
-```shell
-usage: test-runner.py [-h] [-j JOBS] [--configuration CONFIGURATION]
-                      [--pg-version PG_VERSION [PG_VERSION ...]] [--pg-type PG_TYPE [PG_TYPE ...]]
-                      [--os OS [OS ...]] [-k KEYWORD [KEYWORD ...]]
-
-optional arguments:
-  -h, --help            show this help message and exit
-  -j JOBS, --jobs JOBS  Number of parallel jobs. Default: 4
-  --configuration CONFIGURATION
-                        Configuration file
-  --pg-version PG_VERSION [PG_VERSION ...]
-                        Postgres versions list. Default: ['14.6']
-  --pg-type PG_TYPE [PG_TYPE ...]
-                        Postgres DB engines list. Default: ['PG']
-  --os OS [OS ...]      Operating systems list. Default: all
-  -k KEYWORD [KEYWORD ...], --keywords KEYWORD [KEYWORD ...]
-                        Execute test cases with a name matching the given keywords.
-```
-
-### Usage examples
-
-The example below shows how to run the tests for:
-
+### Run One Scenario
+The example below shows how to run a test for:
 - the `install_dbserver` test case
-- on `centos7` and `rocky8` operating systems
-- PostgreSQL engine only
+- on `centos7` operating systems
 - for versions `14.5`
 
 ```shell
-test-runner.py \
-  --pg-version 14.5 \
-  --os rocky8 centos7 \
-  --pg-type PG \
-  -k install_dbserver
-
-Test install_dbserver with PG/13 on centos7 ... OK
-Test install_dbserver with PG/14 on centos7 ... OK
-Test install_dbserver with PG/13 on rocky8 ... OK
-Test install_dbserver with PG/14 on rocky8 ... OK
-
-Tests passed: 4/4 100.00%
+python3 scripts/test-runner.py -k install_dbserver -o centos7 -v 14.5
 ```
-
-Running the tests for all the test cases, for every OS, for PostgreSQL and
-EPAS, in version `14.6`:
-
+### Run Multiple Scenarios
+The example below show how to run multiple tests for:
+- the `setup_repo` and `init_dbserver` test cases
+- on `centos7`, `rocky7` and `oraclelinux7` operating systems
+- for versions `14.6`, `14.7` and `14.8`
 ```shell
-test-runner.py \
-  --pg-version 14.6
-```
-
-### Manual test execution
-
-When implementing new test cases, it can be more efficient to execute the tests
-without using the `test-runner.py` script. This can be done with the following
-command lines:
-
-```shell
-export OPENSQL_PG_TYPE=<pg-type>
-export OPENSQL_PG_VERSION=<pg-version>
-make -C cases/<test-case> <os>
-```
-
-Below is an example of running the tests for test case `init_dbserver`, in
-version 14.6 of PostgreSQL, on RockyLinux8:
-
-```shell
-export OPENSQL_PG_TYPE=PG
-export OPENSQL_PG_VERSION=14.6
-make -C cases/init_dbserver rocky8
-```
-
-Containers hosting Postgres and the components we had tested with the help of
-the previous command are not automatically destroyed. For cleaning up those,
-the following command should be executed:
-
-```shell
-make -C cases/<test-case> clean
-```
-
-Because the container are not automatically destroyed, this method is useful
-for tests development and debugging: it is possible to open a shell session
-on the running container.
-
-```shell
-# Fetch the container id from the output of the following command
-docker ps
-# Start a new bash session on the container
-docker exec -it <container-id> /bin/bash
+python3 scripts/test-runner.py -k setup_repo init_dbserver \
+                               -o centos7 rocky7 oraclelinux 7 \
+                               -v 14.6 14.7 14.8
 ```
 
 ### Logs
+When a test starts running, there will be stdouts with colors telling you which log file to look at for each test case.
+For instance, if you run the following test scenarios,
+```shell
+python3 scripts/test-runner.py -k setup_repo init_dbserver -o centos7 centos8 -v 14.6 14.7 14.8 -j 12
+```
+You will see something like the following:
+```shell
+[PID=322046] Testing...(case=setup_repo, pg_version=14.8, os_type=centos8)
+[PID=322046] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos8_PG14.8.stdout
+[PID=322042] Testing...(case=setup_repo, pg_version=14.7, os_type=centos7)
+[PID=322042] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos7_PG14.7.stdout
+[PID=322047] Testing...(case=init_dbserver, pg_version=14.6, os_type=centos7)
+[PID=322047] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos7_PG14.6.stdout
+[PID=322045] Testing...(case=setup_repo, pg_version=14.7, os_type=centos8)
+[PID=322045] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos8_PG14.7.stdout
+[PID=322051] Testing...(case=init_dbserver, pg_version=14.7, os_type=centos8)
+[PID=322051] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos8_PG14.7.stdout
+[PID=322050] Testing...(case=init_dbserver, pg_version=14.6, os_type=centos8)
+[PID=322050] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos8_PG14.6.stdout
+[PID=322049] Testing...(case=init_dbserver, pg_version=14.8, os_type=centos7)
+[PID=322048] Testing...(case=init_dbserver, pg_version=14.7, os_type=centos7)
+[PID=322049] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos7_PG14.8.stdout
+[PID=322048] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos7_PG14.7.stdout
+[PID=322044] Testing...(case=setup_repo, pg_version=14.6, os_type=centos8)
+[PID=322044] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos8_PG14.6.stdout
+[PID=322041] Testing...(case=setup_repo, pg_version=14.6, os_type=centos7)
+[PID=322041] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos7_PG14.6.stdout
+[PID=322043] Testing...(case=setup_repo, pg_version=14.8, os_type=centos7)
+[PID=322043] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/setup_repo_centos7_PG14.8.stdout
+[PID=322052] Testing...(case=init_dbserver, pg_version=14.8, os_type=centos8)
+[PID=322052] Logs are written in /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos8_PG14.8.stdout
+```
+Choose and tail the log file to see the current progress of the ansible controller:
+```shell
+tail -f /hdd/developer-env/volumes/workspace/pg-ansible/tests/.logs/init_dbserver_centos8_PG14.8.stdout
+```
 
-In case of test failure, standard output and error are stored in dedicated
-files located into the `logs` directory. Filenames are `<test_case>.stdout` and
-`<test_case>.sterr`.
+### Debugging
+After runnging tests, the docker containers that are created will be removed automatically.
+If you would like to maintain the containers so that you can do debugging, use the following option:
+```shell
+python3 scripts/test-runner.py -m ...
+```
+This will ensure the containers survive even after test failures.
+After debugging, you will want to clean all the docker containers. Use the following option for that:
+```shell
+python3 scripts/test-runner.py -r ...
+```
+This will remove all the docker containers that were created by the test runners (DO NOT MANUALLY REMOVE CONTESTS IN ./.cidfiles)

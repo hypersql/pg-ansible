@@ -1,7 +1,9 @@
 ---
-pgbouncer_version: 1.7
+pgbouncer_version: "1.19.1-42"
 # RPM package name
-pgbouncer_package_name: "pgbouncer"
+pgbouncer_package_name: "https://download.postgresql.org/pub/repos/yum/common/redhat/\
+rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}/\
+pgbouncer-{{ pgbouncer_version }}.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm"
 
 # PgBouncer service name
 pgbouncer_service_name: "pgbouncer"

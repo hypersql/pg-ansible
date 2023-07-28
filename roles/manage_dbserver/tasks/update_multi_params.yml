@@ -4,8 +4,8 @@
     _param_values: "{{ _tmp_multi_list[param.name] }}"
   changed_when: param.name in _tmp_multi_list
   when:
-   - _tmp_multi_list is defined
-   - param.name in _tmp_multi_list
+    - _tmp_multi_list is defined
+    - param.name in _tmp_multi_list
   register: multi_exist
 
 - name: Check {{ param.name }} parameter
@@ -20,7 +20,7 @@
 
 - name: Set param value split
   set_fact:
-    _param_values: "{{ _query_result.query_result[0][param.name] | split(',') | map('replace', ' ', '') | list  }}"
+    _param_values: "{{ _query_result.query_result[0][param.name] | split(',') | map('replace', ' ', '') | list }}"
   when:
     - _query_result|length > 0
     - multi_exist is not changed
@@ -44,11 +44,11 @@
 
 - name: Set temporary multi param list
   set_fact:
-    _tmp_multi_list: "{{ _tmp_multi_list|default([])|combine({ param.name: _param_values}) }}"
+    _tmp_multi_list: "{{ _tmp_multi_list | default([]) | combine({param.name: _param_values}) }}"
 
 - name: Set {{ param.name }} line
   set_fact:
-    _values_line: "{{ _values_line | default('') }}{% if _values_line| default ('') | length > 0 %}, {% endif %}{{ line_item }}"
+    _values_line: "{{ _values_line | default('') }}{% if _values_line | default('') | length > 0 %}, {% endif %}{{ line_item }}"
   when: _param_values|length > 0
   with_items: "{{ _param_values }}"
   loop_control:

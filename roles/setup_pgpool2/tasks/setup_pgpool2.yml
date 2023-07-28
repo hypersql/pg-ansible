@@ -122,7 +122,8 @@
 
 - name: Set PostgreSQL slot array
   set_fact:
-    _slot_name_array: "{{ _slot_name_array|default('') + '\"' + server.inventory_hostname|regex_replace('[^a-zA-Z0-9_]', '_')  + '\" ' }}"
+    _slot_name_array: >-
+      {{ _slot_name_array | default('') + '"' + server.inventory_hostname | regex_replace('[^a-zA-Z0-9_]', '_') + '" ' }}
   loop: "{{ _pgpool2_backends }}"
   loop_control:
     loop_var: server

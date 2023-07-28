@@ -3,8 +3,8 @@
   template:
     src: "{{ failover_script_local_path }}"
     dest: "{{ pgpool2_failover_file }}"
-    owner: "{{ pg_owner }}"
-    group: "{{ pg_group }}"
+    owner: "{{ pgpool2_user }}"
+    group: "{{ pgpool2_group }}"
     mode: 0755
   become: true
 
@@ -12,7 +12,7 @@
   template:
     src: "{{ follow_primary_script_local_path }}"
     dest: "{{ pgpool2_follow_primary_file }}"
-    owner: "{{ pg_owner }}"
-    group: "{{ pg_group }}"
+    owner: "{{ pgpool2_user }}"
+    group: "{{ pgpool2_group }}"
     mode: 0755
   become: true

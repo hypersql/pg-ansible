@@ -55,7 +55,7 @@
 - name: Add extension to SPL if needed
   include_tasks: ../../manage_dbserver/tasks/manage_multi_params.yml
   vars:
-    pg_multi_params: "{{ extension_spl_param }}"
+    input_pg_multi_params: "{{ extension_spl_param }}"
   when:
     - extension_spl_param is defined
     - extension_spl_param|length > 0

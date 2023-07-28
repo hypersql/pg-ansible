@@ -26,14 +26,9 @@
 
   roles:
     - role: setup_repo
-      when: "'setup_repo' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: install_dbserver
-      when: "'install_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
+    - role: setup_extension
     - role: init_dbserver
-      when: "'init_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_dbserver
-      when: "'manage_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_barmanserver
-      when: "'setup_barmanserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_barmanbackup
-      when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"

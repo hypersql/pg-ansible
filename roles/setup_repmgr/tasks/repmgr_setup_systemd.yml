@@ -29,7 +29,3 @@
     group: root
   become: true
   when: ansible_os_family == 'Debian'
-
-- name: Restart repmgrd
-  import_tasks: repmgrd_start.yml
-  when: update_spl

@@ -1,5 +1,4 @@
 ---
-# not supported setup_pmmserver
 - hosts: all
   name: set docker in docker
   tasks:
@@ -31,6 +30,17 @@
         executable: /bin/bash
       become: true
 
+    - name: Create Podman network
+      ansible.builtin.shell: |
+        podman network create podman
+      when: ansible_distribution_major_version in ['8','9']
+      failed_when: false
+
+    - name: Install container network plugin package in RHEL8, RHEL9
+      ansible.builtin.shell: |
+        dnf install -y containernetworking-plugins;
+      when: ansible_distribution_major_version in ['8','9']
+
 - hosts: all
   name: Setup pmm-server test deployment playbook
   become: true
@@ -45,4 +55,4 @@
         disable_logging: false
 
   roles:
-    # - role: setup_pmmserver
+    - role: setup_pmmserver

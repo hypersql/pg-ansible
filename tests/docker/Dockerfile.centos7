@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1
 
-FROM centos/systemd
+FROM centos:7
 
 RUN yum install iproute -y
 RUN yum install sudo -y

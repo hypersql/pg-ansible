@@ -1,9 +1,9 @@
 {
   "use_system_user": false,
-  "ansible_module_running_in_container": false,
   "pg_owner": "opensql",
   "pg_group": "opensql",
   "use_hostname": false,
+  "pg_extension_list": ["sslutils"],
   "pg_data": "/var/lib/pgsql/14/main/data",
   "pg_wal": "/opt/pgwal",
   "repmgr_failover": "automatic",

@@ -1,6 +1,7 @@
 {
   "rpm_install": true,
   "use_hostname": false,
+  "pg_extension_list": ["sslutils"],
   "pg_data": "/opt/pgdata",
   "pg_wal": "/opt/pgwal",
   "barman_user": "barman",

@@ -1,7 +1,17 @@
 ---
-pgbouncer_version: 1.7
+deb_architecture_map: {
+  "aarch64": "arm64",
+  "x86_64": "amd64"
+}
+
+deb_architecture: >-
+  {{ [ansible_architecture] | map('extract', deb_architecture_map) | first }}
+
+pgbouncer_version: "1.19.1-1"
+
 # Deb package name
-pgbouncer_package_name: "pgbouncer"
+pgbouncer_package_name: "https://apt.postgresql.org/pub/repos/apt/pool/main/p/pgbouncer/\
+pgbouncer_{{ pgbouncer_version }}.pgdg{{ ansible_distribution_major_version }}0+1_{{ deb_architecture }}.deb"
 
 # PgBouncer service name
 pgbouncer_service_name: "pgbouncer"

@@ -58,7 +58,6 @@
 
 - name: Include repmgr_setup_db_user.yml
   ansible.builtin.include_tasks: repmgr_setup_db_user.yml
-  when: "('primary' in group_names) or ('witness' in group_names)"
 
 - name: Include repmgr_update_pgpass.yml
   ansible.builtin.include_tasks: repmgr_update_pgpass.yml
@@ -100,3 +99,6 @@
 
 - name: Include repmgr_setup_systemd.yml
   ansible.builtin.include_tasks: repmgr_setup_systemd.yml
+
+- name: Restart repmgrd
+  import_tasks: repmgrd_start.yml

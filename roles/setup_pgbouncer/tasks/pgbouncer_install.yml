@@ -2,11 +2,16 @@
 - name: Include RedHat variable in install_dbserver
   include_vars: ../../install_dbserver/vars/{{ pg_type }}_{{ ansible_os_family }}.yml
 
+# Timeout may occur during handshake operation.
 - name: Install PostgreSQL lib package
   ansible.builtin.yum:
-    name: "{{ rpm_install_path }}-libs-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm"
+    name:
+      - "{{ rpm_install_path }}-libs-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm"
+      - "{{ rpm_install_path }}-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm"
     state: present
   when: ansible_os_family == 'RedHat'
+  retries: "{{ external_package_retries }}"
+  delay: "{{ package_retry_delay }}"
 
 - name: Install PgBouncer package
   package:

@@ -13,8 +13,6 @@ OPENSQL_OS_TYPE = os.getenv("OPENSQL_OS_TYPE", "rocky8")
 OPENSQL_INVENTORY = os.getenv("OPENSQL_INVENTORY")
 # Postgres version
 OPENSQL_PG_VERSION = os.getenv("OPENSQL_PG_VERSION").split('.')[0]
-# Postgres type
-OPENSQL_PG_TYPE = os.getenv("OPENSQL_PG_TYPE")
 # SSH parameters
 OPENSQL_SSH_USER = os.getenv("OPENSQL_SSH_USER", "root")
 OPENSQL_SSH_KEY = os.getenv("OPENSQL_SSH_KEY", "../.ssh/id_rsa")
@@ -87,12 +85,12 @@ def os_family():
         return "unknown"
 
 
-def get_pg_type():
-    return OPENSQL_PG_TYPE
-
-
 def get_primary():
     return get_hosts("primary")[0]
+
+
+def get_pmmserver():
+    return get_hosts("pmmserver")[0]
 
 
 def get_pemserver():
@@ -148,34 +146,25 @@ def get_dbt2_client():
 
 
 def get_pg_unix_socket_dir():
-    pg_type = get_pg_type()
-    pg_version = get_pg_version()
-    if pg_type == "PG":
-        return "/var/run/postgresql"
+    return "/var/run/postgresql"
 
 
 def get_pg_profile_dir():
-    pg_type = get_pg_type()
-    if pg_type == "PG":
-        if os_family() == "RedHat":
-            return "/var/lib/pgsql"
-        elif os_family() == "Debian":
-            return "/var/lib/postgresql"
+    if os_family() == "RedHat":
+        return "/var/lib/pgsql"
+    elif os_family() == "Debian":
+        return "/var/lib/postgresql"
 
 
 def get_pgbouncer_pid_file():
-    pg_type = get_pg_type()
-    if pg_type == "PG":
-        if os_family() == "RedHat":
-            return "/run/pgbouncer/pgbouncer.pid"
-        elif os_family() == "Debian":
-            return "/var/run/pgbouncer/pgbouncer.pid"
+    if os_family() == "RedHat":
+        return "/run/pgbouncer/pgbouncer.pid"
+    elif os_family() == "Debian":
+        return "/var/run/pgbouncer/pgbouncer.pid"
 
 
 def get_pgbouncer_auth_file():
-    pg_type = get_pg_type()
-    if pg_type == "PG":
-        if os_family() == "RedHat":
-            return "/etc/pgbouncer/userlist.txt"
-        elif os_family() == "Debian":
-            return "/etc/pgbouncer/userlist.txt"
+    if os_family() == "RedHat":
+        return "/etc/pgbouncer/userlist.txt"
+    elif os_family() == "Debian":
+        return "/etc/pgbouncer/userlist.txt"

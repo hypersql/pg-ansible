@@ -1,5 +1,46 @@
 ---
-# not supported setup_pmmserver
+- hosts: all
+  name: set docker in docker
+  tasks:
+    - name: Install epel repository
+      ansible.builtin.package:
+        name:
+          - epel-release
+      become: true
+
+    - name: Install packages
+      ansible.builtin.package:
+        name:
+          - supervisor
+          - iptables
+          - docker
+      become: true
+
+    - name: linein file
+      ansible.builtin.copy:
+        src: ./docker.ini
+        dest: /etc/supervisord.d/docker.ini
+      become: true
+
+    - name: start superviosrd
+      ansible.builtin.shell: |
+        set -o pipefail
+        /usr/bin/supervisord -n &
+      args:
+        executable: /bin/bash
+      become: true
+
+    - name: Create Podman network
+      ansible.builtin.shell: |
+        podman network create podman
+      when: ansible_distribution_major_version in ['8','9']
+      failed_when: false
+
+    - name: Install container network plugin package in RHEL8, RHEL9
+      ansible.builtin.shell: |
+        dnf install -y containernetworking-plugins;
+      when: ansible_distribution_major_version in ['8','9']
+
 - hosts: all
   name: Setup pmm-client test deployment playbook
   become: true
@@ -16,7 +57,8 @@
   roles:
     - role: setup_repo
     - role: install_dbserver
+    - role: setup_extension
     - role: init_dbserver
     - role: setup_replication
-    # - role: setup_pmmserver
+    - role: setup_pmmserver
     - role: setup_pmmclient

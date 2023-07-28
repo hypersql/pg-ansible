@@ -23,7 +23,7 @@
       {{ pg_hba_entries | default([]) + [
           {
             'contype': 'hostssl',
-            'users': pg_owner,
+            'users': pg_superuser,
             'databases': pg_database,
             'source': server.private_ip + '/32'
           }
@@ -40,7 +40,7 @@
     apply:
       delegate_to: "{{ server.inventory_hostname }}"
   vars:
-    pg_hba_ip_addresses: "{{ pg_hba_entries }}"
+    input_pg_hba_ip_addresses: "{{ pg_hba_entries }}"
   loop: "{{ _pg_cluster_nodes }}"
   loop_control:
     loop_var: server
@@ -52,3 +52,39 @@
     tasks_from: pgpool2_manage_configuration
   vars:
     pgpool2_configuration_lines: "{{ pgpool2_failover_configuration }}"
+
+# This task need that manage_dbserver done 'cause need password file of pg_owner as superuser
+- name: Check {{ pg_superuser }} password file
+  ansible.builtin.stat:
+    path: "~/.pgpassfile/{{ pg_superuser }}_pass"
+  become: false
+  delegate_to: localhost
+  register: pg_superuser_pass_file
+
+- name: Read {{ pg_superuser }} pass
+  set_fact:
+    pg_superuser_password: "{{ lookup('file', '~/.pgpassfile/{{ pg_superuser }}_pass').split('\n') }}"
+  become: false
+  delegate_to: localhost
+  when: pg_superuser_pass_file.stat.exists
+
+- name: Prepare regex and entry line
+  set_fact:
+    pgpass_line: "*:{{ pg_port }}:*:{{ pg_superuser }}:{{ pg_superuser_password[0] }}"
+
+- name: Manage entries in .pgpass
+  lineinfile:
+    path: "{{ pgpass_file | default('~/.pgpass') }}"
+    line: "{{ pgpass_line }}"
+    state: "present"
+    create: true
+    owner: "{{ pg_owner }}"
+    group: "{{ pg_group }}"
+    mode: "0600"
+  no_log: "{{ disable_logging }}"
+  become: true
+  become_user: "{{ pg_owner }}"
+  delegate_to: "{{ server.inventory_hostname }}"
+  loop: "{{ _pg_cluster_nodes }}"
+  loop_control:
+    loop_var: server

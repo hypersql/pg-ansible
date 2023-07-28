@@ -8,6 +8,13 @@
   become: true
   no_log: "{{ disable_logging }}"
 
+- name: Install procps package for rocky9
+  ansible.builtin.package:
+    name: procps
+    state: present
+  when:
+    - ansible_distribution_major_version == '9'
+
 - name: Add core dump parameters in sysctl.conf
   ansible.posix.sysctl:
     name: "{{ line_item.name }}"

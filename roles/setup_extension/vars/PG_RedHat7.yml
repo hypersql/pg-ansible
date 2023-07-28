@@ -20,7 +20,7 @@ supported_extension:
         "gcc",
         "postgresql{{ pg_major_version }}-libs-{{ pg_version }}",
         "postgresql{{ pg_major_version }}-{{ pg_version }}"
-        ],
+      ],
       "uri": "{{ rpm_install_path }}-devel-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
       "source_src": "https://github.com/ossc-db/pg_hint_plan/archive/refs/tags/REL{{ pg_major_version }}_{{ pg_hint_plan_version }}.tar.gz",
       "source_dest": "pg_hint_plan-REL{{ pg_major_version }}_{{ pg_hint_plan_version }}",
@@ -30,7 +30,9 @@ supported_extension:
     },
     {
       "name": "plpython3u",
-      "uri": "https://download.postgresql.org/pub/repos/yum/{{ pg_major_version }}/redhat/rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}/postgresql{{ pg_major_version }}-plpython3-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
+      "uri": "https://download.postgresql.org/pub/repos/yum/{{ pg_major_version }}/redhat/\
+        rhel-{{ ansible_distribution_major_version }}-{{ ansible_architecture }}/\
+        postgresql{{ pg_major_version }}-plpython3-{{ pg_version }}-1PGDG.rhel{{ ansible_distribution_major_version }}.{{ ansible_architecture }}.rpm",
       "required_package": ["python3-libs"],
       "pg_repo": false,
     },
@@ -42,5 +44,9 @@ supported_extension:
       "pg_repo": false,
       "install_source": true,
       "need_spl": true
+    },
+    {
+      "name": "sslutils",
+      "extension_package": "sslutils_{{ pg_major_version }}",
     }
   ]

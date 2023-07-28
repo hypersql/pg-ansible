@@ -43,7 +43,7 @@
     apply:
       delegate_to: "{{ pgpool2_primary_inventory_hostname }}"
   vars:
-    pg_users:
+    input_pg_users:
       - name: "{{ pgpool2_sr_check_user }}"
         pass: "{{ pgpool2_sr_check_password }}"
         role_attr_flags: login
@@ -60,7 +60,7 @@
     apply:
       delegate_to: "{{ pgpool2_primary_inventory_hostname }}"
   vars:
-    pg_grant_roles:
+    input_pg_grant_roles:
       - user: "{{ pgpool2_sr_check_user }}"
         role: "pg_monitor"
   run_once: true

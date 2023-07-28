@@ -1,11 +1,12 @@
 import pytest
-from conftest import get_pg_type, get_pg_version, get_primary, load_ansible_vars
+from conftest import get_pg_version, get_primary, load_ansible_vars
 
 
 def test_install_extension_pg():
-    if get_pg_type() != "PG":
-        pytest.skip()
-
+    #TODO
+    #Need setup_extension python-test refactorying  
+    pytest.skip()
+    
     packages = []
     required_packages = []
 

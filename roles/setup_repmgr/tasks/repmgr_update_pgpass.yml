@@ -17,7 +17,7 @@
     name: manage_dbserver
     tasks_from: manage_pgpass
   vars:
-    pg_pgpass_values:
+    input_pg_pgpass_values:
       - user: "{{ pg_repmgr_user }}"
         password: "{{ pg_repmgr_user_password }}"
         database: "{{ pg_repmgr_dbname }}"

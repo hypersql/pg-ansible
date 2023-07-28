@@ -1,6 +1,10 @@
-./pytest_cache
-/logs
-/tests/__pycache__/
-.ssh*
-/scripts/lib
+.logs
+.cidfiles
+.ssh
+.inventory
+trace.log
+tests/__pycache__/
+tests/.pytest_cache
+scripts/__pycache__/
+
 **/.DS_Store
