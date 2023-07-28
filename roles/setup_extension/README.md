@@ -21,30 +21,36 @@ When executing the role via Ansible these are required variables:
 
 ### `pg_extension_list`
 
-Extension supported are: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`
+Extension supported are: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`, `sslutils`
 
-Default: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`
+Default: `potgis`, `pgaudit`, `pg_hint_plan`, `plpython3u`, `pg_bigm`, `sslutils`
 
 Example:
 
 ```yaml
-# install only postgis
 pg_extension_list:
     - postgis
     - pgaudit
+    - pg_hint_plan
+    - plpython3u
+    - pg_bigm
+    - sslutils
 ```
 
 The rest of the variables can be configured and are available in the:
 
 - [roles/setup_extension/defaults/main.yml](./defaults/main.yml)
-- [roles/setup_extension/vars/PG_RedHat.yml](./vars/PG_RedHat.yml)
+- [roles/setup_extension/vars/PG_RedHat7.yml](./vars/PG_RedHat7.yml)
+- [roles/setup_extension/vars/PG_RedHat8.yml](./vars/PG_RedHat8.yml)
+- [roles/setup_extension/vars/PG_RedHat9.yml](./vars/PG_RedHat9.yml)
 - [roles/setup_extension/vars/PG_Debian.yml](./vars/PG_Debian.yml)
+
 
 
 ## Dependencies
 
-This role depends on the `common`, `manage_dbserver`, `install_dbserver` role.
-
+setup_repo: packages repositories should have been configured beforehand with the setup_repo role.
+install_dbserver: Postgres binaries are required for this role.
 ## Example Playbook
 
 ### Example of inventory file
@@ -98,7 +104,10 @@ installing extension :
         pg_extension_list:
             - postgis
             - pgaudit
-
+            - pg_hint_plan
+            - plpython3u
+            - pg_bigm
+            - sslutils
   roles:
     - setup_extension
 ```
@@ -108,6 +117,8 @@ installing extension :
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8
@@ -118,6 +129,9 @@ installing extension :
 - RedHat
   * PostGIS : 3.2
   * pgAudit : 1.6
+  * pg_bigm_version: 1.2
+  * pg_hint_plan_version: 1.4.1
+  * sslutils: 1.3
 
 ## Playbook execution examples
 ```bash

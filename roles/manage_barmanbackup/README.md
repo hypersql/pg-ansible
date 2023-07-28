@@ -9,6 +9,8 @@ Following are the requirements of this role.
 1. Ansible
 2. `tmax_opensql.postgres` -> `setup_repo` role for setting the repository on
    the systems.
+3. `tmax_opensql.postgres` -> `setup_barman` role for setting up Barman
+   on the systems.
 
 ## Role Variables
 
@@ -241,13 +243,15 @@ server).
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8
 - 15.0 - 15.3
 
 ## Barman supported
-- 3.2.0
+- 3.6.0
 
 ## License
 

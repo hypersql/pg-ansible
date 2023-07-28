@@ -59,7 +59,7 @@ The rest of the variables can be configured and are available in the:
 
 ## Dependencies
 
-The `install_dbserver` role does not have any dependencies on any other roles.
+setup_repo: packages repositories should have been configured beforehand with the setup_repo role.
 
 ## Example Playbook
 
@@ -126,6 +126,8 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

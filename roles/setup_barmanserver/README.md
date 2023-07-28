@@ -169,13 +169,15 @@ All the variables are available at:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8
 - 15.0 - 15.3
 
 ## Barman supported
-- 3.2.0
+- 3.6.0
 
 ## License
 

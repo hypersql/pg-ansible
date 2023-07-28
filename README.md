@@ -19,11 +19,12 @@ The following table describes the roles included in **tmax_opensql.postgres** co
 | [manage_pgbouncer](roles/manage_pgbouncer/README.md)             | Manage PgBouncer pools list and users.                                                                                                                                                                 |
 | [manage_pgpool2](roles/manage_pgpool2/README.md)                 | Manage Pgpool-II settings and users.                                                                                                                                                                   |
 | [manage_barmanbackup](roles/manage_barmanbackup/README.md)       | Set up PostgreSQL backups with Barman.                                                                                                                                                                 |
-| [setup_barmanserver](roles/setup_barmanserver/README.md)         | Set up Barman (Postgres backup) server.                                                                                                                                                                |
-| [setup_pgbackrest](roles/setup_pgbackrest/README.md)             | Set up PostgreSQL backups with pgBackRest.                                                                                                                                                             |
-| [setup_pgbackrestserver](roles/setup_pgbackrestserver/README.md) | Set up pgBackRest server for Postgres backups and recovery.                                                                                                                                            |
+| [setup_barmanserver](roles/setup_barmanserver/README.md)         | Set up Barman (Postgres backup) server.                                                                                                                                                                |                                                                                                                       |
 | [setup_pgbouncer](roles/setup_pgbouncer/README.md)               | Set up PgBouncer connection pooler.                                                                                                                                                                    |
 | [setup_pgpool2](roles/setup_pgpool2/README.md)                   | Set up Pgpool-II connection pooler/load balancer.                                                                                                                                                      |
+| [setup_pmmclient](roles/setup_pmmclient/README.md)                   | Set up PMM
+Client                                                                                                                                                        |
+| [setup_pmmserver](roles/setup_pmmserver/README.md)                   | Set up PMM server.                                                                                                                                                      |
 | [setup_replication](roles/setup_replication/README.md)           | Set up the data replication (synchronous/asynchronous).                                                                                                                                                |
 | [setup_repmgr](roles/setup_repmgr/README.md)                     | Set up Repmgr for PostgreSQL HA cluster.                                                                                                                                                               |
 | [setup_repo](roles/setup_repo/README.md)                         | Set up the PostgreSQL Community and EPEL repositories.                                                                                                                                                 |
@@ -136,35 +137,20 @@ playbook:
 
   roles:
     - role: setup_repo
-      when: "'setup_repo' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: install_dbserver
-      when: "'install_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: init_dbserver
-      when: "'init_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_extension
-      when: "'setup_extension' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_replication
-      when: "'setup_replication' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_pgpool2
-      when: "'setup_pgpool2' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_pgpool2
-      when: "'manage_pgpool2' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_dbserver
-      when: "'manage_dbserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_pgbackrest
-      when: "'setup_pgbackrest' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_pgbackrestserver
-      when: "'setup_pgbackrestserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_pgbouncer
-      when: "'setup_pgbouncer' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_pgbouncer
-      when: "'manage_pgbouncer' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: setup_barmanserver
-      when: "'setup_barmanserver' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: manage_barmanbackup
-      when: "'manage_barmanbackup' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
     - role: autotuning
-      when: "'autotuning' in lookup('tmax_opensql.postgres.supported_roles', wantlist=True)"
 ```
 
 You can customize the above example to install Tmax OpenSQL Package by selecting which roles you would like to execute.
@@ -211,6 +197,8 @@ ansible-playbook playbook.yml \
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8

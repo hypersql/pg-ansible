@@ -9,6 +9,13 @@ from available resources found on the system.
 Following are the dependencies and requirement of this role.
 
 1. Ansible
+2. `tmax_opensql.postgres` -> `setup_repo` - for repository installation
+3. `tmax_opensql.postgres` -> `install_dbserver` - for installation of
+   PostgreSQL binaries.
+4. `tmax_opensql.postgres` -> `setup_extension` - for installation of
+   PostgreSQL extensions.
+5. `tmax_opensql.postgres` -> `init_dbserver` - for the initialization of
+   primary server
 
 ## Role Variables
 
@@ -25,6 +32,13 @@ The rest of the variables can be configured and are available in the:
 - [roles/autotuning/defaults/main.yml](./defaults/main.yml)
 - [roles/autotuning/vars/main.yml](./vars/main.yml)
 
+### `pg_max_connections`
+This value used when you want to fix the value of pg_max_connection when autotuning is executed.
+
+Example:
+``` yaml
+pg_max_connections: 100
+```
 ### `system_memory_mb`
 It can set the amount of memory used when PostgreSQL is tuned, in MB.
 The value cannot exceed the actual system memory value.
@@ -102,6 +116,8 @@ Below is an example of how to include the `autotuning` role:
 ### Supported OS
 - CentOS7
 - CentOS8
+- Rocky8
+- Rocky9
 
 ### Supported PostgreSQL Version
 - 14.0 - 14.8
