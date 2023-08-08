@@ -6,6 +6,18 @@
   become: true
   when: force_docker
 
+- name: Install required package in pmmserver for Redhat7
+  package:
+    name:
+      - yum-utils
+      - python-docker
+      - python3-pip
+    state: present
+  become: true
+  when: 
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version == '7'
+
 - name: Install required package in pmmserver
   package:
     name:
@@ -14,26 +26,28 @@
       - python3-pip
     state: present
   become: true
-  when: ansible_os_family == 'RedHat'
+  when: 
+    - ansible_os_family == 'RedHat'
+    - ansible_distribution_major_version in ['8','9']
 
 - name: Install python docker module
   command: >-
     pip3 install docker
 
 # Install docker Repository
-- name: Install Docker Repository
-  get_url:
-    url: https://download.docker.com/linux/centos/docker-ce.repo
-    dest: /etc/yum.repos.d/docker-ce.repo
-  become: true
-  when: ansible_os_family == 'RedHat'
+#- name: Install Docker Repository
+#  get_url:
+#    url: https://download.docker.com/linux/centos/docker-ce.repo
+#    dest: /etc/yum.repos.d/docker-ce.repo
+#  become: true
+#  when: ansible_os_family == 'RedHat'
 
 # There may be a conflict between the previously installed docker version and the docker-ce version.
 # Error: docker-ce conflicts with 2:docker version
 # Error: docker-ce-cli conflicts with 2:docker version
 - name: Install Docker
   package:
-    name: docker-ce
+    name: docker
     state: present
   become: true
 
