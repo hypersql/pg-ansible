@@ -196,6 +196,20 @@ def get_input_arguments():
         action="store_true",
         help="Set log level to debug"
     )
+
+    parser.add_argument(
+        "--use-pre-build",
+        dest="use_prebuild",
+        action="store_true",
+        help="Use pre build images"
+    )
+
+    parser.add_argument(
+        "--pre-build",
+        dest="prebuild",
+        action="store_true",
+        help="Make pre build images"
+    )
     return parser.parse_args()
 
 def remove_all_containers():
@@ -270,7 +284,7 @@ def get_args_for_exec_test(args):
         for os_type in args.os_types:
             for pg_version in args.pg_versions:
                 test_args.append(
-                    (role, os_type, pg_version, args.maintain_containers)
+                    (role, os_type, pg_version, args.maintain_containers, args.use_prebuild, args.prebuild)
                 )
     common.Logger().debug(slice_to_log_str("exec_test_args", test_args))
     return test_args
@@ -282,14 +296,17 @@ def build_docker_image_if_not_exist(os_type):
         docker_dir = os.path.join(common.ANSIBLE_TEST_HOME, "docker")
         run_command_line(f"docker build -f {docker_dir}/Dockerfile.{os_type} -t opensql-test-{os_type} {docker_dir}")
 
-def exec_test(case_name, os_type, pg_version, maintain_containers):
+def exec_test(case_name, os_type, pg_version, maintain_containers, use_prebuild, prebuild):
     message = f"Test log path: {get_container_name_prefix(case_name, os_type, pg_version)}.stdout"
     ColoredPrinter().print_message(message)
     common.Logger().info(message)
 
     hostnames = get_inventory_hostnames_for_test_case(case_name)
-    create_managed_docker_containers(case_name, os_type, pg_version, hostnames)
-    create_ansible_tester_container(case_name, os_type, pg_version, hostnames)
+    create_managed_docker_containers(case_name, os_type, pg_version, hostnames, use_prebuild)
+    create_ansible_tester_container(case_name, os_type, pg_version, hostnames, use_prebuild)
+
+    if prebuild:
+        build_pre_images(case_name, os_type, pg_version)
 
     if not maintain_containers:
         tear_down(case_name, os_type, pg_version)
@@ -347,9 +364,9 @@ def get_inventory_hostnames_for_test_case(case_name):
     common.Logger().debug(slice_to_log_str("hostnames", hostnames))
     return hostnames
 
-def create_managed_docker_containers(case_name, os_type, pg_version, hostnames):
+def create_managed_docker_containers(case_name, os_type, pg_version, hostnames, use_prebuild):
     for hostname in hostnames:
-        command = get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname)
+        command = get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname, use_prebuild)
         run_command_line(command)
 
         ctnr_name = get_container_name(case_name, os_type, pg_version, hostname)
@@ -362,7 +379,7 @@ def get_container_name(case_name, os_type, pg_version, hostname):
 def get_container_name_prefix(case_name, os_type, pg_version):
     return f"{case_name}_{os_type}_PG{pg_version}"
 
-def get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname):
+def get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname, use_prebuild):
     ctnr_name = get_container_name(case_name, os_type, pg_version, hostname)
     docker_command = f"docker run -d --privileged --cidfile {CIDFILE_DIR}/{ctnr_name} "
     docker_command += "--cap-add SYS_ADMIN "
@@ -375,7 +392,11 @@ def get_managed_docker_ctnr_run_command(case_name, os_type, pg_version, hostname
     docker_command += f"--name {ctnr_name} "
     docker_command += "--tmpfs /run "
 
-    docker_command += f"opensql-test-{os_type} "
+    if not use_prebuild:
+        docker_command += f"opensql-test-{os_type} "
+    else:
+        docker_command += f"opensql-pre-test-{os_type} "
+
     docker_command += "/usr/sbin/init"
     return docker_command
 
@@ -388,12 +409,12 @@ def setup_ssh_configuration(ctnr_name):
     docker_ctnr.mkdir("/root/.ssh", mode="0700")
     docker_ctnr.add_ssh_pub_key(f"{SSH_DIR}/{common.SSH_PUBLIC_KEY_FILE}")
 
-def create_ansible_tester_container(case_name, os_type, pg_version, hostnames):
+def create_ansible_tester_container(case_name, os_type, pg_version, hostnames, use_prebuild):
     common.Logger().info("Creating ansible tester container")
     build_inventory(case_name, os_type, pg_version, hostnames)
     build_add_hosts(case_name, os_type, pg_version, hostnames)
 
-    command = get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version)
+    command = get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version, use_prebuild)
     common.Logger().debug(f"Running ansible tester docker ctnr run command\n{command}")
     command = shlex.split(command)
     process = subprocess.Popen(
@@ -456,7 +477,7 @@ def build_add_hosts(case_name, os_type, pg_version, hostnames):
 
     os.chmod(add_hosts_script_path, 0o755)
 
-def get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version):
+def get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version, use_prebuild):
     ctnr_name = f"{get_container_name_prefix(case_name, os_type, pg_version)}_ansible_tester"
     docker_command = f"docker run --cidfile {CIDFILE_DIR}/{ctnr_name} "
     docker_command += f"--volume {common.ANSIBLE_TEST_HOME}:/workspace "
@@ -464,8 +485,26 @@ def get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version):
     docker_command += f"-e OPENSQL_CASE_NAME={case_name} "
     docker_command += f"-e OPENSQL_OS_TYPE={os_type} "
     docker_command += f"-e OPENSQL_PG_VERSION={pg_version} "
+    if use_prebuild:
+        docker_command += f"-e PRE_BUILD=true "
     docker_command += "opensql-test-controller "
     docker_command += "/workspace/docker/exec-tests.sh"
+    return docker_command
+
+def build_pre_images(case_name, os_type, pg_version):
+    common.Logger().info("Build pre docker image")
+    command = get_build_image_command(case_name, os_type, pg_version)
+    r = run_command_line(command)
+
+    if r.returncode == 0:
+        message = f"Build test image: opensql-pre-test-{os_type}"
+        ColoredPrinter().print_message(message)
+        common.Logger().info(message)
+
+def get_build_image_command(case_name, os_type, pg_version):
+    docker_command = f"docker commit "
+    docker_command += f"{case_name}_{os_type}_PG{pg_version}_primary1 "
+    docker_command += f"opensql-pre-test-{os_type}"
     return docker_command
 
 def tear_down(case_name, os_type, pg_version):

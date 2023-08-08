@@ -11,10 +11,13 @@
     - name: Initialize the user defined variables
       ansible.builtin.set_fact:
         disable_logging: false
+        pg_users:
+          - name: "test"
+            pass: "password"
+            auth: "trust"
 
   roles:
-    - role: setup_repo
-    - role: install_dbserver
-    - role: setup_extension
     - role: init_dbserver
-    - role: autotuning
+    - role: setup_pgpool2
+    - role: manage_pgpool2
+    - role: manage_dbserver

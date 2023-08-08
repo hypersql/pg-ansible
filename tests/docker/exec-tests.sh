@@ -14,6 +14,10 @@ export OPENSQL_SSH_KEY=/root/.ssh/id_rsa
 export OPENSQL_SSH_CONFIG=/root/.ssh/ssh_config
 export OPENSQL_INVENTORY="/workspace/.inventory/${my_ansible_files_prefix}.inventory.yml"
 export OPENSQL_ANSIBLE_VARS="/workspace/cases/${OPENSQL_CASE_NAME}/vars.json"
+export PLAYBOOK_NAME="playbook.yml"
+if ${PRE_BUILD:-false} ; then
+	export PLAYBOOK_NAME="pre_image_playbook.yml"
+fi
 
 ansible-playbook \
 	-i "${OPENSQL_INVENTORY}" \
@@ -21,6 +25,6 @@ ansible-playbook \
 	--extra-vars "pg_version=${OPENSQL_PG_VERSION}" \
 	--extra-vars "@${OPENSQL_ANSIBLE_VARS}" \
 	--private-key ${OPENSQL_SSH_KEY} \
-	"/workspace/cases/${OPENSQL_CASE_NAME}/playbook.yml"
+	"/workspace/cases/${OPENSQL_CASE_NAME}/${PLAYBOOK_NAME}"
 
 py.test -v -k "${OPENSQL_CASE_NAME}" /workspace/tests

@@ -17,4 +17,5 @@
     - role: install_dbserver
     - role: setup_extension
     - role: init_dbserver
-    - role: autotuning
+    - role: setup_replication
+    - role: setup_repmgr

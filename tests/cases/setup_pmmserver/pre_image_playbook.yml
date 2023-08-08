@@ -1,0 +1,54 @@
+---
+- hosts: all
+  name: set docker in docker in centos7, docker out docker in centos8 above
+  tasks:
+    - name: Install epel repository
+      ansible.builtin.package:
+        name:
+          - epel-release
+      become: true
+
+    - name: Install test required packages
+      ansible.builtin.package:
+        name:
+          - supervisor
+          - iptables
+      become: true
+
+    - name: Copy docker.ini
+      ansible.builtin.copy:
+        src: ./docker.ini
+        dest: /etc/supervisord.d/docker.ini
+      become: true
+
+    - name: Set in RHEL7
+      set_fact:
+        ansible_module_running_in_container: false
+      when: ansible_distribution_major_version == '7'
+
+    - name: Create Podman network
+      ansible.builtin.shell: |
+        podman network create podman
+      when: ansible_distribution_major_version in ['8','9']
+      failed_when: false
+
+    - name: Install container network plugin package in RHEL8, RHEL9
+      ansible.builtin.shell: |
+        dnf install -y containernetworking-plugins;
+      when: ansible_distribution_major_version in ['8','9']
+
+- hosts: all
+  name: Setup pmm-server test deployment playbook
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      ansible.builtin.set_fact:
+        disable_logging: false
+
+  roles:
+    - role: setup_pmmserver
