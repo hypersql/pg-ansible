@@ -431,7 +431,7 @@ def build_inventory(case_name, os_type, pg_version, hostnames):
     common.Logger().debug(dict_to_log_str("inventory_vars", inventory_vars))
     template_dir = os.path.join(common.ANSIBLE_TEST_HOME, f"cases/{case_name}")
     file_loader = FileSystemLoader(template_dir)
-    jenv = Environment(loader=file_loader, trim_blocks=True)
+    jenv = Environment(loader=file_loader, trim_blocks=True, autoescape=False)
     template = jenv.get_template("inventory.yml.j2")
 
     inventory_file_name = get_container_name_prefix(case_name, os_type, pg_version)
@@ -454,7 +454,7 @@ def build_add_hosts(case_name, os_type, pg_version, hostnames):
             container = DockerContainer(cid)
             f.write(f"ssh-keyscan -H {container.ip()} >> ~/.ssh/known_hosts\n")
 
-    os.chmod(add_hosts_script_path, 0o755)
+    os.chmod(add_hosts_script_path, 0o744)
 
 def get_ansible_tester_docker_ctnr_run_command(case_name, os_type, pg_version):
     ctnr_name = f"{get_container_name_prefix(case_name, os_type, pg_version)}_ansible_tester"
