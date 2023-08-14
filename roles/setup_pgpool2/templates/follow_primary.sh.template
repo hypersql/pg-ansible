@@ -47,15 +47,32 @@ PGPASSFILE={{ pgpass_file }}
 SSH_KEY_FILE=id_rsa
 SSH_OPTIONS="-o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i ~/.ssh/${SSH_KEY_FILE}"
 FAILOVER_LOG={{ pgpool2_logdir }}/failover.log
+CHECK_PG_READY_RETRY_COUNT=60
+CHECK_PG_READY_RETRY_INTERVAL=5
 
 echo follow_primary.sh: start: Standby node ${NODE_ID} >> ${FAILOVER_LOG}
 
 # Check the connection status of Standby
-${PGHOME}/bin/pg_isready -h ${NODE_HOST} -p ${NODE_PORT} > /dev/null 2>&1
+PG_ISREADY=0
+SET=$(seq 1 ${CHECK_PG_READY_RETRY_COUNT})
+for i in ${SET}
+do
+    echo follow_primary.sh: check pg_isready on node_id=${NODE_ID}, try_cnt=${i} >> ${FAILOVER_LOG}
+    ${PGHOME}/bin/pg_isready -h ${NODE_HOST} -p ${NODE_PORT} > /dev/null 2>&1
+    result=$?
+    if [[ $result == 0 ]]; then
+        PG_ISREADY=1
+        break
+    else
+        sleep ${CHECK_PG_READY_RETRY_INTERVAL}
+    fi
+done
 
-if [ $? -ne 0 ]; then
+if [ $PG_ISREADY -ne 1 ]; then
     echo follow_primary.sh: node_id=${NODE_ID} is not running. skipping follow primary command >> ${FAILOVER_LOG}
     exit 0
+else
+    echo follow_primary.sh: node_id=${NODE_ID} is running. >> ${FAILOVER_LOG}
 fi
 
 # Test passwordless SSH
