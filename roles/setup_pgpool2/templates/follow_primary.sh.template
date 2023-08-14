@@ -57,15 +57,15 @@ PG_ISREADY=0
 SET=$(seq 1 ${CHECK_PG_READY_RETRY_COUNT})
 for i in ${SET}
 do
-  echo follow_primary.sh: check pg_isready on node_id=${NODE_ID}, try_cnt=${i} >> ${FAILOVER_LOG}
-  ${PGHOME}/bin/pg_isready -h ${NODE_HOST} -p ${NODE_PORT} > /dev/null 2>&1
-  result=$?
-  if [[ $result == 0 ]] ; then
-    PG_ISREADY=1
-    break
-  else
-   sleep ${CHECK_PG_READY_RETRY_INTERVAL}
-  fi
+    echo follow_primary.sh: check pg_isready on node_id=${NODE_ID}, try_cnt=${i} >> ${FAILOVER_LOG}
+    ${PGHOME}/bin/pg_isready -h ${NODE_HOST} -p ${NODE_PORT} > /dev/null 2>&1
+    result=$?
+    if [[ $result == 0 ]]; then
+        PG_ISREADY=1
+        break
+    else
+        sleep ${CHECK_PG_READY_RETRY_INTERVAL}
+    fi
 done
 
 if [ $PG_ISREADY -ne 1 ]; then
