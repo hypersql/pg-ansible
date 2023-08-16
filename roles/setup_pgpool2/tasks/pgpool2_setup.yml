@@ -158,17 +158,17 @@
   when: use_system_user
   become: true
 
-- name: Check if we have pgpoolII pid exists or not
-  ansible.builtin.stat:
-    path: "{{ pgpool2_pid_file_name }}"
-  become: true
-  register: pgpool2_pid_file_exists
+- name: Include ensure_pgpool2_process.yml tasks
+  include_tasks: ensure_pgpool2_process.yml
+  vars:
+    - _pgpool2_exists: ""
+  when: not use_system_user
 
 - name: Stop pgpool-II process
   command: "{{ pgpool_stop_command }}"
   when:
     - not use_system_user
-    - pgpool2_pid_file_exists.stat.exists
+    - _pgpool2_exists.rc == 0
   become: true
   become_user: "{{ pgpool2_user }}"
 
