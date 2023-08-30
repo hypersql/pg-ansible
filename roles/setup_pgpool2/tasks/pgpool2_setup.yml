@@ -168,6 +168,7 @@
   command: "{{ pgpool_stop_command }}"
   when:
     - not use_system_user
+    - _pgpool2_exists.rc is defined
     - _pgpool2_exists.rc == 0
   become: true
   become_user: "{{ pgpool2_user }}"
