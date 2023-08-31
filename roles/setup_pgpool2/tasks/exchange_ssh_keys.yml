@@ -22,6 +22,7 @@
   loop: "{{ _pg_cluster_nodes }}"
   loop_control:
     loop_var: server
+  throttle: 1
 
 - name: Run ssh-keyscan and Add known hosts
   include_tasks: add_known_hosts.yml

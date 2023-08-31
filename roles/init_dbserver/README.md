@@ -214,7 +214,7 @@ Below is an example of how to include the `init_dbserver` role:
         pg_type: "PG"
 
   roles:
-    - initdb_dbserver
+    - init_dbserver
 ```
 
 Defining and adding variables is done in the `set_fact` of the `pre_tasks`.

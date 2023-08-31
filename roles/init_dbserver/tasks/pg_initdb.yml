@@ -46,9 +46,17 @@
   when: use_system_user
   become: true
 
+- name: Include ensure_postgresql_process.yml tasks
+  include_tasks: ensure_postgresql_process.yml
+  vars:
+    - _postgresql_exists: ""
+  when: not use_system_user
+
 - name: Start pg process
   ansible.builtin.command: >
     {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} start
-  when: not use_system_user
+  when:
+    - not use_system_user
+    - _postgresql_exists.rc is not defined or _postgresql_exists.rc != 0
   become: true
   become_user: "{{ pg_owner }}"

@@ -13,18 +13,19 @@
     - user_system_user
   become: true
 
-- name: Check if we have postgres pid exists or not
-  ansible.builtin.stat:
-    path: "{{ pg_default_data }}/postmaster.pid"
-  become: true
-  register: postgres_pid_file
+- name: Include ensure_postgresql_process.yml tasks
+  include_tasks: ensure_postgresql_process.yml
+  vars:
+    - _postgresql_exists: ""
+  when: not use_system_user
 
 - name: Stop pg process
   ansible.builtin.command: >
     {{ pg_bin_path }}/pg_ctl -D {{ pg_default_data }} stop
   when:
     - not use_system_user
-    - postgres_pid_file.stat.exists
+    - _postgresql_exists.rc is defined
+    - _postgresql_exists.rc == 0
   become: true
   become_user: "{{ pg_owner }}"
 

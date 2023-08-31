@@ -1,0 +1,23 @@
+---
+- name: Check if it have postgres pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pg_default_data }}/postmaster.pid"
+  become: true
+  register: postgres_pid_file
+
+- name: Fetch PostgreSQL pid
+  shell: |
+    set -o pipefail && cat {{ pg_default_data }}/postmaster.pid  | head -1
+  become: true
+  register: postgres_pid
+  changed_when: postgres_pid|length > 0
+  when: postgres_pid_file.stat.exists
+
+- name: Check PostgreSQL process is running
+  ansible.builtin.shell: >
+    ps -p {{ postgres_pid.stdout }}
+  become: true
+  register: _postgresql_exists
+  failed_when: false
+  when: postgres_pid_file.stat.exists
+

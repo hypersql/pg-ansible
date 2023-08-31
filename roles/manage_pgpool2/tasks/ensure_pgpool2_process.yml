@@ -1,0 +1,23 @@
+---
+- name: Check if it have pgpool-II pid exists or not
+  ansible.builtin.stat:
+    path: "{{ pgpool2_pid_file_name }}"
+  become: true
+  register: pgpool2_pid_file
+
+- name: Fetch pgpool-II pid
+  shell: |
+    set -o pipefail && cat {{ pgpool2_pid_file_name }}  | head -1
+  become: true
+  register: pgpool2_pid
+  changed_when: pgpool2_pid|length > 0
+  when: pgpool2_pid_file.stat.exists
+
+- name: Check pgpool-II process is running
+  ansible.builtin.shell: >
+    ps -p {{ pgpool2_pid.stdout }}
+  become: true
+  register: _pgpool2_exists
+  failed_when: false
+  when: pgpool2_pid_file.stat.exists
+
