@@ -10,7 +10,7 @@
   when:
     - ansible_facts.services[pg_service] is defined
     - ansible_facts.services[pg_service].state == 'running'
-    - user_system_user
+    - use_system_user
   become: true
 
 - name: Include ensure_postgresql_process.yml tasks
