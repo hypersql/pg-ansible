@@ -15,3 +15,4 @@
   roles:
     - role: setup_repo
     - role: install_dbserver
+    - role: setup_extension

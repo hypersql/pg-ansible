@@ -11,10 +11,13 @@
     - name: Initialize the user defined variables
       ansible.builtin.set_fact:
         disable_logging: false
+        pg_pgpool_user: "test"
+        pg_pgpool_user_password: "password"
+        pg_local_wal_archive_dir: "/var/lib/pgsql/archive"
 
   roles:
-    - role: setup_repo
-    - role: install_dbserver
-    - role: setup_extension
     - role: init_dbserver
-    - role: autotuning
+    - role: setup_replication
+    - role: setup_pgpool2
+    - role: manage_pgpool2
+    - role: manage_dbserver

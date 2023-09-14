@@ -1,4 +1,5 @@
 {
     "pg_extension_list": ["sslutils"],
-    "pmm_server_port": "443"
+    "pmm_server_port": "443",
+    "force_docker": true
 }

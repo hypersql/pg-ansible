@@ -59,9 +59,6 @@
         disable_logging: false
 
   roles:
-    - role: setup_repo
-    - role: install_dbserver
-    - role: setup_extension
     - role: init_dbserver
     - role: setup_replication
     - role: setup_pmmserver

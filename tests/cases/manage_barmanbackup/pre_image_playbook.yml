@@ -1,0 +1,31 @@
+---
+- hosts: all
+  name: Remove nologin
+  tasks:
+    - name: Remove /run/nologin
+      ansible.builtin.file:
+        path: /run/nologin
+        state: absent
+      become: true
+
+- hosts: all
+  name: Postgres deployment playbook
+  become: true
+  gather_facts: true
+
+  collections:
+    - tmax_opensql.postgres
+
+  pre_tasks:
+    - name: Initialize the user defined variables
+      ansible.builtin.set_fact:
+        disable_logging: false
+        pg_postgres_conf_params:
+          - name: wal_level
+            value: logical
+
+  roles:
+    - role: init_dbserver
+    - role: manage_dbserver
+    - role: setup_barmanserver
+    - role: manage_barmanbackup
