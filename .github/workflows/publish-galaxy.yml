@@ -24,6 +24,10 @@ jobs:
         # https://github.com/ansible/galaxy/issues/2302#issuecomment-1143132088
         run: python3 -m pip install https://github.com/WATonomous/ansible/archive/galaxy_timeout.tar.gz
 
+      # ISSUE : https://github.com/ansible/awx/issues/14495
+      - name: Added galaxy old collection server ~/.ansible.cfg
+        run: echo -e "[galaxy]\nserver=https://old-galaxy.ansible.com" >> ~/.ansible.cfg
+
       - name: Install tmax_opensql.postgres collection
         run: ansible-galaxy collection install --api-key ${{ secrets.galaxy_api_key }} tmax_opensql.postgres
 
