@@ -44,26 +44,6 @@
     state: directory
   become: true
 
-- name: Ensure postgres log directory exists
-  ansible.builtin.file:
-    path: "{{ pg_log }}"
-    owner: "{{ pg_owner }}"
-    group: "{{ pg_group }}"
-    mode: 0700
-    state: directory
-  become: true
-  when: pg_log|length > 0 and pg_data not in pg_log
-
-- name: Ensure postgres log directory's file privilege
-  ansible.builtin.file:
-    path: "{{ pg_log }}"
-    owner: "{{ pg_owner }}"
-    group: "{{ pg_group }}"
-    state: directory
-    recurse: true
-  become: true
-  when: pg_log|length > 0 and pg_data not in pg_log
-
 - name: Ensure postgres wal directory exists
   ansible.builtin.file:
     path: "{{ pg_wal }}"

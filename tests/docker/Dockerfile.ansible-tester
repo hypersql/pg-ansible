@@ -11,6 +11,9 @@ RUN pip3 install paramiko
 RUN pip3 install pytest-testinfra
 RUN pip3 install pyyaml
 RUN pip3 install netaddr
+# ISSUE : https://github.com/ansible/awx/issues/14495
+RUN echo "[galaxy]" >> ~/.ansible.cfg
+RUN echo "server=https://old-galaxy.ansible.com" >> ~/.ansible.cfg
 RUN ansible-galaxy collection install community.postgresql:=1.6.0
 RUN ansible-galaxy collection install ansible.posix:=1.3.0
 RUN ansible-galaxy collection install community.general:=2.5.8
