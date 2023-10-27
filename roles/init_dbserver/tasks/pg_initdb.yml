@@ -28,8 +28,8 @@
       become: true
       become_user: "{{ pg_owner }}"
 
-- name: Move the origin posttgresql.auto.conf
-  command: mv "{{ pg_data }}/postgresql.auto.conf" "{{ pg_data }}/postgresql.before.conf"
+- name: Move the origin postgresql.auto.conf
+  command: mv "{{ pg_data }}/postgresql.auto.conf" "{{ pg_data }}/{{ pg_existing_conf_file }}"
   become: true
   become_user: "{{ pg_owner }}"
   when: pg_version_stat.stat.exists
