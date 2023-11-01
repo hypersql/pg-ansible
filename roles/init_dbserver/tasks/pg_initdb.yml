@@ -28,19 +28,57 @@
       become: true
       become_user: "{{ pg_owner }}"
 
-- name: Move the origin postgresql.auto.conf
-  command: mv "{{ pg_data }}/postgresql.auto.conf" "{{ pg_data }}/{{ pg_existing_conf_file }}"
+    - name: Copy the postgresql.conf.template to the server
+      template:
+        src: postgresql.conf.template
+        dest: "{{ pg_data }}/postgresql.auto.conf"
+        owner: "{{ pg_owner }}"
+        group: "{{ pg_group }}"
+        mode: 0600
+
+- name: Check if we have postgresql.auto.conf in pg_data
+  stat:
+    path: "{{ pg_data }}/postgresql.auto.conf"
+  become: true
+  register: pg_autoconf_stat
+
+- name: Append Configuration to Changed paramaters
+  when: pg_autoconf_stat.stat.exists
   become: true
   become_user: "{{ pg_owner }}"
-  when: pg_version_stat.stat.exists
+  block:
+    - name: Copy the postgresql.changed.template to the server
+      template:
+        src: postgresql.changed.template
+        dest: "{{ pg_data }}/postgresql.tmp.conf"
+        owner: "{{ pg_owner }}"
+        group: "{{ pg_group }}"
+        mode: 0600
 
-- name: Copy the postgresql.conf.template to the server
-  template:
-    src: postgresql.conf.template
-    dest: "{{ pg_data }}/postgresql.auto.conf"
-    owner: "{{ pg_owner }}"
-    group: "{{ pg_group }}"
-    mode: 0600
+    - name: Append configuration
+      shell: |
+        set -o pipefail &&
+        first_word=$(cat {{ pg_data }}/postgresql.tmp.conf | awk '{print $1}') &&
+        while IFS= read -r line; do
+          word=$(echo "$line" | awk '{print $1}')
+          if ! echo "${first_word[@]}" | grep "${word}"; then
+            echo "$line" >> {{ pg_data }}/postgresql.bak.conf
+          fi
+        done < {{ pg_data }}/postgresql.auto.conf &&
+        cat {{ pg_data }}/postgresql.bak.conf > {{ pg_data }}/postgresql.auto.conf &&
+        cat {{ pg_data }}/postgresql.tmp.conf | tee -a {{ pg_data }}/postgresql.auto.conf
+      become: true
+      become_user: "{{ pg_owner }}"
+
+    - name: Remove postgresql.bak.conf
+      file:
+        path: "{{ pg_data }}/postgresql.bak.conf"
+        state: absent
+
+    - name: Remove postgresql.tmp.conf
+      file:
+        path: "{{ pg_data }}/postgresql.tmp.conf"
+        state: absent
 
 - name: Import create_directories_after_initdb task
   import_tasks: create_directories_after_initdb.yml
