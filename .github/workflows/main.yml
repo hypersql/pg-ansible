@@ -1,8 +1,6 @@
 name: custom-github-action
 
 on:
-  push:
-    branches: [main]
   release:
     types: [published]
 
