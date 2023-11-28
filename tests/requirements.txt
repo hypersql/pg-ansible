@@ -1,4 +1,4 @@
-cryptography==41.0.3
+cryptography==41.0.6
 jinja2
 pytest
 pytest-testinfra
